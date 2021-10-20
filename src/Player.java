@@ -17,55 +17,84 @@ import java.util.List;
  */
 public class Player {
 
-    private String playerName;
+    private final String playerName;
     private int moneyAmount;
-    private HashMap<String, Integer> ownedProperties;
-    private List<BoardElement> boardElementList;
+    private HashMap<String, Integer> ownedPropertiesBasedOnColors;
+    private List<Location> ownedProperties;
     private boolean inJail;
+    private int position;
 
     public Player(String name, int money){
         this.playerName = name;
         this.moneyAmount = money;
-        this.ownedProperties = new HashMap();
-        this.boardElementList = new ArrayList();
+        this.ownedPropertiesBasedOnColors = new HashMap<>();
+        this.ownedProperties = new ArrayList<>();
+        this.position = 0;
+        this.inJail = false;
     }
 
     public void displayProperties(){
         System.out.println(playerName + " owns the following properties: \n");
-        for(String string: ownedProperties.keySet()){
-            System.out.println(string);
+        for(Location location : ownedProperties){
+            System.out.println(location.toString());
         }
+    }
+
+    public void setPosition(int position){
+        this.position = position;
     }
 
     public void checkPosition(){
 
     }
 
+    public void setInJail(boolean inJail) {
+        this.inJail = inJail;
+    }
+
+    public boolean getInJail(){
+        return this.inJail;
+    }
+
     public String getPlayerName() {
-        return playerName;
+        return this.playerName;
     }
 
     public int getMoneyAmount() {
-        return moneyAmount;
+        return this.moneyAmount;
     }
 
-    public HashMap<String, Integer> getOwnedProperties() {
-        return ownedProperties;
+    public HashMap<String, Integer> getOwnedPropertiesBasedOnColors() {
+        return this.ownedPropertiesBasedOnColors;
     }
 
-    public List<BoardElement> getBoardElementList() {
-        return boardElementList;
+    public List<Location> getOwnedProperties() {
+        return this.ownedProperties;
     }
 
     public void setMoneyAmount(int moneyAmount) {
         this.moneyAmount = moneyAmount;
     }
 
-    public void setOwnedProperties(HashMap<String, Integer> ownedProperties) {
-        this.ownedProperties = ownedProperties;
-    }
 
-    public void setBoardElementList(List<BoardElement> boardElementList) {
-        this.boardElementList = boardElementList;
+
+
+    /**
+     * Overrides java oject equals() method
+     * @param obj Object, the object to check
+     * @return boolean, true iff the comparison and the object is identical, otherwise false
+     */
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if(obj == null || obj.getClass()!= this.getClass()){
+            return false;
+        }
+        Player player = (Player) obj;
+        return this.playerName.equals(player.playerName) && this.moneyAmount == player.moneyAmount
+                && this.ownedPropertiesBasedOnColors == player.ownedPropertiesBasedOnColors
+                && this.position == player.position && this.ownedProperties == player.ownedProperties
+                && this.inJail == player.inJail;
     }
 }
