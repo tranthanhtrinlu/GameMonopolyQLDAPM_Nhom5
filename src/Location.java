@@ -1,19 +1,23 @@
 public abstract class Location {
     private int cost;
     private String name;
-    private Player owner;
 
-    public Location(String name, int cost){
-        this.name = name;
+    public Location(int cost, String name){
         this.cost = cost;
-        this.owner = null;
+        this.name = name;
     }
 
-    public void setOwner(Player owner) {
-        this.owner = owner;
+    public String getName() {
+        return this.name;
     }
 
-    public Player getOwner() {
-        return this.owner;
+    public int getCost() {
+        return this.cost;
     }
+
+
+    public abstract void locationElementFunctionality(Player p);
+
+    public abstract String toString();
+
 }
