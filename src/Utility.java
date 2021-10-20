@@ -1,19 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
+public class Utility extends Location{
 
-public class RailRoad extends Location{
-    private List<Integer> payments;
     private Player owner;
+    private int amount;
 
-
-    public RailRoad(String name, int cost){
+    public Utility(int cost, String name) {
         super(cost, name);
-        this.payments = new ArrayList<>(){{
-           add(25);
-           add(50);
-           add(100);
-           add(200);
-        }};
+        this.amount = 10;
         this.owner = null;
     }
 
@@ -25,13 +17,12 @@ public class RailRoad extends Location{
         else {
             if (!this.owner.equals(p)) {
                 // check if player landed is not the player owner
-                return;
             }
         }
     }
 
     @Override
     public String toString() {
-        return "RailRoad: " + this.getName() + " {Current Price: " + this.payments.get(this.owner.getNumberOfRailroads()) + "}";
+        return "Utility: " + this.getName() + " {Price: dice roll * " + this.amount + "}";
     }
 }
