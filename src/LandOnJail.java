@@ -5,12 +5,13 @@ public class LandOnJail extends Location {
     }
 
     @Override
-    public void locationElementFunctionality(Player p) {
-        // nothing
+    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+        System.out.println("You landed " + this.toString());
+        System.out.println("You are just Visiting, moving to the next player");
     }
 
     @Override
     public String toString() {
-        return null;
+        return "On Jail";
     }
 }

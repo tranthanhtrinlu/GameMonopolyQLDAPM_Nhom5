@@ -19,37 +19,59 @@ public class Player {
 
     private final String playerName;
     private int moneyAmount;
-    private HashMap<String, Integer> ownedPropertiesBasedOnColors;
+    private HashMap<BoardModel.Color, Integer> ownedPropertiesBasedOnColors;
     private List<Location> ownedProperties;
     private boolean inJail;
+    private int turnsInJail;
     private int position;
+    private String location;
+    private int numOfRailroads;
+    private int numOfUtilities;
 
-    public Player(String name, int money){
+    public Player(String name){
         this.playerName = name;
-        this.moneyAmount = money;
+        this.moneyAmount = 1500;
         this.ownedPropertiesBasedOnColors = new HashMap<>();
         this.ownedProperties = new ArrayList<>();
         this.position = 0;
         this.inJail = false;
+        this.turnsInJail = 0;
+        this.location = "";
+        this.numOfRailroads = 0;
+        this.numOfUtilities = 0;
     }
 
-    public void displayProperties(){
-        System.out.println(playerName + " owns the following properties: \n");
+    public String printOwnedProperties(){
+        StringBuilder s = new StringBuilder();
         for(Location location : ownedProperties){
-            System.out.println(location.toString());
+            s.append(location.toString()).append("\n");
         }
+        return s.toString();
+    }
+
+    public boolean numberOfColoredPropertiesOwned(BoardModel.Color color, int numOfColor){
+        return this.ownedPropertiesBasedOnColors.get(color) == numOfColor;
     }
 
     public void setPosition(int position){
         this.position = position;
     }
 
-    public void checkPosition(){
-
+    public void movePlayer(int combinedRolls){
+        this.position += combinedRolls;
+        if (this.position >= BoardModel.SIZE_OF_BOARD){
+            this.moneyAmount += BoardModel.GO_MONEY;
+        }
+        this.position -= BoardModel.SIZE_OF_BOARD;
     }
 
     public void setInJail(boolean inJail) {
         this.inJail = inJail;
+        this.turnsInJail = 3;
+    }
+
+    public int getTurnsInJail(){
+        return this.turnsInJail;
     }
 
     public boolean getInJail(){
@@ -64,20 +86,38 @@ public class Player {
         return this.moneyAmount;
     }
 
-    public HashMap<String, Integer> getOwnedPropertiesBasedOnColors() {
-        return this.ownedPropertiesBasedOnColors;
+    public void addProperty(Location p){
+        this.ownedProperties.add(p);
     }
 
-    public List<Location> getOwnedProperties() {
-        return this.ownedProperties;
+    public void addColorToProperty(BoardModel.Color color, int add){
+        if (this.ownedPropertiesBasedOnColors.containsKey(color)){
+            int oldVal = this.ownedPropertiesBasedOnColors.get(color);
+            this.ownedPropertiesBasedOnColors.replace(color, oldVal + add);
+            return;
+        }
+        this.ownedPropertiesBasedOnColors.put(color, add);
     }
 
     public void setMoneyAmount(int moneyAmount) {
         this.moneyAmount = moneyAmount;
     }
 
+    public void addNumOfRailroads(){
+        this.numOfRailroads++;
+    }
 
+    public int getNumOfRailroads() {
+        return this.numOfRailroads;
+    }
 
+    public int getNumOfUtilities(){
+        return this.numOfUtilities;
+    }
+
+    public void addNumOfUtilities(){
+        this.numOfUtilities++;
+    }
 
     /**
      * Overrides java oject equals() method
@@ -95,6 +135,14 @@ public class Player {
         return this.playerName.equals(player.playerName) && this.moneyAmount == player.moneyAmount
                 && this.ownedPropertiesBasedOnColors == player.ownedPropertiesBasedOnColors
                 && this.position == player.position && this.ownedProperties == player.ownedProperties
-                && this.inJail == player.inJail;
+                && this.inJail == player.inJail && this.location.equals(player.location) && this.numOfRailroads == player.numOfRailroads
+                && this.numOfUtilities == player.numOfUtilities && this.turnsInJail == player.turnsInJail;
     }
+
+    public String toString(){
+        return "Player: " + this.playerName + "{\n" +
+                "Money: $" + this.moneyAmount + "\nOwned Properties\n" + this.printOwnedProperties() + "}";
+    }
+
+
 }

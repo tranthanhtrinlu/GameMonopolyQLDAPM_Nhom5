@@ -1,6 +1,6 @@
 public abstract class Location {
-    private int cost;
-    private String name;
+    private final int cost;
+    private final String name;
 
     public Location(int cost, String name){
         this.cost = cost;
@@ -16,7 +16,7 @@ public abstract class Location {
     }
 
 
-    public abstract void locationElementFunctionality(Player p);
+    public abstract void locationElementFunctionality(Player p, int totalDiceRoll);
 
     public abstract String toString();
 
