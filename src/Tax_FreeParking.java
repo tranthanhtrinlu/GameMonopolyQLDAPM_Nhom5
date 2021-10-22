@@ -17,6 +17,7 @@ public class Tax_FreeParking extends Location{
             this.centerMoney = 0;
             return;
         }
+        System.out.println("You landed on " + this.getName() + ", you will lose $" + this.getCost());
         if (p.getMoneyAmount() <= this.getCost()){
             this.centerMoney += p.getMoneyAmount();
             return;

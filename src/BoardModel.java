@@ -16,14 +16,16 @@ public class BoardModel {
     // might add an enum for location names
 
     private List<Location> board;
-    private List<Player> views;
+    private List<BoardView> views;
     private int currentTurn;
+    private int roll;
 
     public BoardModel(){
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
         this.currentTurn = 0;
         this.initializeBoard();
+        this.roll = 0;
     }
 
     public void incrementCurrentTurn(){
@@ -32,14 +34,12 @@ public class BoardModel {
             this.currentTurn = 0;
     }
 
-    private int rollDiceOfTwo(){
-        int rollTotal = 0;
+    private boolean rollDiceOfTwo(){
         Random r = new Random();
-        // Simulates 2 6 sided dice rolls
-        for (int i = 0; i < 2; i++){
-            rollTotal += r.nextInt(5) + 1;
-        }
-        return rollTotal;
+        int die1 = r.nextInt(6) +  1;
+        int die2 = r.nextInt(6) + 1;
+        this.roll = die1 + die2;
+        return die1 == die2;
     }
 
     public void addView(Player p){
@@ -93,7 +93,8 @@ public class BoardModel {
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
     }
 
-    public void play(){
+    public void playCurrPlayer(){
+
 
     }
 

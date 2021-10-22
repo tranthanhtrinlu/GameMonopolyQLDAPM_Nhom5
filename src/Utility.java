@@ -42,7 +42,6 @@ public class Utility extends Location{
         else {
             if (!this.owner.equals(p)) {
                 System.out.println("You landed on " + this.toString() + " Owned by " + this.owner.getPlayerName());
-                System.out.println("You lose money now :)");
                 int landedPlayerMoney = p.getMoneyAmount();
                 int amount = 4;
                 if (this.owner.getNumOfUtilities() == TOTAL_UTILITIES)

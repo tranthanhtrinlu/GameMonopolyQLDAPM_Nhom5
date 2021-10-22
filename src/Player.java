@@ -15,7 +15,7 @@ import java.util.List;
  *
  * Anything else you feel would be nice to implement in player, go ahead!
  */
-public class Player {
+public class Player implements BoardView{
 
     private final String playerName;
     private int moneyAmount;
@@ -143,6 +143,5 @@ public class Player {
         return "Player: " + this.playerName + "{\n" +
                 "Money: $" + this.moneyAmount + "\nOwned Properties\n" + this.printOwnedProperties() + "}";
     }
-
 
 }
