@@ -1,18 +1,23 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class GoToJail extends Location{
 
+    private List<GoToJailListener> goToJailListener;
     public GoToJail(int cost, String name) {
         super(cost, name);
+        this.goToJailListener= new ArrayList<>();
     }
 
     @Override
     public void locationElementFunctionality(Player p, int totalDiceRoll) {
-        System.out.println("You landed on GO TO JAIL, so you going to jail :)");
-        p.setPosition(BoardModel.JAIL_POSITION);
-        p.setInJail(true);
+        for (GoToJailListener listener : this.goToJailListener){
+            listener.SendPlayerToJail(new GoToJailEvent(this, p));
+        }
     }
 
     @Override
     public String toString() {
-        return null;
+        return "GO TO JAIL";
     }
 }

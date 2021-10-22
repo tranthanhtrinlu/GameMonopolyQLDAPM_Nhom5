@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class RailRoad extends Location{
     private List<Integer> payments;
     private Player owner;
+    private List<RailRoadListener> railRoadListener;
 
     public RailRoad(String name, int cost){
         super(cost, name);
@@ -15,54 +16,47 @@ public class RailRoad extends Location{
            add(100);
            add(200);
         }};
+        this.railRoadListener = new ArrayList<>();
         this.owner = null;
     }
 
     @Override
     public void locationElementFunctionality(Player p, int totalDiceRoll) {
-        Scanner sc = new Scanner(System.in);
-        int userInput;
         if (this.owner == null){
-            System.out.println("You landed on " + this.toString());
-            while(true) {
-                try {
-                    System.out.println("Would you want to \n(1) purchase \n(2) pass?");
-                    userInput = sc.nextInt();
-                    if (userInput < 0 || userInput > 2) {
-                        System.out.println("invalid input");
-                        continue;
-                    }
-                    break;
-                } catch (InputMismatchException e) {
-                    System.out.println("You did not enter an integer.");
-                }
-            }
-            if (userInput == 1){
-                if (p.getMoneyAmount() < this.getCost()){
-                    System.out.println("Sorry, you don't have enough money. Moving to the next player");
-                    return;
-                }
-                this.owner = p;
-                this.owner.addProperty(this);
-                this.owner.addNumOfRailroads();
+            for (RailRoadListener listener : this.railRoadListener){
+                listener.railRoadNoOwner(new RailRoadEvent(this, p));
             }
         }
         else {
             if (!this.owner.equals(p)) {
-                System.out.println("You landed on " + this.toString() + " Owned by " + this.owner.getPlayerName());
-                System.out.println("You lose money now :)");
-                int landedPlayerMoney = p.getMoneyAmount();
-                int payment = this.payments.get(this.owner.getNumOfRailroads());
-                if (landedPlayerMoney <= payment){
-                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-                    return;
+                for (RailRoadListener listener : this.railRoadListener){
+                    listener.railRoadRent(new RailRoadEvent(this, p));
                 }
-                p.setMoneyAmount(p.getMoneyAmount() - payment);
-                this.owner.setMoneyAmount(p.getMoneyAmount() + payment);
                 return;
             }
-            System.out.println("You landed on " + this.getName() + " Which you own");
+            for (RailRoadListener listener : this.railRoadListener){
+                listener.railRoadOwned(new RailRoadEvent(this, p));
+            }
         }
+    }
+
+    public boolean buy(Player p){
+        if (p.getMoneyAmount() < this.getCost()){
+            return true;
+        }
+        this.owner = p;
+        this.owner.addProperty(this);
+        this.owner.addNumOfRailroads();
+        this.owner.setMoneyAmount(this.owner.getMoneyAmount() - this.getCost());
+        return false;
+    }
+
+    public int getPayment(int index){
+        return this.payments.get(index);
+    }
+
+    public Player getOwner() {
+        return this.owner;
     }
 
     @Override
@@ -71,4 +65,6 @@ public class RailRoad extends Location{
             return this.getName() + " {Cost is: " + this.getCost() + "}";
         return this.getName() + " {Current Price: " + this.payments.get(this.owner.getNumOfRailroads()) + "}";
     }
+
+
 }

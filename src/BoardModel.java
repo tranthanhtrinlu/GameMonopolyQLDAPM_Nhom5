@@ -8,6 +8,7 @@ public class BoardModel {
     public static final int MIN_NUM_PLAYERS = 2;
     public static final int MAX_NUM_PLAYERS = 5;
     public static final int JAIL_POSITION = 10; // 11 - 1
+    public final static int TOTAL_UTILITIES = 2;
 
     public enum Color{
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
@@ -42,12 +43,12 @@ public class BoardModel {
         return die1 == die2;
     }
 
-    public void addView(Player p){
-        this.views.add(p);
+    public void addView(BoardView view){
+        this.views.add(view);
     }
 
-    public void removePlayer(Player p){
-        this.views.remove(p);
+    public void removePlayer(BoardView view){
+        this.views.remove(view);
     }
 
     private void initializeBoard(){
@@ -93,6 +94,7 @@ public class BoardModel {
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
     }
 
+    // Controller?
     public void playCurrPlayer(){
 
 

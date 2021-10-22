@@ -2,20 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/*
- * TO BE IMPLEMENTED BY MAX
- *
- * NEEDS:
- * A way to keep track of money, gaining and losing money
- * Name...
- * function to display the properties the player owns (Needs a list of properties AKA BoardElement)
- * A way of keeping  track of the position he/she is on the board. (remember to check the position for being at go)
- * Getter setters...
- *
- *
- * Anything else you feel would be nice to implement in player, go ahead!
- */
-public class Player implements BoardView{
+public class Player{
 
     private final String playerName;
     private int moneyAmount;
@@ -24,7 +11,7 @@ public class Player implements BoardView{
     private boolean inJail;
     private int turnsInJail;
     private int position;
-    private String location;
+    private String currLocation;
     private int numOfRailroads;
     private int numOfUtilities;
 
@@ -36,7 +23,7 @@ public class Player implements BoardView{
         this.position = 0;
         this.inJail = false;
         this.turnsInJail = 0;
-        this.location = "";
+        this.currLocation = "";
         this.numOfRailroads = 0;
         this.numOfUtilities = 0;
     }
@@ -135,7 +122,7 @@ public class Player implements BoardView{
         return this.playerName.equals(player.playerName) && this.moneyAmount == player.moneyAmount
                 && this.ownedPropertiesBasedOnColors == player.ownedPropertiesBasedOnColors
                 && this.position == player.position && this.ownedProperties == player.ownedProperties
-                && this.inJail == player.inJail && this.location.equals(player.location) && this.numOfRailroads == player.numOfRailroads
+                && this.inJail == player.inJail && this.currLocation.equals(player.currLocation) && this.numOfRailroads == player.numOfRailroads
                 && this.numOfUtilities == player.numOfUtilities && this.turnsInJail == player.turnsInJail;
     }
 
