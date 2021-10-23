@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Property extends Location {
+public class Property extends Location{
     private final List<Integer> rentCosts;
     private int numOfHouses;
     private final int maxNumberOfHouses;
@@ -10,6 +10,7 @@ public class Property extends Location {
     private final int numberOfColor;
     private final int costPerHouse;
     private List<PropertyListener> propertyListeners;
+    private int oldNumOfHouses;
 
     public Property(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, BoardModel.Color color, int numOfColor){
         super(cost, name);
@@ -23,6 +24,7 @@ public class Property extends Location {
         }};
         this.propertyListeners = new ArrayList<>();
         this.numOfHouses = 0;
+        this.oldNumOfHouses = 0;
         this.maxNumberOfHouses = 5;
         this.color = color;
         this.owner = null;
@@ -30,6 +32,7 @@ public class Property extends Location {
         this.costPerHouse = costPerHouse;
     }
 
+    @Override
     public boolean buy(Player p){
         if (p.getMoneyAmount() < this.getCost()){
             return true;
@@ -41,8 +44,22 @@ public class Property extends Location {
         return false;
     }
 
+    @Override
+    public void resetOwner() {
+        this.numOfHouses = 0;
+        this.owner = null;
+    }
+
+    @Override
+    public void getResult(Player p, BoardEvent boardEvent) {
+        for (PropertyListener listener : this.propertyListeners){
+            listener.displayLandedPropertyResult(new PropertyEvent(this, p), boardEvent);
+        }
+    }
+
     public boolean addHouse(int add, Player p){
         if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() <= add*this.costPerHouse) {
+            this.oldNumOfHouses = this.numOfHouses;
             this.numOfHouses += add;
             return true;
         }
@@ -51,23 +68,25 @@ public class Property extends Location {
 
     // Raise an event for each case "no owner" "curr owner" "not curr owner"
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
                 listener.propertyNoOwner(new PropertyEvent(this, p));
             }
+            return true;
         }
         else {
             if (this.owner.equals(p)) {
                 for (PropertyListener listener : this.propertyListeners){
                     listener.propertyOwned(new PropertyEvent(this, p));
                 }
-                return;
+                return true;
             }
             for (PropertyListener listener : this.propertyListeners){
                 listener.propertyRent(new PropertyEvent(this, p));
             }
         }
+        return false;
     }
 
     public int getCostPerHouse() {
@@ -98,10 +117,21 @@ public class Property extends Location {
         return this.rentCosts.get(index);
     }
 
-    public String toString(){
+    public void setOldNumOfHouses(int oldNumOfHouses) {
+        this.oldNumOfHouses = oldNumOfHouses;
+    }
+
+    public int getOldNumOfHouses() {
+        return this.oldNumOfHouses;
+    }
+
+    public String toString(Player p){
         if (this.owner == null)
             return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
-        return "Property name: " + this.getName() + " {Rent: " + this.rentCosts.get(numOfHouses) + "}";
-
+        else if (this.owner.equals(p)){
+            return "Property name: " + this.getName() + " Who owns this property";
+        }
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
+                + this.rentCosts.get(numOfHouses) + "} \n" + p.getPlayerName() + " will lose money now";
     }
 }

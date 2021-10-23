@@ -1,7 +1,5 @@
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Utility extends Location{
 
@@ -14,7 +12,8 @@ public class Utility extends Location{
         this.utilityListenerList = new ArrayList<>();
     }
 
-    public boolean buy (Player p){
+    @Override
+    public boolean buy(Player p){
         if (p.getMoneyAmount() < this.getCost()){
             return true;
         }
@@ -24,38 +23,49 @@ public class Utility extends Location{
         return false;
     }
 
+    @Override
+    public void resetOwner() {
+        this.owner = null;
+    }
+
+
     public Player getOwner() {
         return this.owner;
     }
 
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
             for (UtilityListener listener : this.utilityListenerList){
                 listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll));
             }
+            return true;
         }
         else {
             if (!this.owner.equals(p)) { // if owned
                 for (UtilityListener listener : this.utilityListenerList){
                     listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll));
                 }
-                return;
+                return false;
             }
             for (UtilityListener listener : this.utilityListenerList){
                 listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll));
             }
+            return false;
         }
     }
 
     @Override
-    public String toString() {
+    public String toString(Player p) {
         if (this.owner == null)
-            return this.getName() + " {Cost is: " + this.getCost() + "}";
-
+            return "Property name: " + this.getName() + " {Purchase property: " + this.getCost() + "}";
+        else if (this.owner.equals(p)){
+            return "Property name: " + this.getName() + " Who owns this property";
+        }
         int amount = 4;
         if (this.owner.getNumOfUtilities() == BoardModel.TOTAL_UTILITIES)
             amount = 10;
-        return this.getName() + " {Payment is: dice rolls * " + amount + "}";
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Payment: dice rolls * "
+                + amount + "} \n" + p.getPlayerName() + " will lose money now";
     }
 }

@@ -10,14 +10,31 @@ public class GoToJail extends Location{
     }
 
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         for (GoToJailListener listener : this.goToJailListener){
             listener.SendPlayerToJail(new GoToJailEvent(this, p));
         }
+        return false;
     }
 
     @Override
-    public String toString() {
-        return "GO TO JAIL";
+    public String toString(Player p) {
+        return p.getPlayerName() + " landed on " + this.getName() + ". Being Sent to Jail.";
     }
+
+    @Override
+    public boolean buy(Player p) {
+        return false;
+    }
+
+    @Override
+    public void resetOwner() {
+
+    }
+
+    @Override
+    public void getResult(Player p,  BoardEvent event) {
+
+    }
+
 }

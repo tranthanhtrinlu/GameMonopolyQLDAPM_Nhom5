@@ -1,9 +1,7 @@
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
-public class RailRoad extends Location{
+public class RailRoad extends Location implements HandlePlaceToOwn{
     private List<Integer> payments;
     private Player owner;
     private List<RailRoadListener> railRoadListener;
@@ -21,25 +19,28 @@ public class RailRoad extends Location{
     }
 
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
             for (RailRoadListener listener : this.railRoadListener){
                 listener.railRoadNoOwner(new RailRoadEvent(this, p));
             }
+            return true;
         }
         else {
             if (!this.owner.equals(p)) {
                 for (RailRoadListener listener : this.railRoadListener){
                     listener.railRoadRent(new RailRoadEvent(this, p));
                 }
-                return;
+                return false;
             }
             for (RailRoadListener listener : this.railRoadListener){
                 listener.railRoadOwned(new RailRoadEvent(this, p));
             }
+            return false;
         }
     }
 
+    @Override
     public boolean buy(Player p){
         if (p.getMoneyAmount() < this.getCost()){
             return true;
@@ -51,6 +52,11 @@ public class RailRoad extends Location{
         return false;
     }
 
+    @Override
+    public void resetOwner() {
+        this.owner = null;
+    }
+
     public int getPayment(int index){
         return this.payments.get(index);
     }
@@ -60,10 +66,14 @@ public class RailRoad extends Location{
     }
 
     @Override
-    public String toString() {
+    public String toString(Player p) {
         if (this.owner == null)
-            return this.getName() + " {Cost is: " + this.getCost() + "}";
-        return this.getName() + " {Current Price: " + this.payments.get(this.owner.getNumOfRailroads()) + "}";
+            return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
+        else if (this.owner.equals(p)){
+            return "Property name: " + this.getName() + " Who owns this property";
+        }
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
+                + this.payments.get(this.owner.getNumOfRailroads()) + "} \n" + p.getPlayerName() + " will lose money now";
     }
 
 

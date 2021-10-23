@@ -23,17 +23,29 @@ public class Player{
         this.position = 0;
         this.inJail = false;
         this.turnsInJail = 0;
-        this.currLocation = "";
+        this.currLocation = "GO";
         this.numOfRailroads = 0;
         this.numOfUtilities = 0;
     }
 
     public String printOwnedProperties(){
         StringBuilder s = new StringBuilder();
-        for(Location location : ownedProperties){
-            s.append(location.toString()).append("\n");
+        for(Location location : this.ownedProperties){
+            s.append(location.getName()).append(", ");
         }
         return s.toString();
+    }
+
+    public String displayOwnedProperties(){
+        StringBuilder s = new StringBuilder();
+        for (int i = 0 ; i < this.ownedProperties.size(); i++){
+            s.append("(").append(i).append(") ").append(this.ownedProperties.get(i).getName()).append("\n");
+        }
+        return s.toString();
+    }
+
+    public Location getLocationByIndex(int i){
+        return this.ownedProperties.get(i);
     }
 
     public boolean numberOfColoredPropertiesOwned(BoardModel.Color color, int numOfColor){
@@ -44,12 +56,18 @@ public class Player{
         this.position = position;
     }
 
-    public void movePlayer(int combinedRolls){
+    public void setCurrLocation(String currLocation) {
+        this.currLocation = currLocation;
+    }
+
+    public boolean movePlayer(int combinedRolls){
         this.position += combinedRolls;
         if (this.position >= BoardModel.SIZE_OF_BOARD){
             this.moneyAmount += BoardModel.GO_MONEY;
+            return true;
         }
         this.position -= BoardModel.SIZE_OF_BOARD;
+        return false;
     }
 
     public void setInJail(boolean inJail) {
@@ -86,6 +104,16 @@ public class Player{
         this.ownedPropertiesBasedOnColors.put(color, add);
     }
 
+    public void bankrupted(){
+        for (Location location : this.ownedProperties){
+            location.resetOwner();
+        }
+    }
+
+    public int getSizeOfOwnedProperties(){
+        return this.ownedProperties.size();
+    }
+
     public void setMoneyAmount(int moneyAmount) {
         this.moneyAmount = moneyAmount;
     }
@@ -104,6 +132,10 @@ public class Player{
 
     public void addNumOfUtilities(){
         this.numOfUtilities++;
+    }
+
+    public int getPosition() {
+        return this.position;
     }
 
     /**
@@ -127,8 +159,8 @@ public class Player{
     }
 
     public String toString(){
-        return "Player: " + this.playerName + "{\n" +
-                "Money: $" + this.moneyAmount + "\nOwned Properties\n" + this.printOwnedProperties() + "}";
+        return "Player: " + this.playerName + "\n{\n" +
+                "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
     }
 
 }

@@ -16,8 +16,14 @@ public abstract class Location {
     }
 
 
-    public abstract void locationElementFunctionality(Player p, int totalDiceRoll);
+    public abstract boolean locationElementFunctionality(Player p, int totalDiceRoll);
 
-    public abstract String toString();
+    public abstract String toString(Player p);
+
+    public abstract boolean buy(Player p);
+
+    public abstract void resetOwner();
+
+    public abstract void getResult(Player p, BoardEvent event);
 
 }

@@ -10,6 +10,9 @@ public class BoardModel {
     public static final int JAIL_POSITION = 10; // 11 - 1
     public final static int TOTAL_UTILITIES = 2;
 
+
+
+
     public enum Color{
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
     }
@@ -94,11 +97,93 @@ public class BoardModel {
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
     }
 
-    // Controller?
-    public void playCurrPlayer(){
+    public void announceReachingGo(){
+        for (BoardView view : this.views){
+            view.announceReachingGo();
+        }
+    }
 
+    public void announceLandedResult(BoardEvent e, boolean result){
+        for (BoardView view : this.views){
+            view.handleGameStatus(e, result);
+        }
+    }
+
+    public void announceLanded(BoardEvent e) {
+        for (BoardView view: this.views){
+            view.handleAnnounceLanded(e);
+        }
 
     }
 
+    public void announcePropertyResult(BoardEvent e) {
+        for (BoardView view: this.views){
+            view.handlePurchaseAnnouncment(e);
+        }
+    }
 
+    public void playCurrPlayerTurn(){
+        BoardView currView = this.views.get(this.currentTurn);
+        boolean doubles = rollDiceOfTwo();
+        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll);
+        boolean hasProperty = currView.checkIfPlayerHasProperties(e);
+        int choice = currView.handleCurrentPlayerChoice(e);
+
+        if (!hasProperty){
+            if (choice == 1) {
+                currView.handlePrintStateOfEachPlayer(e);
+            }
+            else if (choice == 2){
+                currView.handlePlayerMovement(e);
+                if (!doubles){
+                    this.incrementCurrentTurn();
+                    currView.handleNextTurn(e);
+                }
+            }
+            else if (choice == 3){
+                for (BoardView view : this.views){
+                    view.announceDecisionToPurchaseHouses(e);
+                }
+                currView.handlePlayerChoiceToPurchaseHouses(e);
+            }
+            else if (choice == 4){
+                for (BoardView view : this.views){
+                    view.announcePlayerPass(e);
+                }
+                currView.handleNextTurn(e);
+            }
+            else if (choice == 5){
+                for (BoardView view : this.views){
+                    view.handlePlayerQuit(e);
+                }
+                this.incrementCurrentTurn();
+                currView.handleNextTurn(e);
+            }
+        }
+        else{
+            if (choice == 1){
+                currView.handlePrintStateOfEachPlayer(e);
+            }
+            else if (choice == 2){
+                currView.handlePlayerMovement(e);
+                if (!doubles){
+                    this.incrementCurrentTurn();
+                    currView.handleNextTurn(e);
+                }
+            }
+            else if (choice == 3){
+                for (BoardView view : this.views){
+                    view.announcePlayerPass(e);
+                }
+                currView.handleNextTurn(e);
+            }
+            else if (choice == 4){
+                for (BoardView view : this.views){
+                    view.handlePlayerQuit(e);
+                }
+                this.incrementCurrentTurn();
+                currView.handleNextTurn(e);
+            }
+        }
+    }
 }

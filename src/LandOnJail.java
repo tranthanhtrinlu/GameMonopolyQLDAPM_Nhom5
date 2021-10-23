@@ -10,15 +10,31 @@ public class LandOnJail extends Location {
     }
 
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         for (LandOnJailListener listener : this.landOnJailListenerList){
             listener.visiting(new LandOnJailEvent(this));
         }
+        return false;
+    }
+
+    @Override
+    public String toString(Player p) {
+        return p.getPlayerName() + " LANDED ON JAIL. Just Visiting";
+    }
+
+    @Override
+    public boolean buy(Player p) {
+        return false;
+    }
+
+    @Override
+    public void resetOwner() {
 
     }
 
     @Override
-    public String toString() {
-        return this.getName();
+    public void getResult(Player p,  BoardEvent event) {
+
     }
+
 }

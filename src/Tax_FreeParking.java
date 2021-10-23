@@ -24,20 +24,35 @@ public class Tax_FreeParking extends Location{
     }
 
     @Override
-    public void locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.getName().equals("FREE PARKING")){
             for (Tax_FreeParkingListener listener : this.tax_freeParkingListenerList){
                 listener.FreeParking(new Tax_FreeParkingEvent(this, p));
             }
-            return;
+            return false;
         }
         for (Tax_FreeParkingListener listener : this.tax_freeParkingListenerList){
             listener.payTax(new Tax_FreeParkingEvent(this, p));
         }
+        return false;
     }
 
     @Override
-    public String toString() {
-        return null;
+    public String toString(Player p) {
+        if (this.getName().equals("FREE PARKING")){
+            return p.getPlayerName() + " Landed on free parking. Earned money is $" + this.centerMoney;
+        }
+        return p.getPlayerName() + " landed on " + this.getName() + ". Loss of money is $" + this.getCost();
     }
+
+    @Override
+    public boolean buy(Player p) {
+        return false;
+    }
+
+    @Override
+    public void resetOwner() {
+
+    }
+
 }
