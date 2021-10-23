@@ -31,8 +31,13 @@ public class Utility extends Location{
     @Override
     public void getResult(Player p, BoardEvent event) {
         for (UtilityListener listener : this.utilityListenerList){
-            listener.displayLandedUtilityResult(new UtilityEvent(this, p, event.getRoll()), event);
+            listener.displayLandedUtilityResult(new UtilityEvent(this, p, event.diceSum()), event);
         }
+    }
+
+    @Override
+    public void addListener(BoardView view) {
+        this.utilityListenerList.add(view);
     }
 
 

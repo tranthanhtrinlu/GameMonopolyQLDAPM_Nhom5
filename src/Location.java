@@ -26,4 +26,5 @@ public abstract class Location {
 
     public abstract void getResult(Player p, BoardEvent event);
 
+    public abstract void addListener(BoardView view);
 }

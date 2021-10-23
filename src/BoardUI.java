@@ -17,6 +17,7 @@ public class BoardUI implements BoardView{
         this.gamePlayers = new ArrayList<>();
         this.model = new BoardModel();
         this.model.addView(this);
+        this.model.addViewToListener(this);
         this.currentTurn = 0;
         this.pass = false;
         this.purchasesProperty = false;
@@ -34,6 +35,7 @@ public class BoardUI implements BoardView{
                 System.out.println("Invalid amount");
             }catch(InputMismatchException e){
                 System.out.println("You did not enter an integer.");
+                this.sc.next();
             }
         }
         return this.userInput;
@@ -78,6 +80,7 @@ public class BoardUI implements BoardView{
                 break;
             }catch(InputMismatchException exception){
                 System.out.println("You did not enter an integer.");
+                this.sc.next();
             }
         }
         if (userInput == 1) {
@@ -88,19 +91,25 @@ public class BoardUI implements BoardView{
             }
             this.purchasesProperty = true;
             boolean buy = false;
+            boolean choice = true;
             while (true) {
                 try{
-                    while(true){
-                        System.out.println("Would you want to buy any houses?\n(1) YES or (2) No");
-                        this.userInput = this.sc.nextInt();
-                        if (this.userInput < 0 || this.userInput > 2){
-                            System.out.println("Invalid Input");
-                            continue;
+                    while(choice){
+                        try{
+                            System.out.println("Would you want to buy any houses?\n(1) YES or (2) No");
+                            this.userInput = this.sc.nextInt();
+                            if (this.userInput < 0 || this.userInput > 2){
+                                System.out.println("Invalid Input");
+                                continue;
+                            }
+                            if (this.userInput == 1){
+                                buy = true;
+                            }
+                            choice = false;
+                        }catch (InputMismatchException exception){
+                            System.out.println("Invalid input");
+                            this.sc.next();
                         }
-                        if (this.userInput == 1){
-                            buy = true;
-                        }
-                        break;
                     }
                     if (!buy){
                         break;
@@ -108,13 +117,14 @@ public class BoardUI implements BoardView{
                     System.out.println("Each house cost " + e.getProperty().getCostPerHouse());
                     System.out.println("Out of " + e.getProperty().getMaxNumberOfHouses() + ", how many would you like to buy?");
                     this.userInput = this.sc.nextInt();
-                    if(!e.getProperty().addHouse(this.userInput, e.getPlayer())){
+                    if(e.getProperty().addHouse(this.userInput, e.getPlayer())){
                         System.out.println("invalid amount or not enough money");
                         continue;
                     }
                     break;
                 }catch(InputMismatchException exception){
                     System.out.println("You did not enter an integer.");
+                    this.sc.next();
                 }
             }
         }
@@ -136,6 +146,7 @@ public class BoardUI implements BoardView{
                     break;
                 }catch(InputMismatchException exception){
                     System.out.println("You did not enter an integer.");
+                    this.sc.next();
                 }
             }
             if (this.userInput == 1){
@@ -145,13 +156,14 @@ public class BoardUI implements BoardView{
                         System.out.println("You currently have " + e.getProperty().getNumOfHouses() + " of " + e.getProperty().getMaxNumberOfHouses());
                         System.out.println("How many would you like to currently buy?");
                         this.userInput = this.sc.nextInt();
-                        if(!e.getProperty().addHouse(this.userInput, e.getPlayer())){
+                        if(e.getProperty().addHouse(this.userInput, e.getPlayer())){
                             System.out.println("invalid amount or not enough money");
                             continue;
                         }
                         break;
                     }catch(InputMismatchException exception){
                         System.out.println("You did not enter an integer.");
+                        this.sc.next();
                     }
                 }
             }
@@ -203,6 +215,7 @@ public class BoardUI implements BoardView{
                 break;
             } catch (InputMismatchException exception) {
                 System.out.println("You did not enter an integer.");
+                this.sc.next();
             }
         }
         if (userInput == 1){
@@ -260,6 +273,7 @@ public class BoardUI implements BoardView{
                 break;
             } catch (InputMismatchException exception) {
                 System.out.println("You did not enter an integer.");
+                this.sc.next();
             }
         }
         if (this.userInput == 1){
@@ -351,7 +365,7 @@ public class BoardUI implements BoardView{
     // HANDLES
     @Override
     public boolean checkIfPlayerHasProperties(BoardEvent e){
-        return this.gamePlayers.get(this.currentTurn).getSizeOfOwnedProperties() != 0;
+        return this.gamePlayers.get(this.currentTurn).numberOfEstateProperties() != 0;
     }
 
     @Override
@@ -378,7 +392,7 @@ public class BoardUI implements BoardView{
     public void handleAnnounceLanded(BoardEvent e){
         Player p = this.gamePlayers.get(this.currentTurn);
         Location place = e.boardElement(p.getPosition());
-        System.out.println(place.toString(p));
+        System.out.println(p.getPlayerName() + " landed on " + place.toString(p));
     }
 
     @Override
@@ -428,16 +442,42 @@ public class BoardUI implements BoardView{
         while (true){
             try{
                 System.out.println("Which property would you like to purchase houses for?");
-                System.out.println(p.displayOwnedProperties());
+                List<Property> estates = p.getEstatePropertiesOfPlayer();
+                int k = 0;
+                for (Property owned : estates){
+                    System.out.println("(" + k + ") " + owned.getName() + ", number of houses: " + owned.getNumOfHouses());
+                }
                 System.out.print("<number input>>> ");
                 this.userInput = this.sc.nextInt();
-                if (this.userInput < 0 || this.userInput >= p.getSizeOfOwnedProperties()){
+                if (this.userInput < 0 || this.userInput >= estates.size()){
                     System.out.println("Invalid option");
                     continue;
                 }
-                Location place = p.getLocationByIndex(this.userInput);
+                Property place = p.getPropertyByName(estates.get(this.userInput).getName());
+                if (place.getNumOfHouses() != place.getMaxNumberOfHouses()){
+                    while(true){
+                        try{
+                            System.out.println("Each house cost " + place.getCostPerHouse());
+                            System.out.println("You currently have " + place.getNumOfHouses() + " of " + place.getMaxNumberOfHouses());
+                            System.out.println("How many would you like to currently buy?");
+                            this.userInput = this.sc.nextInt();
+                            if(place.addHouse(this.userInput, p)){
+                                System.out.println("invalid amount or not enough money");
+                                continue;
+                            }
+                            break;
+                        }catch(InputMismatchException exception){
+                            System.out.println("You did not enter an integer.");
+                            this.sc.next();
+                        }
+                    }
+                    return;
+                }
+                System.out.println("You maxed out on houses already");
+
             }catch(InputMismatchException exception){
                 System.out.println("Invalid input");
+                this.sc.next();
             }
         }
     }
@@ -450,11 +490,13 @@ public class BoardUI implements BoardView{
 
     @Override
     public void handlePlayerMovement(BoardEvent e) {
-        if (this.gamePlayers.get(this.currentTurn).movePlayer(e.getRoll())){
+        System.out.println("Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName() + " rolled: ( " + e.getRoll1() + " + " + e.getRoll2() + " =" + e.diceSum() + ")");
+        if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
             e.getModel().announceReachingGo();
         }
         e.getModel().announceLanded(e);
-        boolean result = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.getRoll());
+        this.gamePlayers.get(this.currentTurn).setCurrLocation(e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition()).getName());
+        boolean result = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.diceSum());
         e.getModel().announceLandedResult(e, result);
     }
 

@@ -60,4 +60,9 @@ public class Tax_FreeParking extends Location{
 
     }
 
+    @Override
+    public void addListener(BoardView view) {
+        this.tax_freeParkingListenerList.add(view);
+    }
+
 }

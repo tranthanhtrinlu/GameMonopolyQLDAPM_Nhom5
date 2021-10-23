@@ -36,12 +36,34 @@ public class Player{
         return s.toString();
     }
 
-    public String displayOwnedProperties(){
+    public List<Property> getEstatePropertiesOfPlayer(){
         StringBuilder s = new StringBuilder();
-        for (int i = 0 ; i < this.ownedProperties.size(); i++){
-            s.append("(").append(i).append(") ").append(this.ownedProperties.get(i).getName()).append("\n");
+        List<Property> properties = new ArrayList<>();
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                properties.add((Property) ownedProperty);
+            }
         }
-        return s.toString();
+        return properties;
+    }
+
+    public Property getPropertyByName(String name){
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty.getName().equals(name)){
+                return (Property) ownedProperty;
+            }
+        }
+        return null;
+    }
+
+    public int numberOfEstateProperties(){
+        int k = 0;
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                k++;
+            }
+        }
+        return k;
     }
 
     public Location getLocationByIndex(int i){

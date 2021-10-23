@@ -64,6 +64,11 @@ public class RailRoad extends Location{
         }
     }
 
+    @Override
+    public void addListener(BoardView view) {
+        this.railRoadListener.add(view);
+    }
+
     public int getPayment(int index){
         return this.payments.get(index);
     }

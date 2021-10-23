@@ -22,14 +22,16 @@ public class BoardModel {
     private List<Location> board;
     private List<BoardView> views;
     private int currentTurn;
-    private int roll;
+    private int roll1;
+    private int roll2;
 
     public BoardModel(){
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
         this.currentTurn = 0;
         this.initializeBoard();
-        this.roll = 0;
+        this.roll1 = 0;
+        this.roll2 = 0;
     }
 
     public void incrementCurrentTurn(){
@@ -40,10 +42,9 @@ public class BoardModel {
 
     private boolean rollDiceOfTwo(){
         Random r = new Random();
-        int die1 = r.nextInt(6) +  1;
-        int die2 = r.nextInt(6) + 1;
-        this.roll = die1 + die2;
-        return die1 == die2;
+        this.roll1 = r.nextInt(6) +  1;
+        this.roll2 = r.nextInt(6) + 1;
+        return this.roll1 == this.roll2;
     }
 
     public void addView(BoardView view){
@@ -97,6 +98,12 @@ public class BoardModel {
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
     }
 
+    public void addViewToListener(BoardView view){
+        for (Location location : this.board){
+            location.addListener(view);
+        }
+    }
+
     public void announceReachingGo(){
         for (BoardView view : this.views){
             view.announceReachingGo();
@@ -125,7 +132,7 @@ public class BoardModel {
     public void playCurrPlayerTurn(){
         BoardView currView = this.views.get(this.currentTurn);
         boolean doubles = rollDiceOfTwo();
-        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll);
+        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
         boolean hasProperty = currView.checkIfPlayerHasProperties(e);
         int choice = currView.handleCurrentPlayerChoice(e);
 

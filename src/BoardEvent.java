@@ -5,16 +5,26 @@ public class BoardEvent extends EventObject {
 
     private List<Location> board;
     private boolean doubles;
-    private int roll;
-    public BoardEvent(BoardModel boardModel, List<Location> board, boolean doubles, int roll) {
+    private int roll1;
+    private int roll2;
+    public BoardEvent(BoardModel boardModel, List<Location> board, boolean doubles, int roll1, int roll2) {
         super(boardModel);
         this.board = board;
         this.doubles = doubles;
-        this.roll = roll;
+        this.roll1 = roll1;
+        this.roll2 = roll2;
     }
 
-    public int getRoll() {
-        return this.roll;
+    public int getRoll1() {
+        return this.roll1;
+    }
+
+    public int getRoll2() {
+        return this.roll2;
+    }
+
+    public int diceSum(){
+        return this.roll1 + this.roll2;
     }
 
     public boolean getDoubles(){

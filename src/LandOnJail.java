@@ -37,4 +37,9 @@ public class LandOnJail extends Location {
 
     }
 
+    @Override
+    public void addListener(BoardView view) {
+        this.landOnJailListenerList.add(view);
+    }
+
 }

@@ -57,18 +57,24 @@ public class Property extends Location{
         }
     }
 
+    @Override
+    public void addListener(BoardView view) {
+        this.propertyListeners.add(view);
+    }
+
     public boolean addHouse(int add, Player p){
         if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() <= add*this.costPerHouse) {
             this.oldNumOfHouses = this.numOfHouses;
             this.numOfHouses += add;
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     // Raise an event for each case "no owner" "curr owner" "not curr owner"
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+        System.out.println("FUNCTION RUNNING HERE WORKING");
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
                 listener.propertyNoOwner(new PropertyEvent(this, p));

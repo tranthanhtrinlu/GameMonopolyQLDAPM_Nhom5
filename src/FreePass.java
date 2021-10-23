@@ -38,4 +38,9 @@ public class FreePass extends Location {
 
     }
 
+    @Override
+    public void addListener(BoardView view) {
+        this.listeners.add(view);
+    }
+
 }
