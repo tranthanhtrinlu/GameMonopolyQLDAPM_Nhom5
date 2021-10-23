@@ -129,7 +129,7 @@ public class BoardModel {
         boolean hasProperty = currView.checkIfPlayerHasProperties(e);
         int choice = currView.handleCurrentPlayerChoice(e);
 
-        if (!hasProperty){
+        if (hasProperty){
             if (choice == 1) {
                 currView.handlePrintStateOfEachPlayer(e);
             }

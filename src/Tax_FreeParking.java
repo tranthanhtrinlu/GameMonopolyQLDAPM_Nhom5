@@ -55,4 +55,9 @@ public class Tax_FreeParking extends Location{
 
     }
 
+    @Override
+    public void getResult(Player p, BoardEvent event) {
+
+    }
+
 }

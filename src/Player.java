@@ -64,9 +64,9 @@ public class Player{
         this.position += combinedRolls;
         if (this.position >= BoardModel.SIZE_OF_BOARD){
             this.moneyAmount += BoardModel.GO_MONEY;
+            this.position -= BoardModel.SIZE_OF_BOARD;
             return true;
         }
-        this.position -= BoardModel.SIZE_OF_BOARD;
         return false;
     }
 

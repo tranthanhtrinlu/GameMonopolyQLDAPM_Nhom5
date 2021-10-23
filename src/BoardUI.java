@@ -237,6 +237,11 @@ public class BoardUI implements BoardView{
         owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
     }
 
+    @Override
+    public void displayLandedRailroadResult(RailRoadEvent e, BoardEvent boardEvent) {
+        boardEvent.getModel().announcePropertyResult(boardEvent);
+    }
+
     // **END OF RAIL ROAD IMPLEMENTATION** //
 
     //** BEGINNING OF UTILITY IMPLEMENTATION **//
@@ -290,6 +295,11 @@ public class BoardUI implements BoardView{
         }
         e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - payment);
         owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
+    }
+
+    @Override
+    public void displayLandedUtilityResult(UtilityEvent e, BoardEvent boardEvent) {
+        boardEvent.getModel().announcePropertyResult(boardEvent);
     }
     // ** END OF UTILITY IMPLEMENTATION **
 
@@ -426,8 +436,6 @@ public class BoardUI implements BoardView{
                     continue;
                 }
                 Location place = p.getLocationByIndex(this.userInput);
-
-
             }catch(InputMismatchException exception){
                 System.out.println("Invalid input");
             }

@@ -28,6 +28,13 @@ public class Utility extends Location{
         this.owner = null;
     }
 
+    @Override
+    public void getResult(Player p, BoardEvent event) {
+        for (UtilityListener listener : this.utilityListenerList){
+            listener.displayLandedUtilityResult(new UtilityEvent(this, p, event.getRoll()), event);
+        }
+    }
+
 
     public Player getOwner() {
         return this.owner;

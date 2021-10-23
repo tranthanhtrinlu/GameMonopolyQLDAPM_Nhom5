@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class RailRoad extends Location implements HandlePlaceToOwn{
+public class RailRoad extends Location{
     private List<Integer> payments;
     private Player owner;
     private List<RailRoadListener> railRoadListener;
@@ -55,6 +55,13 @@ public class RailRoad extends Location implements HandlePlaceToOwn{
     @Override
     public void resetOwner() {
         this.owner = null;
+    }
+
+    @Override
+    public void getResult(Player p, BoardEvent event) {
+        for (RailRoadListener listener : this.railRoadListener){
+            listener.displayLandedRailroadResult(new RailRoadEvent(this, p), event);
+        }
     }
 
     public int getPayment(int index){
