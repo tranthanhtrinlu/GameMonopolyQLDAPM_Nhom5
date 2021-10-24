@@ -12,6 +12,20 @@ public class Property extends Location{
     private List<PropertyListener> propertyListeners;
     private int oldNumOfHouses;
 
+    /**
+     * property constructor
+     * @param name String name of property
+     * @param cost Integer cost of the property to buy
+     * @param costPerHouse Integer cost to buy one house
+     * @param initialRent Integer starting rent
+     * @param house1Rent Integer rent with one house
+     * @param house2Rent Integer rent with two houses
+     * @param house3Rent Integer rent with three houses
+     * @param house4Rent Integer rent with four houses
+     * @param hotelRent Integer rent with a hotel
+     * @param color Color of property
+     * @param numOfColor Integer number of the color
+     */
     public Property(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, BoardModel.Color color, int numOfColor){
         super(cost, name);
         this.rentCosts = new ArrayList<>(){{
@@ -32,6 +46,11 @@ public class Property extends Location{
         this.costPerHouse = costPerHouse;
     }
 
+    /**
+     * allows players to buy property and adds property to owner
+     * @param p Player
+     * @return false or true
+     */
     @Override
     public boolean buy(Player p){
         if (p.getMoneyAmount() < this.getCost()){
@@ -44,12 +63,20 @@ public class Property extends Location{
         return false;
     }
 
+    /**
+     * resets the owner on a property
+     */
     @Override
     public void resetOwner() {
         this.numOfHouses = 0;
         this.owner = null;
     }
 
+    /**
+     * get the result of an event
+     * @param p Player
+     * @param boardEvent BoardEvent
+     */
     @Override
     public void getResult(Player p, BoardEvent boardEvent) {
         for (PropertyListener listener : this.propertyListeners){
@@ -57,11 +84,21 @@ public class Property extends Location{
         }
     }
 
+    /**
+     * adds a listener to the property
+     * @param view BoardView
+     */
     @Override
     public void addListener(BoardView view) {
         this.propertyListeners.add(view);
     }
 
+    /**
+     * adds house to a property based on how many the player wants
+     * @param add Integer number of houses added
+     * @param p Player
+     * @return
+     */
     public boolean addHouse(int add, Player p){
         if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() >= add*this.costPerHouse) {
             this.oldNumOfHouses = this.numOfHouses;
@@ -72,6 +109,10 @@ public class Property extends Location{
         return false;
     }
 
+    /**
+     * find the rent of the current property based off houses and hotels
+     * @return the rent of a property
+     */
     public int getRent(){
         if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
             return this.rentCosts.get(this.numOfHouses)*2;
@@ -137,6 +178,11 @@ public class Property extends Location{
         return this.oldNumOfHouses;
     }
 
+    /**
+     * send info to a string
+     * @param p Player
+     * @return property name, the cost or how who owns it and how much the player owes them
+     */
     public String toString(Player p){
         if (this.owner == null)
             return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
