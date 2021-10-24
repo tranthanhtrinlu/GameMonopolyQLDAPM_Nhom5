@@ -5,24 +5,48 @@ public class Tax_FreeParking extends Location{
 
     private int centerMoney;
     private List<Tax_FreeParkingListener> tax_freeParkingListenerList;
+
+    /**
+     * constructor for tax free parking
+     * @param cost Integer for cost
+     * @param name String name of parking lot
+     */
     public Tax_FreeParking(int cost, String name) {
         super(cost, name);
         this.centerMoney = 0;
         this.tax_freeParkingListenerList = new ArrayList<>();
     }
 
+    /**
+     * gets how much money is in the center
+     * @return Integer centerMoney
+     */
     public int getCenterMoney() {
         return this.centerMoney;
     }
 
+    /**
+     * will set centerMoney
+     * @param centerMoney Integer money in center
+     */
     public void setCenterMoney(int centerMoney) {
         this.centerMoney = centerMoney;
     }
 
+    /**
+     * used to add money to the center
+     * @param add Integer added
+     */
     public void addToCenterMoney(int add){
         this.centerMoney += add;
     }
 
+    /**
+     *
+     * @param p Player
+     * @param totalDiceRoll Integer amount of dice sum
+     * @return
+     */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.getName().equals("FREE PARKING")){
@@ -37,6 +61,11 @@ public class Tax_FreeParking extends Location{
         return false;
     }
 
+    /**
+     * Sends player name and the amount of money earned to a string
+     * @param p Player
+     * @return player name and how much they earned
+     */
     @Override
     public String toString(Player p) {
         if (this.getName().equals("FREE PARKING")){
@@ -45,21 +74,38 @@ public class Tax_FreeParking extends Location{
         return p.getPlayerName() + " landed on " + this.getName() + ". Loss of money is $" + this.getCost();
     }
 
+    /**
+     *  buying property
+     * @param p Player
+     * @return false
+     */
     @Override
     public boolean buy(Player p) {
         return false;
     }
 
+    /**
+     * resets the owner
+     */
     @Override
     public void resetOwner() {
 
     }
 
+    /**
+     * get result of a board event
+     * @param p
+     * @param event
+     */
     @Override
     public void getResult(Player p, BoardEvent event) {
 
     }
 
+    /**
+     * adds a listener
+     * @param view
+     */
     @Override
     public void addListener(BoardView view) {
         this.tax_freeParkingListenerList.add(view);
