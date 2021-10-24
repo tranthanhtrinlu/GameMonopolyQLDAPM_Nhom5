@@ -4,6 +4,12 @@ import java.util.List;
 public class GoToJail extends Location{
 
     private List<GoToJailListener> goToJailListener;
+
+    /**
+     * constructor
+     * @param cost
+     * @param name
+     */
     public GoToJail(int cost, String name) {
         super(cost, name);
         this.goToJailListener= new ArrayList<>();
