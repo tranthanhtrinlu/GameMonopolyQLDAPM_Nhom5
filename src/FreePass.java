@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author
+ * @author Max Curkovic
  * Class FreePass for describing a Free Pass element.
  */
 public class FreePass extends Location {
