@@ -2,7 +2,11 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-//
+
+/**
+ * @author Max Curkovic, Tony Massaad, Cory Helm, Kareem
+ * Class BoardUI that implements the UI of the board.
+ */
 public class BoardUI implements BoardView{
 
     protected BoardModel model;
@@ -12,6 +16,9 @@ public class BoardUI implements BoardView{
     private int currentTurn;
     private boolean pass, purchasesProperty, purchaseHouses;
 
+    /**
+     * Default constructor for BoardUI.
+     */
     public BoardUI(){
         this.sc = new Scanner(System.in);
         this.gamePlayers = new ArrayList<>();
@@ -24,6 +31,10 @@ public class BoardUI implements BoardView{
         this.purchaseHouses = false;
     }
 
+    /**
+     * Method for getting the number of players in the game.
+     * @return An integer number of players.
+     */
     private int getNumPlayers(){
         while(true){
             try{
@@ -42,6 +53,10 @@ public class BoardUI implements BoardView{
         return this.userInput;
     }
 
+    /**
+     * Method for getting the player names.
+     * @param numPlayers An integer numPlayers.
+     */
     private void getPlayerNames(int numPlayers){
         for(int i = 0;i <numPlayers;i++){
             System.out.print("Player #"+ (i + 1) +" Enter your name: ");
@@ -50,6 +65,10 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Method for handling a bankrupted player.
+     * @param p A Player object p.
+     */
     private void bankruptedPlayer(Player p){
         System.out.println("Player: " + p.getPlayerName() + " has no more money. Removing player from game.");
         System.out.println("Player properties are now back in estate!");
@@ -57,6 +76,10 @@ public class BoardUI implements BoardView{
         this.gamePlayers.remove(p);
     }
 
+    /**
+     * Method for checking if a player has won the game.
+     * @return True if there is only one player left in the game, false otherwise.
+     */
     public boolean checkWinner(){
         if (this.gamePlayers.size() == 1){
             System.out.println("Winner is " + this.gamePlayers.get(0).getPlayerName() + ", Ending game now");
@@ -65,8 +88,13 @@ public class BoardUI implements BoardView{
         return false;
     }
 
-
     //****BEGINNING OF PROPERTY FUNCTIONS**//
+
+    /**
+     * Overridden method to handle a property with no owner. A player can either pass on or buy a property.
+     * If bought, give player choices to purchase houses.
+     * @param e A PropertyEvent e.
+     */
     @Override
     public void propertyNoOwner(PropertyEvent e) {
         while(true){
@@ -137,6 +165,11 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Overridden method to handle a property already owned by a player.
+     * Can either buy houses/hotels or pass.
+     * @param e A PropertyEvent e.
+     */
     @Override
     public void propertyOwned(PropertyEvent e) {
         if (e.getProperty().getNumOfHouses() != e.getProperty().getMaxNumberOfHouses()){
@@ -185,6 +218,11 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Overridden method to handle a property owned by a player not currently on their turn.
+     * If the player does not have enough money to pay rent, they are bankrupted.
+     * @param e A PropertyEvent e.
+     */
     @Override
     public void propertyRent(PropertyEvent e) {
         Player owner = e.getProperty().getOwner();
@@ -205,6 +243,11 @@ public class BoardUI implements BoardView{
         owner.setMoneyAmount(landedPlayer.getMoneyAmount() + (rentCost * doubleAmount));
     }
 
+    /**
+     * Overridden method for displaying the landed property result based on a board event.
+     * @param e A PropertyEvent e.
+     * @param event A BoardEvent event.
+     */
     @Override
     public void displayLandedPropertyResult(PropertyEvent e,  BoardEvent event) {
         event.getModel().announcePropertyResult(event);
@@ -212,6 +255,11 @@ public class BoardUI implements BoardView{
     // ** ENDING OF PROPERTY IMPLEMENTATION
 
     //** BEGINNING OF RAIL ROAD IMPLEMENTATION **//
+
+    /**
+     * Overridden method to handle a railroad with no owner. A player can either pass on or buy a property.
+     * @param e A RailRoadEvent e.
+     */
     @Override
     public void railRoadNoOwner(RailRoadEvent e) {
         while(true) {
@@ -241,11 +289,20 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Method to handle a railroad that a player who owns it lands on.
+     * @param e A RailRoadEvent e.
+     */
     @Override
     public void railRoadOwned(RailRoadEvent e) {
         System.out.println("You landed on " + e.getRailRoad().getName() + ", Which you own");
     }
 
+    /**
+     * Overridden method to handle a railroad owned by a player not currently on their turn.
+     * If the player does not have enough money to pay rent, they are bankrupted.
+     * @param e A RailRoadEvent e.
+     */
     @Override
     public void railRoadRent(RailRoadEvent e) {
         Player owner = e.getRailRoad().getOwner();
@@ -262,6 +319,11 @@ public class BoardUI implements BoardView{
         owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
     }
 
+    /**
+     * Overridden method for displaying the landed railroad result based on a board event.
+     * @param e A RailRoadEvent e.
+     * @param boardEvent A BoardEvent event.
+     */
     @Override
     public void displayLandedRailroadResult(RailRoadEvent e, BoardEvent boardEvent) {
         boardEvent.getModel().announcePropertyResult(boardEvent);
@@ -270,6 +332,10 @@ public class BoardUI implements BoardView{
 
     //** BEGINNING OF UTILITY IMPLEMENTATION **//
 
+    /**
+     * Overridden method to handle a utility with no owner. A player can either pass on or buy a property.
+     * @param e A UtilityEvent e.
+     */
     @Override
     public void UtilityNoOwner(UtilityEvent e) {
         while(true) {
@@ -299,11 +365,20 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Method to handle a utility that a player who owns it lands on.
+     * @param e A UtilityEvent e.
+     */
     @Override
     public void UtilityOwned(UtilityEvent e) {
         System.out.println("You landed on " + e.getUtility().getName() + ", Which you own");
     }
 
+    /**
+     * Overridden method to handle a utility owned by a player not currently on their turn.
+     * If the player does not have enough money to pay rent, they are bankrupted.
+     * @param e A UtilityEvent e.
+     */
     @Override
     public void UtilityPay(UtilityEvent e) {
         Player owner = e.getUtility().getOwner();
@@ -321,12 +396,22 @@ public class BoardUI implements BoardView{
         owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
     }
 
+    /**
+     * Overridden method for displaying the landed utility result based on a board event.
+     * @param e A UtilityEvent e.
+     * @param boardEvent A BoardEvent event.
+     */
     @Override
     public void displayLandedUtilityResult(UtilityEvent e, BoardEvent boardEvent) {
         boardEvent.getModel().announcePropertyResult(boardEvent);
     }
     // ** END OF UTILITY IMPLEMENTATION **
 
+    /**
+     * Overridden method for handling free parking.
+     * If a player lands here they get the money in the "center" of the board.
+     * @param e A Tax_FreeParkingEvent event.
+     */
     @Override
     public void FreeParking(Tax_FreeParkingEvent e) {
         if (e.getLocation().getCenterMoney() == 0)
@@ -336,6 +421,11 @@ public class BoardUI implements BoardView{
         e.getLocation().setCenterMoney(0);
     }
 
+    /**
+     * Overridden method for handling the payment of tax.
+     * If player runs out of money, they will go bankrupt.
+     * @param e A Tax_FreeParkingEvent event.
+     */
     @Override
     public void payTax(Tax_FreeParkingEvent e) {
         System.out.println("You landed on " + e.getLocation().getName() + ", you will lose $" + e.getLocation().getCost());
@@ -350,33 +440,57 @@ public class BoardUI implements BoardView{
     // END OF IMPLEMENTING TAX AND PARKING //
 
     // BEGINNING OF IMPLEMENTING LAND ON JAIL //
+
+    /**
+     * Overridden method for handling "Just Visiting".
+     * @param e A LandOnJailEvent event.
+     */
     @Override
     public void visiting(LandOnJailEvent e) {
-        System.out.println("You landed " + e.getLandOnJail().getName());
+        System.out.println("You landed " + e.getLandOnJail().getName() + " - Just Visiting");
         System.out.println("You are just Visiting, moving to the next player");
     }
 
     // END OF IMPLEMENTING TAX AND PARKING //
 
     // BEGINNING OF IMPLEMENTING LAND ON JAIL //
+
+    /**
+     * Overridden method for sending a player to jail.
+     * @param e GoToJailEvent e.
+     */
     @Override
     public void SendPlayerToJail(GoToJailEvent e) {
-        System.out.println("You landed on " + e.getGoToJail().getName() + " so you going to jail :)");
+        System.out.println("You landed on " + e.getGoToJail().getName() + " so you going to jail.");
         e.getPlayer().setPosition(BoardModel.JAIL_POSITION);
         e.getPlayer().setInJail(true);
     }
     // ENDING OF LAND ON JAIL //
 
+    /**
+     * Overridden method for handling a free pass. These replace the Chance + Community Chest as placeholders on the board.
+     * @param e FreePassEvent event.
+     */
     @Override
     public void FreePass(FreePassEvent e) {
-        System.out.println("You landed on a + " + e.getPass().getName() + " Enjoy it :)");
+        System.out.println("You landed on a + " + e.getPass().getName() + " Enjoy it!");
     }
 
+    /**
+     * Overridden method to check if the player has properties.
+     * @param e A BoardEvent e.
+     * @return True if the player has properties, false otherwise.
+     */
     // HANDLES
     @Override
     public boolean checkIfPlayerHasProperties(BoardEvent e){
         return this.gamePlayers.get(this.currentTurn).numberOfEstateProperties() != 0;
     }
+
+    /**
+     * Overridden method for handling the print states of each player based on a board event.
+     * @param e A BoardEvent e.
+     */
 
     @Override
     public void handlePrintStateOfEachPlayer(BoardEvent e) {
@@ -385,12 +499,20 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Overridden method that announces when a player has reached GO!.
+     */
     @Override
     public void announceReachingGo() {
         Player p = this.gamePlayers.get(this.currentTurn);
         System.out.println(p.getPlayerName() + " received $" + BoardModel.GO_MONEY + " for reaching GO");
     }
 
+    /**
+     * Overridden method for handling the game status.
+     * @param e A BoardEvent e.
+     * @param result A boolean result.
+     */
     @Override
     public void handleGameStatus(BoardEvent e, boolean result) {
         if (result){
@@ -398,6 +520,10 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Overridden method for handling the announcement of an element landed on.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handleAnnounceLanded(BoardEvent e){
         Player p = this.gamePlayers.get(this.currentTurn);
@@ -405,6 +531,10 @@ public class BoardUI implements BoardView{
         System.out.println(p.getPlayerName() + " landed on " + place.toString(p));
     }
 
+    /**
+     * Overridden method for handling the purchase announcement of a board element.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handlePurchaseAnnouncment(BoardEvent e) {
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
@@ -433,6 +563,10 @@ public class BoardUI implements BoardView{
         System.out.println("Player: " + player.getPlayerName() + " has purchased " + place.getName());
     }
 
+    /**
+     * Overridden method for handling the next turn of the player.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handleNextTurn(BoardEvent e) {
         this.currentTurn++;
@@ -440,12 +574,20 @@ public class BoardUI implements BoardView{
             this.currentTurn = 0;
     }
 
+    /**
+     * Overridden method for handling the announcement of a player passing the turn.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void announcePlayerPass(BoardEvent e) {
         Player p = this.gamePlayers.get(currentTurn);
         System.out.println("Player " + p.getPlayerName() + " passed the turn. Moving to the next player.");
     }
 
+    /**
+     * Overridden method for handling the player quit.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handlePlayerQuit(BoardEvent e) {
         Player quittingPlayer = this.gamePlayers.get(currentTurn);
@@ -454,6 +596,10 @@ public class BoardUI implements BoardView{
         this.gamePlayers.remove(quittingPlayer);
     }
 
+    /**
+     * Overridden method for handling the player's choice to purchase houses or not.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
         Player p = this.gamePlayers.get(this.currentTurn);
@@ -501,12 +647,20 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Overridden method to handle the announcement of the decision of the player to purchase houses.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void announceDecisionToPurchaseHouses(BoardEvent e) {
         Player p = this.gamePlayers.get(this.currentTurn);
         System.out.println("Player: " + p.getPlayerName() + " has decided to purchase houses for a property they own");
     }
 
+    /**
+     * Overridden method to handle player movement in general, depending on where the player is located.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void handlePlayerMovement(BoardEvent e) {
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
@@ -544,36 +698,52 @@ public class BoardUI implements BoardView{
             else{
                 System.out.println("You are now out of turns in jail, you have to pay the $50");
                 p.setMoneyAmount(p.getMoneyAmount() - 50);
-                e.getModel().announcePayedOutOfJail(e, false);
+                e.getModel().announcePaidOutOfJail(e, false);
             }
         }
 
     }
 
+    /**
+     * Overridden boolean method for handling the payment in jail.
+     * @param e A BoardEvent e.
+     * @return True if player has paid the jail fee, false otherwise.
+     */
     @Override
     public boolean payJail(BoardEvent e){
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         if (this.gamePlayers.get(this.currentTurn).payJail()){
             System.out.println("You are out of jail and now just visiting");
-            e.getModel().announcePayedOutOfJail(e, true);
+            e.getModel().announcePaidOutOfJail(e, true);
             return true;
         }
         System.out.println("Not enough money to get out of jail");
         return false;
     }
 
+    /**
+     * Overridden method for handling the announcement of rolling out of jail.
+     */
     @Override
     public void handleAnnounceRolledOutOfJail() {
         Player p = this.gamePlayers.get(this.currentTurn);
         System.out.println("Player: " + p.getPlayerName() + " Rolled out of jail and is now just visiting!");
     }
 
+    /**
+     * Overridden method for handling the announcement of not rolling out of jail.
+     */
     @Override
     public void handleAnnounceDidNotRollOutOfJail() {
         Player p = this.gamePlayers.get(this.currentTurn);
-        System.out.println("Player: " + p.getPlayerName() + " Failed tp rolled out of jail!");
+        System.out.println("Player: " + p.getPlayerName() + " Failed to rolled out of jail!");
     }
 
+    /**
+     * Overridden method for handling the announcement of the player posting bail.
+     * @param e A BoardEvent e.
+     * @param b A boolean b.
+     */
     @Override
     public void handleAnnouncePayedOutOfJail(BoardEvent e, boolean b) {
         Player p = this.gamePlayers.get(this.currentTurn);
@@ -590,6 +760,11 @@ public class BoardUI implements BoardView{
 
     }
 
+    /**
+     * Overridden boolean method for updating the game players if one loses the game or quits.
+     * @param e A BoardEvent e.
+     * @return True if the game players is updated, false otherwise.
+     */
     @Override
     public boolean updateGamePlayers(BoardEvent e) {
         Player p = this.gamePlayers.get(this.currentTurn);
@@ -601,16 +776,30 @@ public class BoardUI implements BoardView{
         return false;
     }
 
+    /**
+     * Overridden method for announcing the current player.
+     * @param e A BoardEvent e.
+     */
     @Override
     public void announceCurrentPlayer(BoardEvent e){
         System.out.println("Current Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName());
     }
 
+    /**
+     * Overridden boolean method for checking if the player is in jail.
+     * @param e A BoardEvent e.
+     * @return True if the player is in jail, false otherwise.
+     */
     @Override
     public boolean checkIfPlayerInJail(BoardEvent e) {
         return this.gamePlayers.get(this.currentTurn).getInJail();
     }
 
+    /**
+     * Overriden integer method for handling all the player choices that they could potentially choose.
+     * @param e A BoardEvent object e.
+     * @return An integer player choice.
+     */
     @Override
     public int handleCurrentPlayerChoice(BoardEvent e) {
         int numOfOptions;
@@ -624,7 +813,7 @@ public class BoardUI implements BoardView{
             numOfOptions = 2;
         }
 
-            while (true){
+        while (true){
             try{
                 e.getModel().announceCurrentPlayer(e);
                 System.out.println("You are currently at " + e.boardElementName(this.gamePlayers.get(this.currentTurn).getPosition()));
@@ -661,6 +850,9 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Method for playing the actual game.
+     */
     public void play(){
         int num = this.getNumPlayers();
         this.getPlayerNames(num);
@@ -670,6 +862,10 @@ public class BoardUI implements BoardView{
         }
     }
 
+    /**
+     * Main method for running the game.
+     * @param args A String Array of args.
+     */
     public static void main(String[] args) {
         BoardUI game = new BoardUI();
         game.play();
