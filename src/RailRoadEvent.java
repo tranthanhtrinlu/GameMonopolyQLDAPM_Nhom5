@@ -3,6 +3,12 @@ import java.util.EventObject;
 public class RailRoadEvent extends EventObject {
 
     private Player player;
+
+    /**
+     * constructor for railroad
+     * @param rail RailRoad property
+     * @param p Player
+     */
     public RailRoadEvent(RailRoad rail, Player p) {
         super(rail);
         this.player = p;
