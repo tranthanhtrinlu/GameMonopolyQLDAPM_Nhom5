@@ -2,27 +2,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * @author Tony Massaad
+ * Class BoardModel that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
+ */
+
+
 public class BoardModel {
     public static final int SIZE_OF_BOARD = 39; // 0-39 inclusive
     public static final int GO_MONEY = 200;
     public static final int MIN_NUM_PLAYERS = 2;
     public static final int MAX_NUM_PLAYERS = 5;
     public static final int JAIL_POSITION = 10; // 11 - 1
-    public final static int TOTAL_UTILITIES = 2;
-
-
-    public enum Color{
-        BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
-    }
-
-    // might add an enum for location names
-
+    public static final int TOTAL_UTILITIES = 2;
     private List<Location> board;
     private List<BoardView> views;
     private int currentTurn;
     private int roll1;
     private int roll2;
 
+    /**
+     * Sets up the colours for element of the board.
+     */
+    public enum Color{
+        BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
+    }
+
+    /**
+     * Default constructor for the BoardModel.
+     */
     public BoardModel(){
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
@@ -32,12 +40,19 @@ public class BoardModel {
         this.roll2 = 0;
     }
 
+    /**
+     * Method for incrementing the amount of turns.
+     */
     public void incrementCurrentTurn(){
         this.currentTurn++;
         if (this.currentTurn == this.views.size())
             this.currentTurn = 0;
     }
 
+    /**
+     * Boolean method for determining whether a player has rolled doubles.
+     * @return True if doubles are rolled, false otherwise.
+     */
     private boolean rollDiceOfTwo(){
         Random r = new Random();
         this.roll1 = r.nextInt(6) +  1;
@@ -45,14 +60,17 @@ public class BoardModel {
         return this.roll1 == this.roll2;
     }
 
+    /**
+     * Method for adding a BoardView object to the ArrayList of BoardViews.
+     * @param view A BoardView object view.
+     */
     public void addView(BoardView view){
         this.views.add(view);
     }
 
-    public void removePlayer(BoardView view){
-        this.views.remove(view);
-    }
-
+    /**
+     * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
+     */
     private void initializeBoard(){
         this.board.add(new FreePass(0, "Go"));
         this.board.add(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2));
@@ -96,60 +114,98 @@ public class BoardModel {
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
     }
 
+    /**
+     * Method that loops through the board list and adds all the listeners to each.
+     * @param view A BoardView view.
+     */
     public void addViewToListener(BoardView view){
         for (Location location : this.board){
             location.addListener(view);
         }
     }
 
+    /**
+     * Method that announces when a player has reached GO!.
+     */
     public void announceReachingGo(){
         for (BoardView view : this.views){
             view.announceReachingGo();
         }
     }
 
+    /**
+     * Method that announces a landed result based on a board event.
+     * @param e A BoardEvent object e.
+     * @param result A boolean result.
+     */
     public void announceLandedResult(BoardEvent e, boolean result){
         for (BoardView view : this.views){
             view.handleGameStatus(e, result);
         }
     }
 
+    /**
+     * Method that announces that the player has landed on an element of the board based on a board event.
+     * @param e A BoardEvent object e.
+     */
     public void announceLanded(BoardEvent e) {
         for (BoardView view: this.views){
             view.handleAnnounceLanded(e);
         }
-
     }
 
+    /**
+     * Method that announces the result of a property sale based on a board event.
+     * @param e A BoardEvent object e.
+     */
     public void announcePropertyResult(BoardEvent e) {
         for (BoardView view : this.views){
             view.handlePurchaseAnnouncment(e);
         }
     }
 
+    /**
+     * Method that announces the player of which is currently on a turn.
+     * @param e A BoardEvent object e.
+     */
     public void announceCurrentPlayer(BoardEvent e) {
         for (BoardView view : this.views){
             view.announceCurrentPlayer(e);
         }
     }
 
+    /**
+     * Method that announces that a player has rolled out of jail.
+     */
     public void announceRolledOutOfJail() {
         for (BoardView view : this.views){
             view.handleAnnounceRolledOutOfJail();
         }
     }
 
+    /**
+     * Method that announces that a player has not rolled out of jail.
+     */
     public void announceDidNotRollOutOfJail() {
         for (BoardView view : this.views){
             view.handleAnnounceDidNotRollOutOfJail();
         }
     }
-    public void announcePayedOutOfJail(BoardEvent e, boolean b) {
+
+    /**
+     * Method that announces that the player has paid out of jail.
+     * @param e A BoardEvent e.
+     * @param b A boolean b.
+     */
+    public void announcePaidOutOfJail(BoardEvent e, boolean b) {
         for (BoardView view : this.views){
             view.handleAnnouncePayedOutOfJail(e, b);
         }
     }
 
+    /**
+     * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
+     */
     public void playCurrPlayerTurn(){
         BoardView currView = this.views.get(this.currentTurn);
         boolean doubles = rollDiceOfTwo();
