@@ -6,12 +6,22 @@ public class Utility extends Location{
     private Player owner;
     private List<UtilityListener> utilityListenerList;
 
+    /**
+     * the constructor for Utility
+     * @param name, String name
+     * @param cost, cost of the utility
+     */
     public Utility(String name, int cost) {
         super(cost, name);
         this.owner = null;
         this.utilityListenerList = new ArrayList<>();
     }
 
+    /**
+     * Allows the player to buy a utility property
+     * @param p Player
+     * @return true tor false based of amount of money
+     */
     @Override
     public boolean buy(Player p){
         if (p.getMoneyAmount() < this.getCost()){
@@ -23,11 +33,19 @@ public class Utility extends Location{
         return false;
     }
 
+    /**
+     *resets the owner of a utility property
+     */
     @Override
     public void resetOwner() {
         this.owner = null;
     }
 
+    /**
+     * gets result of a player landing on utility
+     * @param p Player
+     * @param event a board event like landing on
+     */
     @Override
     public void getResult(Player p, BoardEvent event) {
         for (UtilityListener listener : this.utilityListenerList){
@@ -35,16 +53,30 @@ public class Utility extends Location{
         }
     }
 
+    /**
+     * listener for board
+     * @param view  view of the board
+     */
     @Override
     public void addListener(BoardView view) {
         this.utilityListenerList.add(view);
     }
 
 
+    /**
+     *gets the owner of the utility property
+     * @return
+     */
     public Player getOwner() {
         return this.owner;
     }
 
+    /**
+     * location for player on the board and element functionality
+     * @param p Player
+     * @param totalDiceRoll integer of amount rolled on the dice
+     * @return
+     */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
@@ -67,6 +99,11 @@ public class Utility extends Location{
         }
     }
 
+    /**
+     * how much someone has to pay if a player lands on utility
+     * @param totalDiceRoll Integer of dice sum
+     * @return
+     */
     public int payment(int totalDiceRoll){
         int amount = 4;
         if (this.owner.getNumOfUtilities() == BoardModel.TOTAL_UTILITIES)
@@ -74,6 +111,11 @@ public class Utility extends Location{
         return totalDiceRoll*amount;
     }
 
+    /**
+     * puts info to a string
+     * @param p Player
+     * @return property name, who owns it and how much is owed if landing on it
+     */
     @Override
     public String toString(Player p) {
         if (this.owner == null)
