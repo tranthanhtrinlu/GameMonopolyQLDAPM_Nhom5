@@ -15,6 +15,10 @@ public class Player{
     private int numOfRailroads;
     private int numOfUtilities;
 
+    /**
+     *  Player default constructor
+     * @param name String player name
+     */
     public Player(String name){
         this.playerName = name;
         this.moneyAmount = 1500;
@@ -28,6 +32,10 @@ public class Player{
         this.numOfUtilities = 0;
     }
 
+    /**
+     * lets you print properties player owns
+     * @return String of owned property by the player
+     */
     public String printOwnedProperties(){
         StringBuilder s = new StringBuilder();
         for(Location location : this.ownedProperties){
@@ -36,6 +44,10 @@ public class Player{
         return s.toString();
     }
 
+    /**
+     * gets the properties in a players list
+     * @return properties
+     */
     public List<Property> getEstatePropertiesOfPlayer(){
         StringBuilder s = new StringBuilder();
         List<Property> properties = new ArrayList<>();
@@ -47,6 +59,11 @@ public class Player{
         return properties;
     }
 
+    /**
+     * gets the property using its name
+     * @param name String name of property
+     * @return if it is owned
+     */
     public Property getPropertyByName(String name){
         for (Location ownedProperty : this.ownedProperties) {
             if (ownedProperty.getName().equals(name)){
@@ -70,6 +87,12 @@ public class Player{
         return this.ownedProperties.get(i);
     }
 
+    /**
+     * how many color properties does the player own
+     * @param color Color
+     * @param numOfColor Integer
+     * @return number of colored properties owned by player
+     */
     public boolean numberOfColoredPropertiesOwned(BoardModel.Color color, int numOfColor){
         return this.ownedPropertiesBasedOnColors.get(color) == numOfColor;
     }
@@ -82,6 +105,11 @@ public class Player{
         this.currLocation = currLocation;
     }
 
+    /**
+     * used to move the character around the board
+     * @param combinedRolls Integer of dice rolled
+     * @return
+     */
     public boolean movePlayer(int combinedRolls){
         this.position += combinedRolls;
         if (this.position >= BoardModel.SIZE_OF_BOARD){
@@ -92,6 +120,10 @@ public class Player{
         return false;
     }
 
+    /**\
+     * sets the player in jail
+     * @param inJail boolean in jail or not
+     */
     public void setInJail(boolean inJail) {
         this.inJail = inJail;
         if (inJail)
@@ -124,6 +156,11 @@ public class Player{
         this.ownedProperties.add(p);
     }
 
+    /**
+     * adds a color code to properties if the player owns all of one color double rent
+     * @param color Color
+     * @param add Integer color int added to property
+     */
     public void addColorToProperty(BoardModel.Color color, int add){
         if (this.ownedPropertiesBasedOnColors.containsKey(color)){
             int oldVal = this.ownedPropertiesBasedOnColors.get(color);
@@ -133,6 +170,9 @@ public class Player{
         this.ownedPropertiesBasedOnColors.put(color, add);
     }
 
+    /**
+     * if player bankrupt reset all properties own by them
+     */
     public void bankrupted(){
         for (Location location : this.ownedProperties){
             location.resetOwner();
@@ -143,26 +183,48 @@ public class Player{
         return this.ownedProperties.size();
     }
 
+    /**
+     * sets amount of money player has
+     * @param moneyAmount Integer
+     */
     public void setMoneyAmount(int moneyAmount) {
         this.moneyAmount = moneyAmount;
     }
 
+    /**
+     *adds railroads to player
+     */
     public void addNumOfRailroads(){
         this.numOfRailroads++;
     }
 
+    /**
+     * gets the number of railroads
+     * @return number of railroad player owns
+     */
     public int getNumOfRailroads() {
         return this.numOfRailroads;
     }
 
+    /**
+     * gets number of utilities player has
+     * @return Integer numOfUtilities
+     */
     public int getNumOfUtilities(){
         return this.numOfUtilities;
     }
 
+    /**
+     * adds num of utilities to the player
+     */
     public void addNumOfUtilities(){
         this.numOfUtilities++;
     }
 
+    /**
+     * gets position of the player
+     * @return position
+     */
     public int getPosition() {
         return this.position;
     }
