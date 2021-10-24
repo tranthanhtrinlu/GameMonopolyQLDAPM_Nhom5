@@ -6,15 +6,21 @@ public class GoToJail extends Location{
     private List<GoToJailListener> goToJailListener;
 
     /**
-     * constructor
-     * @param cost
-     * @param name
+     * constructor for go to jail
+     * @param cost Integer for cost to get out
+     * @param name String name of jail
      */
     public GoToJail(int cost, String name) {
         super(cost, name);
         this.goToJailListener= new ArrayList<>();
     }
 
+    /**
+     * location functionality
+     * @param p Player
+     * @param totalDiceRoll Integer sum of dice roll
+     * @return
+     */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         for (GoToJailListener listener : this.goToJailListener){
