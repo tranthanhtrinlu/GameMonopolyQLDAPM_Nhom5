@@ -11,8 +11,6 @@ public class BoardModel {
     public final static int TOTAL_UTILITIES = 2;
 
 
-
-
     public enum Color{
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
     }
@@ -124,8 +122,31 @@ public class BoardModel {
     }
 
     public void announcePropertyResult(BoardEvent e) {
-        for (BoardView view: this.views){
+        for (BoardView view : this.views){
             view.handlePurchaseAnnouncment(e);
+        }
+    }
+
+    public void announceCurrentPlayer(BoardEvent e) {
+        for (BoardView view : this.views){
+            view.announceCurrentPlayer(e);
+        }
+    }
+
+    public void announceRolledOutOfJail() {
+        for (BoardView view : this.views){
+            view.handleAnnounceRolledOutOfJail();
+        }
+    }
+
+    public void announceDidNotRollOutOfJail() {
+        for (BoardView view : this.views){
+            view.handleAnnounceDidNotRollOutOfJail();
+        }
+    }
+    public void announcePayedOutOfJail(BoardEvent e, boolean b) {
+        for (BoardView view : this.views){
+            view.handleAnnouncePayedOutOfJail(e, b);
         }
     }
 
@@ -134,62 +155,89 @@ public class BoardModel {
         boolean doubles = rollDiceOfTwo();
         BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
         boolean hasProperty = currView.checkIfPlayerHasProperties(e);
+        boolean inJail = currView.checkIfPlayerInJail(e);
         int choice = currView.handleCurrentPlayerChoice(e);
 
-        if (hasProperty){
-            if (choice == 1) {
-                currView.handlePrintStateOfEachPlayer(e);
-            }
-            else if (choice == 2){
-                currView.handlePlayerMovement(e);
-                if (!doubles){
+        if (!inJail){
+            if (hasProperty){
+                if (choice == 1) {
+                    currView.handlePrintStateOfEachPlayer(e);
+                }
+                else if (choice == 2){
+                    currView.handlePlayerMovement(e);
+                    for (BoardView view : this.views){
+                        view.updateGamePlayers(e);
+                        view.handleNextTurn(e);
+                    }
                     this.incrementCurrentTurn();
-                    currView.handleNextTurn(e);
+                }
+                else if (choice == 3){
+                    for (BoardView view : this.views){
+                        view.announceDecisionToPurchaseHouses(e);
+                    }
+                    currView.handlePlayerChoiceToPurchaseHouses(e);
+                }
+                else if (choice == 4){
+                    for (BoardView view : this.views){
+                        view.announcePlayerPass(e);
+                        view.handleNextTurn(e);
+                    }
+                }
+                else if (choice == 5){
+                    for (BoardView view : this.views){
+                        view.handlePlayerQuit(e);
+                        view.handleNextTurn(e);
+                    }
+                    this.incrementCurrentTurn();
                 }
             }
-            else if (choice == 3){
-                for (BoardView view : this.views){
-                    view.announceDecisionToPurchaseHouses(e);
+            else{
+                if (choice == 1){
+                    currView.handlePrintStateOfEachPlayer(e);
                 }
-                currView.handlePlayerChoiceToPurchaseHouses(e);
-            }
-            else if (choice == 4){
-                for (BoardView view : this.views){
-                    view.announcePlayerPass(e);
+                else if (choice == 2){
+                    currView.handlePlayerMovement(e);
+                    if (!doubles){
+                        for (BoardView view : this.views){
+                            view.updateGamePlayers(e);
+                            view.handleNextTurn(e);
+                        }
+                        this.incrementCurrentTurn();
+
+                    }
                 }
-                currView.handleNextTurn(e);
-            }
-            else if (choice == 5){
-                for (BoardView view : this.views){
-                    view.handlePlayerQuit(e);
+                else if (choice == 3){
+                    for (BoardView view : this.views){
+                        view.announcePlayerPass(e);
+                        view.handleNextTurn(e);
+                    }
                 }
-                this.incrementCurrentTurn();
-                currView.handleNextTurn(e);
+                else if (choice == 4){
+                    for (BoardView view : this.views){
+                        view.handlePlayerQuit(e);
+                        view.handleNextTurn(e);
+                    }
+                    this.incrementCurrentTurn();
+                }
             }
         }
         else{
             if (choice == 1){
-                currView.handlePrintStateOfEachPlayer(e);
-            }
-            else if (choice == 2){
                 currView.handlePlayerMovement(e);
-                if (!doubles){
-                    this.incrementCurrentTurn();
-                    currView.handleNextTurn(e);
-                }
-            }
-            else if (choice == 3){
                 for (BoardView view : this.views){
-                    view.announcePlayerPass(e);
-                }
-                currView.handleNextTurn(e);
-            }
-            else if (choice == 4){
-                for (BoardView view : this.views){
-                    view.handlePlayerQuit(e);
+                    view.updateGamePlayers(e);
+                    view.handleNextTurn(e);
                 }
                 this.incrementCurrentTurn();
-                currView.handleNextTurn(e);
+            }
+            else if (choice == 2){
+                if (currView.payJail(e)){
+                    for (BoardView view : this.views){
+                        view.updateGamePlayers(e);
+                        view.handleNextTurn(e);
+                    }
+                    this.incrementCurrentTurn();
+                }
             }
         }
     }

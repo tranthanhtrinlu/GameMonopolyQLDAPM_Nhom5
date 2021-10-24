@@ -94,11 +94,18 @@ public class Player{
 
     public void setInJail(boolean inJail) {
         this.inJail = inJail;
-        this.turnsInJail = 3;
+        if (inJail)
+            this.turnsInJail = 3;
+        else
+            this.turnsInJail = 0;
     }
 
     public int getTurnsInJail(){
         return this.turnsInJail;
+    }
+
+    public void setTurnsInJail(int val){
+        this.turnsInJail = val;
     }
 
     public boolean getInJail(){
@@ -185,4 +192,8 @@ public class Player{
                 "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
     }
 
+    public boolean payJail() {
+        return this.moneyAmount - 50 > 0;
+
+    }
 }

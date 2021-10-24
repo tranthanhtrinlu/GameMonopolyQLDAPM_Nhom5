@@ -67,6 +67,13 @@ public class Utility extends Location{
         }
     }
 
+    public int payment(int totalDiceRoll){
+        int amount = 4;
+        if (this.owner.getNumOfUtilities() == BoardModel.TOTAL_UTILITIES)
+            amount = 10;
+        return totalDiceRoll*amount;
+    }
+
     @Override
     public String toString(Player p) {
         if (this.owner == null)

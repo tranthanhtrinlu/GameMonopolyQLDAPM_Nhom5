@@ -64,6 +64,10 @@ public class RailRoad extends Location{
         }
     }
 
+    public int getPayment(){
+        return this.payments.get(this.owner.getNumOfRailroads());
+    }
+
     @Override
     public void addListener(BoardView view) {
         this.railRoadListener.add(view);

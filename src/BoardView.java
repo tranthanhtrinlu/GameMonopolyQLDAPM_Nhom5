@@ -27,4 +27,19 @@ public interface BoardView extends PropertyListener,RailRoadListener,
     void handlePlayerChoiceToPurchaseHouses(BoardEvent e);
 
     void announceDecisionToPurchaseHouses(BoardEvent e);
+
+    void announceCurrentPlayer(BoardEvent e);
+
+    boolean checkIfPlayerInJail(BoardEvent e);
+
+    boolean payJail(BoardEvent e);
+
+    void handleAnnounceRolledOutOfJail();
+
+    void handleAnnounceDidNotRollOutOfJail();
+
+    void handleAnnouncePayedOutOfJail(BoardEvent e, boolean b);
+
+    boolean updateGamePlayers(BoardEvent e);
+
 }

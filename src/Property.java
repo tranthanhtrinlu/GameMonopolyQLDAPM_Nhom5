@@ -63,18 +63,24 @@ public class Property extends Location{
     }
 
     public boolean addHouse(int add, Player p){
-        if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() <= add*this.costPerHouse) {
+        if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() >= add*this.costPerHouse) {
             this.oldNumOfHouses = this.numOfHouses;
             this.numOfHouses += add;
-            return false;
+            p.setMoneyAmount(p.getMoneyAmount() - (add*this.costPerHouse));
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    public int getRent(){
+        if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
+            return this.rentCosts.get(this.numOfHouses)*2;
+        return this.rentCosts.get(this.numOfHouses);
     }
 
     // Raise an event for each case "no owner" "curr owner" "not curr owner"
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
-        System.out.println("FUNCTION RUNNING HERE WORKING");
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
                 listener.propertyNoOwner(new PropertyEvent(this, p));
