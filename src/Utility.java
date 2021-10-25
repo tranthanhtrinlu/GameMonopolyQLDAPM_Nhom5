@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* @author Kareem El-Hajjar
+* Class Utility for a utility element
+*/
 public class Utility extends Location{
 
     private Player owner;
