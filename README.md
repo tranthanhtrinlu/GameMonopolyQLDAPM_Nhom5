@@ -2,7 +2,7 @@
 
 Authors: Tony Massaad, Max Curkovic, Cory Helm, Kareem El-Hajjar
 
-Milestone 1 Deliverable
+Milestone 1 Deliverable (of 4 total)
 
 Since there was no last deliverable, there were no changes made!
 The first deliverable depicts the foundation for the Monopoly game that our team will be completing towards the end of the term.
@@ -15,5 +15,7 @@ For Milestone 2, we will be focusing on making our Board View into a GUI with ou
 We were able to implement a lot of Milestone 3 into the foundation of the game, so a lot of the next few weeks will be spent refining and refactoring our code. We also want to implement AIs within the next milestone, if possible.
 
 We also want to expand the current house system by allowing the player to remove/sell houses at their leisure.
+
+In Milestone 4, we will be implementing a save/load feature, as well as an international version with custom street names, values, and currencies.
 
 ~ MC
