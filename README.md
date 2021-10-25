@@ -1,6 +1,7 @@
 # 3110MonopolyProject
 
 Authors: Tony Massaad, Max Curkovic, Cory Helm, Kareem El-Hajjar
+
 Milestone 1 Deliverable
 
 Since there was no last deliverable, there were no changes made!
