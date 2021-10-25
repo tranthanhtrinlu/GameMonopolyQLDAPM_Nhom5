@@ -228,11 +228,11 @@ public class Property extends Location{
      */
     public String toString(Player p){
         if (this.owner == null)
-            return "MVC.Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
+            return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
         else if (this.owner.equals(p)){
-            return "MVC.Property name: " + this.getName() + " Who owns this property";
+            return "Property name: " + this.getName() + " Who owns this property";
         }
-        return "MVC.Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
                 + this.rentCosts.get(numOfHouses) + "} \n" + p.getPlayerName() + " will lose money now";
     }
 }

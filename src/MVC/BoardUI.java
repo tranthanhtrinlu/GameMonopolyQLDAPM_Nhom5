@@ -64,7 +64,7 @@ public class BoardUI implements BoardView {
      */
     private void getPlayerNames(int numPlayers){
         for(int i = 0;i <numPlayers;i++){
-            System.out.print("MVC.Player #"+ (i + 1) +" Enter your name: ");
+            System.out.print("Player #"+ (i + 1) +" Enter your name: ");
             String name = this.sc.next();
             this.gamePlayers.add(new Player(name));
         }
@@ -75,8 +75,8 @@ public class BoardUI implements BoardView {
      * @param p A MVC.Player object p.
      */
     private void bankruptedPlayer(Player p){
-        System.out.println("MVC.Player: " + p.getPlayerName() + " has no more money. Removing player from game.");
-        System.out.println("MVC.Player properties are now back in estate!");
+        System.out.println("Player: " + p.getPlayerName() + " has no more money. Removing player from game.");
+        System.out.println("Player properties are now back in estate!");
         p.bankrupted();
         this.gamePlayers.remove(p);
     }
@@ -180,7 +180,7 @@ public class BoardUI implements BoardView {
         if (e.getProperty().getNumOfHouses() != e.getProperty().getMaxNumberOfHouses()){
             while(true){
                 try{
-                    System.out.println("You landed on " + e.getProperty().getName() + ", MVC.Property you own");
+                    System.out.println("You landed on " + e.getProperty().getName() + ", Property you own");
                     System.out.println("Would you want to \n(1) purchase some buildings \n(2) pass?");
                     System.out.print("<Option number> ");
                     this.userInput = this.sc.nextInt();
@@ -217,7 +217,7 @@ public class BoardUI implements BoardView {
                 this.pass = true;
             }
         }else{
-            System.out.println("You landed on " + e.getProperty().getName() + ", MVC.Property you own");
+            System.out.println("You landed on " + e.getProperty().getName() + ", Property you own");
             System.out.println("You maxed out on houses already, moving to next player");
             this.pass = true;
         }
@@ -545,27 +545,27 @@ public class BoardUI implements BoardView {
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         Player player = this.gamePlayers.get(this.currentTurn);
         if (this.pass){
-            System.out.println("MVC.Player: " + player.getPlayerName() + " has done nothing. Moving to the next player");
+            System.out.println("Player: " + player.getPlayerName() + " has done nothing. Moving to the next player");
             this.pass = false;
             return;
         }
 
         if (this.purchaseHouses){
-            System.out.println("MVC.Player: " + player.getPlayerName() + " purchased " + (((Property) place).getNumOfHouses() - ((Property) place).getOldNumOfHouses()) + " for " + place.getName());
+            System.out.println("Player: " + player.getPlayerName() + " purchased " + (((Property) place).getNumOfHouses() - ((Property) place).getOldNumOfHouses()) + " for " + place.getName());
             this.purchaseHouses = false;
             return;
         }
 
         if (place instanceof Property){
             if (this.purchasesProperty){
-                System.out.println("MVC.Player: " + player.getPlayerName() + " has purchase the property " + place.getName() + " and owns " + ((Property) place).getNumOfHouses() + " houses");
+                System.out.println("Player: " + player.getPlayerName() + " has purchase the property " + place.getName() + " and owns " + ((Property) place).getNumOfHouses() + " houses");
                 this.purchasesProperty = false;
                 return;
             }
-            System.out.println("MVC.Player: " + player.getPlayerName() + " has purchase " + (((Property) place).getNumOfHouses() - ((Property) place).getOldNumOfHouses()) + " Houses for " + place.getName());
+            System.out.println("Player: " + player.getPlayerName() + " has purchase " + (((Property) place).getNumOfHouses() - ((Property) place).getOldNumOfHouses()) + " Houses for " + place.getName());
             return;
         }
-        System.out.println("MVC.Player: " + player.getPlayerName() + " has purchased " + place.getName());
+        System.out.println("Player: " + player.getPlayerName() + " has purchased " + place.getName());
     }
 
     /**
@@ -586,7 +586,7 @@ public class BoardUI implements BoardView {
     @Override
     public void announcePlayerPass(BoardEvent e) {
         Player p = this.gamePlayers.get(currentTurn);
-        System.out.println("MVC.Player " + p.getPlayerName() + " passed the turn. Moving to the next player.");
+        System.out.println("Player " + p.getPlayerName() + " passed the turn. Moving to the next player.");
     }
 
     /**
@@ -596,7 +596,7 @@ public class BoardUI implements BoardView {
     @Override
     public void handlePlayerQuit(BoardEvent e) {
         Player quittingPlayer = this.gamePlayers.get(currentTurn);
-        System.out.println("MVC.Player: " + quittingPlayer.getPlayerName() + " has quit the game");
+        System.out.println("Player: " + quittingPlayer.getPlayerName() + " has quit the game");
         quittingPlayer.bankrupted();
         this.gamePlayers.remove(quittingPlayer);
     }
@@ -659,7 +659,7 @@ public class BoardUI implements BoardView {
     @Override
     public void announceDecisionToPurchaseHouses(BoardEvent e) {
         Player p = this.gamePlayers.get(this.currentTurn);
-        System.out.println("MVC.Player: " + p.getPlayerName() + " has decided to purchase houses for a property they own");
+        System.out.println("Player: " + p.getPlayerName() + " has decided to purchase houses for a property they own");
     }
 
     /**
@@ -670,7 +670,7 @@ public class BoardUI implements BoardView {
     public void handlePlayerMovement(BoardEvent e) {
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         Player p = this.gamePlayers.get(this.currentTurn);
-        System.out.println("MVC.Player: " + p.getPlayerName() + " rolled: ( " + e.getRoll1() + " + " + e.getRoll2() + " = " + e.diceSum() + ")");
+        System.out.println("Player: " + p.getPlayerName() + " rolled: ( " + e.getRoll1() + " + " + e.getRoll2() + " = " + e.diceSum() + ")");
         if (!p.getInJail()){
             if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
                 e.getModel().announceReachingGo();
@@ -732,7 +732,7 @@ public class BoardUI implements BoardView {
     @Override
     public void handleAnnounceRolledOutOfJail() {
         Player p = this.gamePlayers.get(this.currentTurn);
-        System.out.println("MVC.Player: " + p.getPlayerName() + " Rolled out of jail and is now just visiting!");
+        System.out.println("Player: " + p.getPlayerName() + " Rolled out of jail and is now just visiting!");
     }
 
     /**
@@ -741,7 +741,7 @@ public class BoardUI implements BoardView {
     @Override
     public void handleAnnounceDidNotRollOutOfJail() {
         Player p = this.gamePlayers.get(this.currentTurn);
-        System.out.println("MVC.Player: " + p.getPlayerName() + " Failed to rolled out of jail!");
+        System.out.println("Player: " + p.getPlayerName() + " Failed to rolled out of jail!");
     }
 
     /**
@@ -754,11 +754,11 @@ public class BoardUI implements BoardView {
         Player p = this.gamePlayers.get(this.currentTurn);
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         if (!b){
-            System.out.println("MVC.Player: " + p.getPlayerName() + " Failed to rolled out of jail for 3 turns!" +
-                    "\nMVC.Player is losing $50 to now visit jail");
+            System.out.println("Player: " + p.getPlayerName() + " Failed to rolled out of jail for 3 turns!" +
+                    "\nPlayer is losing $50 to now visit jail");
         }
         else{
-            System.out.println("MVC.Player payed the $50 to get out of jail and now just visiting");
+            System.out.println("Player payed the $50 to get out of jail and now just visiting");
         }
         p.setInJail(false);
         p.setCurrLocation(place.getName() + ", Just visiting");
@@ -774,7 +774,7 @@ public class BoardUI implements BoardView {
     public boolean updateGamePlayers(BoardEvent e) {
         Player p = this.gamePlayers.get(this.currentTurn);
         if (p.getMoneyAmount() == 0){
-            System.out.println("MVC.Player: " + p.getPlayerName() + " is out of money and is now removed from the game!");
+            System.out.println("Player: " + p.getPlayerName() + " is out of money and is now removed from the game!");
             this.gamePlayers.remove(this.currentTurn);
             return true;
         }
@@ -787,7 +787,7 @@ public class BoardUI implements BoardView {
      */
     @Override
     public void announceCurrentPlayer(BoardEvent e){
-        System.out.println("Current MVC.Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName());
+        System.out.println("Current Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName());
     }
 
     /**
@@ -824,7 +824,7 @@ public class BoardUI implements BoardView {
                 System.out.println("You are currently at " + e.boardElementName(this.gamePlayers.get(this.currentTurn).getPosition()));
                 if (numOfOptions == 5){
                     System.out.println("What would you like to do?");
-                    System.out.println("(1) Print State of Each MVC.Player");
+                    System.out.println("(1) Print State of Each Player");
                     System.out.println("(2) Roll");
                     System.out.println("(3) Purchase house for an existing property?");
                     System.out.println("(4) Pass");
@@ -832,7 +832,7 @@ public class BoardUI implements BoardView {
                 }
                 else if (numOfOptions == 4){
                     System.out.println("What would you like to do?");
-                    System.out.println("(1) Print State of Each MVC.Player");
+                    System.out.println("(1) Print State of Each Player");
                     System.out.println("(2) Roll");
                     System.out.println("(3) Pass");
                     System.out.println("(4) Quit");

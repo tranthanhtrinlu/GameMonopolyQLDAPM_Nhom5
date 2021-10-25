@@ -141,11 +141,11 @@ public class RailRoad extends Location{
     @Override
     public String toString(Player p) {
         if (this.owner == null)
-            return "MVC.Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
+            return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
         else if (this.owner.equals(p)){
-            return "MVC.Property name: " + this.getName() + " Which you own this property";
+            return "Property name: " + this.getName() + " Which you own this property";
         }
-        return "MVC.Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
                 + this.payments.get(this.owner.getNumOfRailroads()) + "} \n" + p.getPlayerName() + " will lose money now";
     }
 

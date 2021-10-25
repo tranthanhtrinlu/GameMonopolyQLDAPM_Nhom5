@@ -288,8 +288,8 @@ public class Player{
      * @return A string statement of the state of a player
      */
     public String toString(){
-        return "MVC.Player: " + this.playerName + "\n{\n" +
-                "Money: $" + this.moneyAmount + "\nMVC.Location: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
+        return "Player: " + this.playerName + "\n{\n" +
+                "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
     }
 
     /**

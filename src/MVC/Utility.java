@@ -130,14 +130,14 @@ public class Utility extends Location{
     @Override
     public String toString(Player p) {
         if (this.owner == null)
-            return "MVC.Property name: " + this.getName() + " {Purchase property: " + this.getCost() + "}";
+            return "Property name: " + this.getName() + " {Purchase property: " + this.getCost() + "}";
         else if (this.owner.equals(p)){
-            return "MVC.Property name: " + this.getName() + " Who owns this property";
+            return "Property name: " + this.getName() + " Who owns this property";
         }
         int amount = 4;
         if (this.owner.getNumOfUtilities() == BoardModel.TOTAL_UTILITIES)
             amount = 10;
-        return "MVC.Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Payment: dice rolls * "
+        return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Payment: dice rolls * "
                 + amount + "} \n" + p.getPlayerName() + " will lose money now";
     }
 }
