@@ -1,5 +1,8 @@
 import java.util.EventObject;
 
+/**
+ * Class GoToJailEvent that describes a go to jail event. Extends EventObject.
+ */
 public class GoToJailEvent extends EventObject {
 
     private Player player;
@@ -15,14 +18,26 @@ public class GoToJailEvent extends EventObject {
         this.player = p;
     }
 
+    /**
+     * Getter method for returning the player.
+     * @return A Player object player.
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * Getter method for the Go To Jail.
+     * @return A GoToJail event.
+     */
     public GoToJail getGoToJail(){
         return (GoToJail) this.getSource();
     }
 
+    /**
+     * Overridden Java method for getting an object source.
+     * @return An object source.
+     */
     @Override
     public Object getSource() {
         return super.getSource();
