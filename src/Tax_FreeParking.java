@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* @author Cory Helm 
+* class for Tax and Free Parking
+*/ 
 public class Tax_FreeParking extends Location{
 
     private int centerMoney;
@@ -42,7 +46,7 @@ public class Tax_FreeParking extends Location{
     }
 
     /**
-     *
+     * used for actual functionality of free parking and tax
      * @param p Player
      * @param totalDiceRoll Integer amount of dice sum
      * @return
