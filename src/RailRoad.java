@@ -136,7 +136,7 @@ public class RailRoad extends Location{
         if (this.owner == null)
             return "Property name: " + this.getName() + " {Cost: " + this.getCost() + "}";
         else if (this.owner.equals(p)){
-            return "Property name: " + this.getName() + " Who owns this property";
+            return "Property name: " + this.getName() + " Which you own this property";
         }
         return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
                 + this.payments.get(this.owner.getNumOfRailroads()) + "} \n" + p.getPlayerName() + " will lose money now";

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @author Cory Helm 
+* @author Tony Massaad
 * class for Tax and Free Parking
 */ 
 public class Tax_FreeParking extends Location{

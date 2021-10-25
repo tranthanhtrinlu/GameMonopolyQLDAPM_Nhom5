@@ -25,7 +25,7 @@ public class LandOnJailEvent extends EventObject {
     }
 
     /**
-     * Overriden Java method for getting a source
+     * Override Java method for getting a source
      * @return A Java source
      */
     @Override

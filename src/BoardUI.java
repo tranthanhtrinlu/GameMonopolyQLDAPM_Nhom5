@@ -851,7 +851,7 @@ public class BoardUI implements BoardView{
     }
 
     /**
-     * Method for playing the actual game.
+     * Method for playing the game.
      */
     public void play(){
         int num = this.getNumPlayers();

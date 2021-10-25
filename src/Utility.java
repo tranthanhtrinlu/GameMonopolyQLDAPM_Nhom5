@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @author Kareem El-Hajjar
+* @author Kareem El-Hajjar, Max Curkovic
 * Class Utility for a utility element
 */
 public class Utility extends Location{
@@ -68,8 +68,8 @@ public class Utility extends Location{
 
 
     /**
-     *gets the owner of the utility property
-     * @return
+     * gets the owner of the utility property
+     * @return Player, the owner
      */
     public Player getOwner() {
         return this.owner;
@@ -79,7 +79,7 @@ public class Utility extends Location{
      * location for player on the board and element functionality
      * @param p Player
      * @param totalDiceRoll integer of amount rolled on the dice
-     * @return
+     * @return Boolean, true if no owner, otherwise false
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
@@ -106,7 +106,7 @@ public class Utility extends Location{
     /**
      * how much someone has to pay if a player lands on utility
      * @param totalDiceRoll Integer of dice sum
-     * @return
+     * @return Integer, payment amount accordingly
      */
     public int payment(int totalDiceRoll){
         int amount = 4;

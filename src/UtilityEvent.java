@@ -1,7 +1,7 @@
 import java.util.EventObject;
 
 /**
-* @author Kareem El-Hajjar
+* @author Kareem El-Hajjar, Max Curkovic
 * Class UtilityEvent for a utility event, that extends EventObject
 */
 public class UtilityEvent extends EventObject {
