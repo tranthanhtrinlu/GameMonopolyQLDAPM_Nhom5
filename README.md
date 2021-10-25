@@ -14,4 +14,6 @@ Allowing houses to be bought on any property is a known issue and will be fixed 
 For Milestone 2, we will be focusing on making our Board View into a GUI with our Board Controller. We will also be using JUnit Testing to find additional bugs.
 We were able to implement a lot of Milestone 3 into the foundation of the game, so a lot of the next few weeks will be spent refining and refactoring our code. We also want to implement AIs within the next milestone, if possible.
 
+We also want to expand the current house system by allowing the player to remove/sell houses at their leisure.
+
 ~ MC
