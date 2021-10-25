@@ -17,4 +17,4 @@ We were able to implement a lot of Milestone 3 into the foundation of the game, 
 
 In Milestone 4, we will be implementing a save/load feature, as well as an international version with custom street names, values, and currencies.
 
-~ Author: Max Curkovic
+~ Author: Max Curkovic, Tony Massaad
