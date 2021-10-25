@@ -1,13 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Kareem El-Hajjar
+ * Class Railroad that defines a railroad element. Extends Location
+ */
 public class RailRoad extends Location{
     private List<Integer> payments;
     private Player owner;
     private List<RailRoadListener> railRoadListener;
 
     /**
-     *  Constructor for railroad
+     * Constructor for railroad
      * @param name String railroad property name
      * @param cost Integer cost of property
      */
@@ -79,7 +83,7 @@ public class RailRoad extends Location{
     /**
      * gets the results of a board event
      * @param p Player
-     * @param event BoardEven
+     * @param event BoardEvent
      */
     @Override
     public void getResult(Player p, BoardEvent event) {
@@ -88,15 +92,28 @@ public class RailRoad extends Location{
         }
     }
 
+    /**
+     * Getter for getting the payment to an owner of a property
+     * @return An integer payment
+     */
     public int getPayment(){
         return this.payments.get(this.owner.getNumOfRailroads());
     }
 
+    /**
+     * Method for adding a view to the list of railroadListeners
+     * @param view A BoardView view.
+     */
     @Override
     public void addListener(BoardView view) {
         this.railRoadListener.add(view);
     }
 
+    /**
+     * Same payment method but using an index for the list
+     * @param index An integer index
+     * @return An integer payment
+     */
     public int getPayment(int index){
         return this.payments.get(index);
     }

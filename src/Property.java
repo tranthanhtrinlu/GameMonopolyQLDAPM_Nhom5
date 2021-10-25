@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Cory Helm
+ * Class Property that defines a property. Extends Location
+ */
 public class Property extends Location{
     private final List<Integer> rentCosts;
     private int numOfHouses;
@@ -119,8 +123,11 @@ public class Property extends Location{
         return this.rentCosts.get(this.numOfHouses);
     }
 
-    // Raise an event for each case "no owner" "curr owner" "not curr owner"
     @Override
+    /**
+     * Method for property functionality
+     * @return A boolean
+     */
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
@@ -142,38 +149,67 @@ public class Property extends Location{
         return false;
     }
 
+    /**
+     * Getter for getting cost per house
+     * @return An integer cost per house
+     */
     public int getCostPerHouse() {
         return this.costPerHouse;
     }
 
+    /**
+     * Getter for max number of houses
+     * @return An integer max number of houses
+     */
     public int getMaxNumberOfHouses() {
         return this.maxNumberOfHouses;
     }
 
+    /**
+     * Getter for number of houses
+     * @return An integer number of houses
+     */
     public int getNumOfHouses() {
         return this.numOfHouses;
     }
 
+    /**
+     * Getter for a color
+     * @return A BoardModel color
+     */
     public BoardModel.Color getColor() {
         return this.color;
     }
 
+    /**
+     * Getter for getting the number of colours on the board
+     * @return An integer numberOfColor
+     */
     public int getNumberOfColor() {
         return this.numberOfColor;
     }
 
+    /**
+     * Getter for getting the property owner
+     * @return A Player owner
+     */
     public Player getOwner() {
         return this.owner;
     }
 
+    /**
+     * Method for getting the rent cost from a list of rent costs
+     * @param index An integer index
+     * @return An integer rent cost
+     */
     public int getRentCost(int index){
         return this.rentCosts.get(index);
     }
 
-    public void setOldNumOfHouses(int oldNumOfHouses) {
-        this.oldNumOfHouses = oldNumOfHouses;
-    }
-
+    /**
+     * Getter for getting the old number of houses prior to buying a house
+     * @return An integer oldNumOfHouses
+     */
     public int getOldNumOfHouses() {
         return this.oldNumOfHouses;
     }

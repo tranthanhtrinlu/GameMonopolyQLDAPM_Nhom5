@@ -1,5 +1,9 @@
 import java.util.EventObject;
 
+/**
+ * @author Kareem El-Hajjar
+ * Class RailRoadEvent for defining a railroad event. Extends EventObject
+ */
 public class RailRoadEvent extends EventObject {
 
     private Player player;
@@ -14,14 +18,26 @@ public class RailRoadEvent extends EventObject {
         this.player = p;
     }
 
+    /**
+     * Getter method for returning the player
+     * @return A Player player
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * Getter method for the Railroad element.
+     * @return A Railroad event.
+     */
     public RailRoad getRailRoad(){
         return (RailRoad) this.getSource();
     }
 
+    /**
+     * Overriden Java method for getting a source
+     * @return A Java source
+     */
     @Override
     public Object getSource() {
         return super.getSource();

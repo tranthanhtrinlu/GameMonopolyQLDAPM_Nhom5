@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Kareem El-Hajjar
+ * Class LandOnJail that defines a LandOnJail element
+ */
 public class LandOnJail extends Location {
 
     private List<LandOnJailListener> landOnJailListenerList;
@@ -58,9 +62,9 @@ public class LandOnJail extends Location {
     }
 
     /**
-     * gets the result fo board event
+     * gets the result for board event
      * @param p Player
-     * @param event BoardEven
+     * @param event BoardEvent
      */
     @Override
     public void getResult(Player p,  BoardEvent event) {

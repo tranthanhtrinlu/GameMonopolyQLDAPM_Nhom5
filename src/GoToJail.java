@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Tony Massaad
+ * Class GoToJail that defines a GoToJail element. Extends Location
+ */
 public class GoToJail extends Location{
 
     private List<GoToJailListener> goToJailListener;
@@ -16,10 +20,10 @@ public class GoToJail extends Location{
     }
 
     /**
-     * location functionality
-     * @param p Player
+     * Describes functionality of the GoToJail element
+     * @param p Player object p
      * @param totalDiceRoll Integer sum of dice roll
-     * @return
+     * @return A boolean, always returns false
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
@@ -29,26 +33,44 @@ public class GoToJail extends Location{
         return false;
     }
 
+    /**
+     * Java toString method
+     * @param p A player p
+     * @return A string sentence of someone landing on GoToJail
+     */
     @Override
     public String toString(Player p) {
         return p.getPlayerName() + " landed on " + this.getName() + ". Being Sent to Jail.";
     }
 
+    /**
+     * Does nothing for this class
+     */
     @Override
     public boolean buy(Player p) {
         return false;
     }
 
+    /**
+     * Does nothing for this class
+     */
     @Override
     public void resetOwner() {
 
     }
 
+    /**
+     * Does nothing for this class
+     */
     @Override
     public void getResult(Player p,  BoardEvent event) {
 
     }
 
+    /**
+     * Adds the view to the ArrayList of goToJailListeners
+     * @param view A BoardView view
+     */
     @Override
     public void addListener(BoardView view) {
         this.goToJailListener.add(view);

@@ -1,6 +1,7 @@
 import java.util.EventObject;
 
 /**
+ * @author Tony Massaad
  * Class GoToJailEvent that describes a go to jail event. Extends EventObject.
  */
 public class GoToJailEvent extends EventObject {

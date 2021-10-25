@@ -1,5 +1,5 @@
 /**
- * @author Max Curkovic
+ * @author Tony Massaad
  * Interface BoardView that acts as the view for the Monopoly game. Extends all of the listeners for different elements of the board.
  */
 

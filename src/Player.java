@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author Tony Massaad
+ * Class Player that defines the attributes of a player in the Monopoly game.
+ */
 public class Player{
 
     private final String playerName;
@@ -49,7 +53,6 @@ public class Player{
      * @return properties
      */
     public List<Property> getEstatePropertiesOfPlayer(){
-        StringBuilder s = new StringBuilder();
         List<Property> properties = new ArrayList<>();
         for (Location ownedProperty : this.ownedProperties) {
             if (ownedProperty instanceof Property) {
@@ -73,6 +76,10 @@ public class Player{
         return null;
     }
 
+    /**
+     * Integer method that checks the number of properties that can have houses on them
+     * @return An integer k
+     */
     public int numberOfEstateProperties(){
         int k = 0;
         for (Location ownedProperty : this.ownedProperties) {
@@ -83,9 +90,6 @@ public class Player{
         return k;
     }
 
-    public Location getLocationByIndex(int i){
-        return this.ownedProperties.get(i);
-    }
 
     /**
      * how many color properties does the player own
@@ -97,10 +101,18 @@ public class Player{
         return this.ownedPropertiesBasedOnColors.get(color) == numOfColor;
     }
 
+    /**
+     * setter method for setting the player position
+     * @param position Integer
+     */
     public void setPosition(int position){
         this.position = position;
     }
 
+    /**
+     * Setter method for setting the current location
+     * @param currLocation A String currLocation
+     */
     public void setCurrLocation(String currLocation) {
         this.currLocation = currLocation;
     }
@@ -108,7 +120,7 @@ public class Player{
     /**
      * used to move the character around the board
      * @param combinedRolls Integer of dice rolled
-     * @return
+     * @return True if player is moved, false otherwise
      */
     public boolean movePlayer(int combinedRolls){
         this.position += combinedRolls;
@@ -120,7 +132,7 @@ public class Player{
         return false;
     }
 
-    /**\
+    /**
      * sets the player in jail
      * @param inJail boolean in jail or not
      */
@@ -132,26 +144,50 @@ public class Player{
             this.turnsInJail = 0;
     }
 
+    /**
+     * Getter method for getting the turns in jail
+     * @return An integer amount of turns
+     */
     public int getTurnsInJail(){
         return this.turnsInJail;
     }
 
+    /**
+     * Setter method for setting the number of turns in jail
+     * @param val An integer val
+     */
     public void setTurnsInJail(int val){
         this.turnsInJail = val;
     }
 
+    /**
+     * Getter method for getting a boolean that describes if a player is in jail
+     * @return A boolean inJail
+     */
     public boolean getInJail(){
         return this.inJail;
     }
 
+    /**
+     * Getter for getting the player name
+     * @return A string name
+     */
     public String getPlayerName() {
         return this.playerName;
     }
 
+    /**
+     * Getter for getting the money amount of the player
+     * @return An integer moneyAmount
+     */
     public int getMoneyAmount() {
         return this.moneyAmount;
     }
 
+    /**
+     * Void method to add a property to the player's list of owned properties
+     * @param p A Location p
+     */
     public void addProperty(Location p){
         this.ownedProperties.add(p);
     }
@@ -177,10 +213,6 @@ public class Player{
         for (Location location : this.ownedProperties){
             location.resetOwner();
         }
-    }
-
-    public int getSizeOfOwnedProperties(){
-        return this.ownedProperties.size();
     }
 
     /**
@@ -230,7 +262,7 @@ public class Player{
     }
 
     /**
-     * Overrides java oject equals() method
+     * Overrides java object equals() method
      * @param obj Object, the object to check
      * @return boolean, true iff the comparison and the object is identical, otherwise false
      */
@@ -249,11 +281,19 @@ public class Player{
                 && this.numOfUtilities == player.numOfUtilities && this.turnsInJail == player.turnsInJail;
     }
 
+    /**
+     * Overridden Java toString method
+     * @return A string statement of the state of a player
+     */
     public String toString(){
         return "Player: " + this.playerName + "\n{\n" +
                 "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
     }
 
+    /**
+     * Boolean method for confirming jail payment does not result in bankruptcy
+     * @return True if the player's money is greater than 50, false otherwise
+     */
     public boolean payJail() {
         return this.moneyAmount - 50 > 0;
 

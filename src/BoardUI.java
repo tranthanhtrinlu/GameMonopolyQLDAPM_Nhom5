@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * @author Max Curkovic, Tony Massaad, Cory Helm, Kareem
+ * @author Max Curkovic, Tony Massaad, Cory Helm, Kareem El-Hajjar (this class was a collective effort based on how long it would be)
  * Class BoardUI that implements the UI of the board.
  */
 public class BoardUI implements BoardView{
