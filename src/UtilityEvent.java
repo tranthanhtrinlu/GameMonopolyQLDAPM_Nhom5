@@ -1,5 +1,9 @@
 import java.util.EventObject;
 
+/**
+* @author Kareem El-Hajjar
+* Class UtilityEvent for a utility event, that extends EventObject
+*/
 public class UtilityEvent extends EventObject {
 
     private Player player;
@@ -16,18 +20,33 @@ public class UtilityEvent extends EventObject {
         this.totalDiceRoll = totalDiceRoll;
     }
 
+    /**
+    * Method for getting the total dice roll
+    * @return An integer totalDiceRoll
+    */
     public int getTotalDiceRoll() {
         return this.totalDiceRoll;
     }
 
+    /**
+    * Method for getting the player
+    * @return A Player player
+    */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+    * Method for getting a utility element
+    * @return A Utility
+    */
     public Utility getUtility(){
         return (Utility) this.getSource();
     }
 
+    /**
+    * Java method for getting a source
+    */
     @Override
     public Object getSource() {
         return super.getSource();
