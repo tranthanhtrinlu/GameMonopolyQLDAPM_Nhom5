@@ -11,7 +11,7 @@ The current implementation focuses on a text-based UI with a jail system, abilit
 
 Allowing houses to be bought on any property owned is a known issue and will be fixed by Milestone 3. According, to Monopoly rules, all same colored properties should be owned before purchasing houses. We simply wanted the basis for what we were going to do for implementing this feature. Other than this, the Milestone 1 has been tested and fully implemented with no known bugs.
 
-For Milestone 2, we will be focusing on making our Board View into a GUI with our Board Controller. We will also be using JUnit Testing to find additional bugs. We will also be adding more enums, especially for property names. We will also be adding the feature of selling existing houses on properties in Milestone 2. 
+For Milestone 2, we will be focusing on making our Board View into a GUI with our Board Controller. We will convert the Scanner controller to a class controller that will collect GUI inputs and send data accordingly. We will also be using JUnit Testing to find additional bugs. We will also be adding more enums, especially for property names. We will also be adding the feature of selling existing houses on properties in Milestone 2. 
 
 We were able to implement a lot of Milestone 3 into the foundation of the game, so a lot of the next few weeks will be spent refining and refactoring our code. We also want to implement AIs in Milestone 3, as well as expandintg the current house system by allowing the player to remove/sell houses at their leisure.
 
