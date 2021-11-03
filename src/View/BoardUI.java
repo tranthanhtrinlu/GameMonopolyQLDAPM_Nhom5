@@ -1,7 +1,10 @@
-package MVC;
-
+package View;
 import Events.*;
 import Listener.BoardView;
+import Model.BoardModel;
+import Model.Location;
+import Model.Player;
+import Model.Property;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -15,11 +18,11 @@ import java.util.Scanner;
 public class BoardUI implements BoardView {
 
     protected BoardModel model;
-    private final Scanner sc;
-    private int userInput;
     private List<Player> gamePlayers;
     private int currentTurn;
     private boolean pass, purchasesProperty, purchaseHouses;
+    private final Scanner sc;
+    private int userInput;
 
     /**
      * Default constructor for MVC.BoardUI.

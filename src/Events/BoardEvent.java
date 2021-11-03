@@ -1,5 +1,5 @@
 package Events;
-import MVC.*;
+import Model.*;
 
 import java.util.EventObject;
 import java.util.List;

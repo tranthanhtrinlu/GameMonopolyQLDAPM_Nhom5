@@ -1,10 +1,9 @@
-package MVC;
+package Model;
 import  Listener.Tax_FreeParkingListener;
 
 import Events.BoardEvent;
 import Events.Tax_FreeParkingEvent;
 import Listener.BoardView;
-import Listener.Tax_FreeParkingListener;
 
 import java.util.ArrayList;
 import java.util.List;

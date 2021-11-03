@@ -1,4 +1,4 @@
-package MVC;
+package Model;
 
 import Events.BoardEvent;
 import Listener.BoardView;
