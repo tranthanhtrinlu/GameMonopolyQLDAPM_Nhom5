@@ -208,6 +208,21 @@ public class BoardModel {
         }
     }
 
+
+    public void RollButtonChoice(){
+        BoardView currView = this.views.get(this.currentTurn);
+        boolean doubles = rollDiceOfTwo();
+        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
+        currView.handlePlayerMovement(e);
+        if (!doubles){
+            for (BoardView view : this.views){
+                view.updateGamePlayers(e);
+                view.handleNextTurn(e);
+            }
+            this.incrementCurrentTurn();
+        }
+    }
+
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
      */
@@ -253,6 +268,7 @@ public class BoardModel {
                 }
             }
             else{
+                // where our control panel starts.
                 if (choice == 1){
                     currView.handlePrintStateOfEachPlayer(e);
                 }

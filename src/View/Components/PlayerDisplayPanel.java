@@ -20,21 +20,30 @@ public class PlayerDisplayPanel extends JPanel {
     public void addNewPlayerViewButton(Player p){
         JPanel playerDisplay = new JPanel();
         playerDisplay.setLayout(new BoxLayout(playerDisplay, BoxLayout.Y_AXIS));
-        JButton playerButton = new JButton(p.getPlayerName());
+        JButton playerButton = new JButton(p.getPlayerName() + " +");
         playerButton.addActionListener(e -> {
             System.out.println("Do something");
-            // do function here add the following the the JPanel playerDisplay in the array list accordingly and update it
-            // Location: currlocation
-            // label: money
-            // Properties:
-            //list of properties
+            if (playerButton.getText().substring(playerButton.getText().length() - 1).equals("+")){
+                playerDisplay.add(new JLabel("Current Location: " + p.getCurrLocation()));
+                playerDisplay.add(new JLabel("Money: " + p.getMoneyAmount()));
+                playerDisplay.add(new JLabel("Properties:"));
+                for (int i = 0; i < p.getNumOfProperties(); i++){
+                    playerDisplay.add(new JLabel(p.getPropertyByIndex(i).getName()));
+                }
+                playerButton.setText(playerButton.getText().substring(0,playerButton.getText().length() - 1) + "-");
+            }
+            else{
+                playerDisplay.removeAll();
+                playerButton.setText(playerButton.getText().substring(0,playerButton.getText().length() - 1) + "+");
+                playerDisplay.add(playerButton);
+            }
+            playerDisplay.revalidate();
         });
         playerDisplay.add(playerButton);
         this.playerButtons.add(playerButton);
         this.playerDisplays.add(playerDisplay);
         this.add(playerDisplay);
         this.revalidate();
-        //this.repaint();
     }
 
     public void removePlayerView(int i){
@@ -42,4 +51,21 @@ public class PlayerDisplayPanel extends JPanel {
         this.playerButtons.remove(i);
     }
 
+    public void updatePlayerDisplay(int index, Player p) {
+        JPanel panel = this.playerDisplays.get(index);
+        JButton button = this.playerButtons.get(index);
+        panel.removeAll();
+        if (button.getText().substring(button.getText().length() - 1).equals("+")){
+            panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
+            panel.add(new JLabel("Money: " + p.getMoneyAmount()));
+            panel.add(new JLabel("Properties:"));
+            for (int i = 0; i < p.getNumOfProperties(); i++){
+                panel.add(new JLabel(p.getPropertyByIndex(i).getName()));
+            }
+        }
+        else{
+            panel.add(button);
+        }
+        panel.revalidate();
+    }
 }

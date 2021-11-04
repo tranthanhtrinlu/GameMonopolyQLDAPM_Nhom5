@@ -92,6 +92,23 @@ public class Player{
         return k;
     }
 
+    /**
+     * get the size of teh property owned arrays
+     * @return Integer, the size
+     */
+    public int getNumOfProperties(){
+        return this.ownedProperties.size();
+    }
+
+    /**
+     * Get property in list by index
+     * @param i, Integer index
+     * @return Location, the property
+     */
+    public Location getPropertyByIndex(int i){
+        return this.ownedProperties.get(i);
+    }
+
 
     /**
      * how many color properties does the player own
@@ -281,6 +298,14 @@ public class Player{
                 && this.position == player.position && this.ownedProperties == player.ownedProperties
                 && this.inJail == player.inJail && this.currLocation.equals(player.currLocation) && this.numOfRailroads == player.numOfRailroads
                 && this.numOfUtilities == player.numOfUtilities && this.turnsInJail == player.turnsInJail;
+    }
+
+    /**
+     * Get the current location
+     * @return String, current location
+     */
+    public String getCurrLocation() {
+        return this.currLocation;
     }
 
     /**
