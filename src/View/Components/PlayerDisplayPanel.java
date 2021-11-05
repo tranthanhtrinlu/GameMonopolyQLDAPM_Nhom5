@@ -2,10 +2,8 @@ package View.Components;
 import Model.Player;
 
 import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PlayerDisplayPanel extends JPanel {
     private final static String CURRENT_TURN = "(Playing)";
@@ -99,19 +97,20 @@ public class PlayerDisplayPanel extends JPanel {
 
     public void updateCurrentTurn(int currentTurn, int index, ArrayList<Player> players){
         String[] text = this.playerButtons.get(index).getText().split(" ");
-        System.out.println(Arrays.toString(text));
         if (index == currentTurn){
             String s;
             s = players.get(index).getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN;
-            if (text[text.length - 2].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING)))
+            if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
                 s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN;
+            }
             this.playerButtons.get(index).setText(s);
         }
         else{
             String s;
             s = players.get(index).getPlayerName() + " " + UP_STRING;
-            if (text[text.length - 2].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING)))
+            if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
                 s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING;
+            }
             this.playerButtons.get(index).setText(s);
         }
         this.playerDisplays.get(index).revalidate();

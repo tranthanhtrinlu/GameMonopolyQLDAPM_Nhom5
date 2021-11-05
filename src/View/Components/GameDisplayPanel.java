@@ -1,5 +1,7 @@
 package View.Components;
 
+import View.BoardGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -8,6 +10,10 @@ public class GameDisplayPanel extends JPanel {
     private final static int DIM1 = 96;
     private final static int DIM2 = 64;
     private final static int DIM3 = 3;
+
+    private final static int GAME_START_X = BoardGUI.GAME_WIDTH-DIM1;
+    private final static int GAME_START_Y = BoardGUI.GAME_HEIGHT-DIM1;
+    private final static int[] PLAYER_PIECE_DIM = new int[]{24,24};
 
     private final static int BOARD_START_TOP_X_POS = 0; // after the side panel
     private final static int BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS = DIM1; // after the top right corner image
@@ -20,7 +26,18 @@ public class GameDisplayPanel extends JPanel {
     private final static int[] V_LINE_WIDTH_HEIGHT = new int[]{DIM3, DIM1};
 
     private final ImageIcon verticalBorder, horizontalBorder;
+
+    private ArrayList<JLabel> playerPieces;
+
     public GameDisplayPanel(){
+        this.playerPieces = new ArrayList<>();
+        this.playerPieces.add(new JLabel("P1"));
+        this.playerPieces.get(0).setBounds(689-74-64-64-64-64-64-64-64-64-79, 689, PLAYER_PIECE_DIM[0], PLAYER_PIECE_DIM[1]);
+        this.playerPieces.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+        this.playerPieces.get(0).setFont(new Font("Verdana", Font.BOLD, 12));
+        this.playerPieces.get(0).setForeground(Color.BLACK);
+        this.playerPieces.get(0).setBackground(Color.WHITE);
+
 
         Image hLine = new ImageIcon (this.getClass().getResource("/MonopolyBoardImages/BlackBorders/HORIZONTAL_BAR.png")).getImage();
         Image vLine = new ImageIcon (this.getClass().getResource("/MonopolyBoardImages/BlackBorders/VERTICAL_BAR.png")).getImage();
@@ -28,6 +45,7 @@ public class GameDisplayPanel extends JPanel {
         vLine = vLine.getScaledInstance(V_LINE_WIDTH_HEIGHT[0],V_LINE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
         this.horizontalBorder = new ImageIcon(hLine);
         this.verticalBorder = new ImageIcon(vLine);
+        this.add(playerPieces.get(0));
         this.setTopImages();
         this.setMiddleLeftImages();
         this.setMiddleRightImages();

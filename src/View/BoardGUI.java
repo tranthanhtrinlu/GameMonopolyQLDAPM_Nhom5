@@ -15,10 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class BoardGUI extends JFrame implements BoardView{
-    private final static int GAME_WIDTH = 985;
-    private final static int GAME_HEIGHT = 807;
+    public final static int GAME_WIDTH = 985;
+    public final static int GAME_HEIGHT = 807;
     private final static int[] DICE_DIM = new int[]{96, 96};
 
 
@@ -32,9 +35,10 @@ public class BoardGUI extends JFrame implements BoardView{
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
     private final ArrayList<Image> diceImages;
     private JLabel dice1, dice2;
-
+    private boolean finishedRolling;
     public BoardGUI(){
         super("Monopoly");
+        this.finishedRolling = false;
         this.gamePanel = new GameDisplayPanel();
         this.sidePanel = new PlayerDisplayPanel();
         this.currentTurn = 0;
@@ -482,20 +486,33 @@ public class BoardGUI extends JFrame implements BoardView{
     public void handleGameplayRoll(BoardEvent e){
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         Player p = this.gamePlayers.get(this.currentTurn);
+        gamePanel.movePlayerPiece(currentTurn, e.diceSum());
         this.updateRoll(e.getRoll1(), e.getRoll2());
-        this.gamePanel.movePlayerPiece(this.currentTurn, e.diceSum());
-        if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
+        this.buttonEnableCondition(false);
+        if (gamePlayers.get(currentTurn).movePlayer(e.diceSum())){
             e.getModel().announceReachingGo();
         }
         if (place.getName().equals("In Jail") && !p.getInJail()){
             p.setCurrLocation(place.getName() + ", Just visiting");
-            e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.diceSum());
+            e.boardElement(gamePlayers.get(currentTurn).getPosition()).locationElementFunctionality(gamePlayers.get(currentTurn), e.diceSum());
+            this.buttonEnableCondition(true);
             return;
         }
-        this.gamePlayers.get(this.currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
+        gamePlayers.get(currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
         e.boardElement(p.getPosition()).locationElementFunctionality(p, e.diceSum());
+        this.buttonEnableCondition(true);
     }
 
+    private void buttonEnableCondition(boolean b){
+        this.turnPass.setEnabled(b);
+        this.quit.setEnabled(b);
+        this.roll.setEnabled(b);
+        this.payOutOfJail.setEnabled(b);
+        this.rollDouble.setEnabled(b);
+        this.purchaseEstateHouses.setEnabled(b);
+        this.sellHouses.setEnabled(b);
+        this.gameControlPanel.revalidate();
+    }
 
     /**
      * Overridden method that announces when a player has reached GO!.
@@ -530,8 +547,8 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     private void updateRoll(int roll1, int roll2) {
-        this.dice1.setIcon(new ImageIcon(this.diceImages.get(roll1-1)));
-        this.dice2.setIcon(new ImageIcon(this.diceImages.get(roll2-1)));
+        dice1.setIcon(new ImageIcon(diceImages.get(roll1-1)));
+        dice2.setIcon(new ImageIcon(diceImages.get(roll2-1)));
     }
 
 
