@@ -84,18 +84,6 @@ public class Property extends Location{
     }
 
     /**
-     * get the result of an event
-     * @param p MVC.Player
-     * @param boardEvent Events.BoardEvent
-     */
-    @Override
-    public void getResult(Player p, BoardEvent boardEvent) {
-        for (PropertyListener listener : this.propertyListeners){
-            listener.displayLandedPropertyResult(new PropertyEvent(this, p), boardEvent);
-        }
-    }
-
-    /**
      * adds a listener to the property
      * @param view Listener.BoardView
      */

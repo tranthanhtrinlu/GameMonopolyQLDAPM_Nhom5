@@ -28,10 +28,4 @@ public interface PropertyListener {
      */
     void propertyRent(PropertyEvent e);
 
-    /**
-     * Listener to announce the landed property result by the player
-     * @param e Events.PropertyEvent that takes the property and player
-     * @param boardEvent The Events.BoardEvent
-     */
-    void displayLandedPropertyResult(PropertyEvent e, BoardEvent boardEvent);
 }

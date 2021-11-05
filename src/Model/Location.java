@@ -66,12 +66,6 @@ public abstract class Location {
      */
     public abstract void resetOwner();
 
-    /**
-     * Abstract method for getting the result of a board event on an element.
-     * @param p A MVC.Player object p.
-     * @param event A Events.BoardEvent event.
-     */
-    public abstract void getResult(Player p, BoardEvent event);
 
     /**
      * Abstract method for adding a view to a listener ArrayList.

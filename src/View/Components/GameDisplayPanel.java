@@ -169,9 +169,15 @@ public class GameDisplayPanel extends JPanel {
         }
     }
 
-    public void movePieceImage(){
+    public void movePieceImage(int currentPlayer){
         // Moves the piece accordingly, do some math
     }
 
+    public void removePieceFromBoard(int currentPlayer){
+        // remove piece from the board;
+    }
 
+
+    public void movePlayerPiece(int currentTurn, int diceSum) {
+    }
 }

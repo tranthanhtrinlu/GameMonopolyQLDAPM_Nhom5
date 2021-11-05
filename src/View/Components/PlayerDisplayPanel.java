@@ -2,39 +2,57 @@ package View.Components;
 import Model.Player;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PlayerDisplayPanel extends JPanel {
-
+    private final static String CURRENT_TURN = "(Playing)";
+    private final static String DROP_DOWN_STRING = "+";
+    private final static String UP_STRING = "-";
 
     private ArrayList<JButton> playerButtons;
     private ArrayList<JPanel> playerDisplays;
+    private ArrayList<Boolean> turns;
     public PlayerDisplayPanel(){
         this.playerButtons = new ArrayList<>();
         this.playerDisplays = new ArrayList<>();
+        this.turns = new ArrayList<>();
         this.setBackground(new Color(224, 225, 224));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 
-    public void addNewPlayerViewButton(Player p){
+    public void addNewPlayerViewButton(Player p, int index){
         JPanel playerDisplay = new JPanel();
         playerDisplay.setLayout(new BoxLayout(playerDisplay, BoxLayout.Y_AXIS));
-        JButton playerButton = new JButton(p.getPlayerName() + " +");
+        JButton playerButton;
+        if (index == 0)
+            playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN);
+        else
+            playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING);
+
         playerButton.addActionListener(e -> {
-            System.out.println("Do something");
-            if (playerButton.getText().substring(playerButton.getText().length() - 1).equals("+")){
+            String[] text = playerButton.getText().split(" ");
+            int length = text.length;
+            if (text[length-1].equals(DROP_DOWN_STRING) || (text[length-1].equals(CURRENT_TURN) && text[length-2].equals(DROP_DOWN_STRING))){
                 playerDisplay.add(new JLabel("Current Location: " + p.getCurrLocation()));
                 playerDisplay.add(new JLabel("Money: " + p.getMoneyAmount()));
                 playerDisplay.add(new JLabel("Properties:"));
                 for (int i = 0; i < p.getNumOfProperties(); i++){
                     playerDisplay.add(new JLabel(p.getPropertyByIndex(i).getName()));
                 }
-                playerButton.setText(playerButton.getText().substring(0,playerButton.getText().length() - 1) + "-");
+                if (text[length-1].equals(CURRENT_TURN))
+                    playerButton.setText(p.getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN);
+                else
+                    playerButton.setText(p.getPlayerName() + " " + UP_STRING);
             }
-            else{
+            else if (text[length-1].equals(UP_STRING) || (text[length-1].equals(CURRENT_TURN) && text[length-2].equals(UP_STRING))){
                 playerDisplay.removeAll();
-                playerButton.setText(playerButton.getText().substring(0,playerButton.getText().length() - 1) + "+");
+                if (text[length-1].equals(CURRENT_TURN))
+                    playerButton.setText(p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN);
+                else
+                    playerButton.setText(p.getPlayerName() + " " + DROP_DOWN_STRING);
                 playerDisplay.add(playerButton);
             }
             playerDisplay.revalidate();
@@ -46,16 +64,24 @@ public class PlayerDisplayPanel extends JPanel {
         this.revalidate();
     }
 
-    public void removePlayerView(int i){
-        this.playerDisplays.remove(i);
-        this.playerButtons.remove(i);
+    public void removePlayerView(int i, Player p){
+        JPanel panel = this.playerDisplays.get(i);
+        JButton button = this.playerButtons.get(i);
+        button.setText(p.getPlayerName() + " (Out)");
+        panel.removeAll();
+        button.setEnabled(false);
+        panel.add(button);
+        panel.revalidate();
     }
 
     public void updatePlayerDisplay(int index, Player p) {
         JPanel panel = this.playerDisplays.get(index);
         JButton button = this.playerButtons.get(index);
+        String[] text = button.getText().split(" ");
+        int length = text.length;
         panel.removeAll();
-        if (button.getText().substring(button.getText().length() - 1).equals("+")){
+        if (text[length-1].equals(UP_STRING) || (text[length-1].equals(CURRENT_TURN) && text[length-2].equals(UP_STRING))){
+            panel.add(button);
             panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
             panel.add(new JLabel("Money: " + p.getMoneyAmount()));
             panel.add(new JLabel("Properties:"));
@@ -67,5 +93,27 @@ public class PlayerDisplayPanel extends JPanel {
             panel.add(button);
         }
         panel.revalidate();
+
+    }
+
+
+    public void updateCurrentTurn(int currentTurn, int index, ArrayList<Player> players){
+        String[] text = this.playerButtons.get(index).getText().split(" ");
+        System.out.println(Arrays.toString(text));
+        if (index == currentTurn){
+            String s;
+            s = players.get(index).getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN;
+            if (text[text.length - 2].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING)))
+                s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN;
+            this.playerButtons.get(index).setText(s);
+        }
+        else{
+            String s;
+            s = players.get(index).getPlayerName() + " " + UP_STRING;
+            if (text[text.length - 2].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING)))
+                s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING;
+            this.playerButtons.get(index).setText(s);
+        }
+        this.playerDisplays.get(index).revalidate();
     }
 }

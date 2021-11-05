@@ -27,10 +27,4 @@ public interface RailRoadListener {
      */
     void railRoadRent(RailRoadEvent e);
 
-    /**
-     * Listener to announce the landed property result by the player
-     * @param e Events.RailRoadEvent that takes the MVC.RailRoad and player
-     * @param boardEvent The Events.BoardEvent
-     */
-    void displayLandedRailroadResult(RailRoadEvent e, BoardEvent boardEvent);
 }

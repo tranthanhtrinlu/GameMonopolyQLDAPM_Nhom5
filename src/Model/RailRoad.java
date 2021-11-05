@@ -87,17 +87,6 @@ public class RailRoad extends Location{
         this.owner = null;
     }
 
-    /**
-     * gets the results of a board event
-     * @param p MVC.Player
-     * @param event Events.BoardEvent
-     */
-    @Override
-    public void getResult(Player p, BoardEvent event) {
-        for (RailRoadListener listener : this.railRoadListener){
-            listener.displayLandedRailroadResult(new RailRoadEvent(this, p), event);
-        }
-    }
 
     /**
      * Getter for getting the payment to an owner of a property

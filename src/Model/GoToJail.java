@@ -67,14 +67,6 @@ public class GoToJail extends Location{
     }
 
     /**
-     * Does nothing for this class
-     */
-    @Override
-    public void getResult(Player p,  BoardEvent event) {
-
-    }
-
-    /**
      * Adds the view to the ArrayList of goToJailListeners
      * @param view A Listener.BoardView view
      */

@@ -26,6 +26,9 @@ public class BoardModel {
     private int roll1;
     private int roll2;
 
+
+
+
     /**
      * Sets up the colours for element of the board.
      */
@@ -129,6 +132,24 @@ public class BoardModel {
         }
     }
 
+
+    /**
+     * announce handle to announce a purchase of a property
+     * @param place Location, the place
+     */
+    public void announcePurchasingProperty(Location place) {
+        for (BoardView view : this.views){
+            view.handleAnnounceLocationPurchasing(place);
+        }
+    }
+
+
+    public void announceBankruptedPlayer(Player p){
+        for (BoardView view : this.views){
+            view.handleAnnounceBankruptedPlayer(p);
+        }
+    }
+
     /**
      * Method that announces when a player has reached GO!.
      */
@@ -138,184 +159,92 @@ public class BoardModel {
         }
     }
 
+
     /**
-     * Method that announces a landed result based on a board event.
-     * @param e A Events.BoardEvent object e.
-     * @param result A boolean result.
+     * Message announement method for all views
+     * @param s
      */
-    public void announceLandedResult(BoardEvent e, boolean result){
+    public void announcePlayerMessage(String s) {
         for (BoardView view : this.views){
-            view.handleGameStatus(e, result);
+            view.handleMessageAnnouncement(s);
         }
     }
 
-    /**
-     * Method that announces that the player has landed on an element of the board based on a board event.
-     * @param e A Events.BoardEvent object e.
-     */
-    public void announceLanded(BoardEvent e) {
-        for (BoardView view: this.views){
-            view.handleAnnounceLanded(e);
-        }
-    }
-
-    /**
-     * Method that announces the result of a property sale based on a board event.
-     * @param e A Events.BoardEvent object e.
-     */
-    public void announcePropertyResult(BoardEvent e) {
-        for (BoardView view : this.views){
-            view.handlePurchaseAnnouncment(e);
-        }
-    }
-
-    /**
-     * Method that announces the player of which is currently on a turn.
-     * @param e A Events.BoardEvent object e.
-     */
-    public void announceCurrentPlayer(BoardEvent e) {
-        for (BoardView view : this.views){
-            view.announceCurrentPlayer(e);
-        }
-    }
-
-    /**
-     * Method that announces that a player has rolled out of jail.
-     */
-    public void announceRolledOutOfJail() {
-        for (BoardView view : this.views){
-            view.handleAnnounceRolledOutOfJail();
-        }
-    }
-
-    /**
-     * Method that announces that a player has not rolled out of jail.
-     */
-    public void announceDidNotRollOutOfJail() {
-        for (BoardView view : this.views){
-            view.handleAnnounceDidNotRollOutOfJail();
-        }
-    }
-
-    /**
-     * Method that announces that the player has paid out of jail.
-     * @param e A Events.BoardEvent e.
-     * @param b A boolean b.
-     */
-    public void announcePaidOutOfJail(BoardEvent e, boolean b) {
-        for (BoardView view : this.views){
-            view.handleAnnouncePayedOutOfJail(e, b);
-        }
-    }
-
-
-    public void RollButtonChoice(){
-        BoardView currView = this.views.get(this.currentTurn);
-        boolean doubles = rollDiceOfTwo();
-        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
-        currView.handlePlayerMovement(e);
-        if (!doubles){
-            for (BoardView view : this.views){
-                view.updateGamePlayers(e);
-                view.handleNextTurn(e);
-            }
-            this.incrementCurrentTurn();
-        }
-    }
 
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
      */
-    public void playCurrPlayerTurn(){
+    public void playCurrPlayerTurn(int choice){
         BoardView currView = this.views.get(this.currentTurn);
         boolean doubles = rollDiceOfTwo();
         BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
-        boolean hasProperty = currView.checkIfPlayerHasProperties(e);
-        boolean inJail = currView.checkIfPlayerInJail(e);
-        int choice = currView.handleCurrentPlayerChoice(e);
 
-        if (!inJail){
-            if (hasProperty){
-                if (choice == 1) {
-                    currView.handlePrintStateOfEachPlayer(e);
-                }
-                else if (choice == 2){
-                    currView.handlePlayerMovement(e);
-                    for (BoardView view : this.views){
-                        view.updateGamePlayers(e);
-                        view.handleNextTurn(e);
-                    }
-                    this.incrementCurrentTurn();
-                }
-                else if (choice == 3){
-                    for (BoardView view : this.views){
-                        view.announceDecisionToPurchaseHouses(e);
-                    }
-                    currView.handlePlayerChoiceToPurchaseHouses(e);
-                }
-                else if (choice == 4){
-                    for (BoardView view : this.views){
-                        view.announcePlayerPass(e);
-                        view.handleNextTurn(e);
-                    }
-                }
-                else if (choice == 5){
-                    for (BoardView view : this.views){
-                        view.handlePlayerQuit(e);
-                        view.handleNextTurn(e);
-                    }
-                    this.incrementCurrentTurn();
-                }
-            }
-            else{
-                // where our control panel starts.
-                if (choice == 1){
-                    currView.handlePrintStateOfEachPlayer(e);
-                }
-                else if (choice == 2){
-                    currView.handlePlayerMovement(e);
-                    if (!doubles){
-                        for (BoardView view : this.views){
-                            view.updateGamePlayers(e);
-                            view.handleNextTurn(e);
-                        }
-                        this.incrementCurrentTurn();
-
-                    }
-                }
-                else if (choice == 3){
-                    for (BoardView view : this.views){
-                        view.announcePlayerPass(e);
-                        view.handleNextTurn(e);
-                    }
-                }
-                else if (choice == 4){
-                    for (BoardView view : this.views){
-                        view.handlePlayerQuit(e);
-                        view.handleNextTurn(e);
-                    }
-                    this.incrementCurrentTurn();
-                }
-            }
-        }
-        else{
-            if (choice == 1){
-                currView.handlePlayerMovement(e);
+        if (choice == 1){ // roll
+            currView.handleGameplayRoll(e);
+            if (!doubles){
                 for (BoardView view : this.views){
                     view.updateGamePlayers(e);
                     view.handleNextTurn(e);
+                    view.handleUpdateSidePanelDisplay(e);
+                    view.handleNextTurnDisplay(e);
+                    view.updateChoicePanel();
                 }
                 this.incrementCurrentTurn();
             }
-            else if (choice == 2){
-                if (currView.payJail(e)){
-                    for (BoardView view : this.views){
-                        view.updateGamePlayers(e);
-                        view.handleNextTurn(e);
-                    }
-                    this.incrementCurrentTurn();
-                }
+        }
+        else if (choice == 2){ // quit
+            for (BoardView view : this.views){
+                view.handlePlayerQuit(e);
+                view.handleNextTurn(e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.handleNextTurnDisplay(e);
+                view.updateChoicePanel();
             }
+            this.incrementCurrentTurn();
+        }
+        else if (choice == 3){ // pass
+            for (BoardView view : this.views){
+                view.announcePlayerPass(e);
+                view.handleNextTurn(e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.handleNextTurnDisplay(e);
+                view.updateChoicePanel();
+            }
+        }
+        else if (choice == 4){ // pay out of jail
+            if (currView.payJail(e)){
+                for (BoardView view : this.views){
+                    view.updateGamePlayers(e);
+                    view.handleNextTurn(e);
+                    view.handleUpdateSidePanelDisplay(e);
+                    view.handleNextTurnDisplay(e);
+                    view.updateChoicePanel();
+                }
+                this.incrementCurrentTurn();
+            }
+        }
+        else if (choice == 5){ // roll double out of jail
+            currView.handleRollingDoubles(e); // change this to roll double choice
+            for (BoardView view : this.views){
+                view.updateGamePlayers(e);
+                view.handleNextTurn(e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.handleNextTurnDisplay(e);
+                view.updateChoicePanel();
+            }
+            this.incrementCurrentTurn();
+        }
+        else if (choice == 6){ // purchase house
+            /*for (BoardView view : this.views){
+                view.announceDecisionToPurchaseHouses(e);
+            }
+            currView.handlePlayerChoiceToPurchaseHouses(e);*/
+        }
+        else if (choice == 7){ // sell house
+            /*for (BoardView view : this.views){
+                view.announceDecisionToSellHouses(e);
+            }
+            currView.handlePlayerChoiceToSellHouses(e);*/
         }
     }
 }

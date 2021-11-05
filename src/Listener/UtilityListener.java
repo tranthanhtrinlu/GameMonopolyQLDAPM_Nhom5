@@ -27,10 +27,4 @@ public interface UtilityListener {
      */
     void UtilityPay(UtilityEvent e);
 
-    /**
-     * Listener to display the result of the player landing on the MVC.Utility
-     * @param e Events.UtilityEvent
-     * @param boardEvent Events.BoardEvent
-     */
-    void displayLandedUtilityResult(UtilityEvent e, BoardEvent boardEvent);
 }

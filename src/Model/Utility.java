@@ -53,18 +53,6 @@ public class Utility extends Location{
     }
 
     /**
-     * gets result of a player landing on utility
-     * @param p MVC.Player
-     * @param event a board event like landing on
-     */
-    @Override
-    public void getResult(Player p, BoardEvent event) {
-        for (UtilityListener listener : this.utilityListenerList){
-            listener.displayLandedUtilityResult(new UtilityEvent(this, p, event.diceSum()), event);
-        }
-    }
-
-    /**
      * listener for board
      * @param view  view of the board
      */

@@ -104,16 +104,6 @@ public class Tax_FreeParking extends Location{
     }
 
     /**
-     * get result of a board event
-     * @param p
-     * @param event
-     */
-    @Override
-    public void getResult(Player p, BoardEvent event) {
-
-    }
-
-    /**
      * adds a listener
      * @param view
      */

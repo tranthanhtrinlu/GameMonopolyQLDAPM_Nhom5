@@ -69,16 +69,6 @@ public class LandOnJail extends Location {
     }
 
     /**
-     * gets the result for board event
-     * @param p MVC.Player
-     * @param event Events.BoardEvent
-     */
-    @Override
-    public void getResult(Player p,  BoardEvent event) {
-
-    }
-
-    /**
      * adds the listener for jail
      * @param view
      */

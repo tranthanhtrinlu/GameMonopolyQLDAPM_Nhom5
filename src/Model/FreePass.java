@@ -69,14 +69,6 @@ public class FreePass extends Location {
     }
 
     /**
-     * Does nothing for this class.
-     */
-    @Override
-    public void getResult(Player p,  BoardEvent event) {
-
-    }
-
-    /**
      * Adds the view to the list of listeners.
      * @param view A Listener.BoardView view.
      */
