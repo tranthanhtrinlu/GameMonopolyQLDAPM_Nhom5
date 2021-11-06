@@ -21,6 +21,11 @@ public class PlayerDisplayPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
 
+    /**
+     * will add the new player buttons to view location, money, properties
+     * @param p Player current playing
+     * @param index Integer
+     */
     public void addNewPlayerViewButton(Player p, int index){
         JPanel playerDisplay = new JPanel();
         playerDisplay.setLayout(new BoxLayout(playerDisplay, BoxLayout.Y_AXIS));
@@ -63,6 +68,11 @@ public class PlayerDisplayPanel extends JPanel {
         this.revalidate();
     }
 
+    /**
+     * removes the player view
+     * @param i Integer
+     * @param p Player being removed
+     */
     public void removePlayerView(int i, Player p){
         JPanel panel = this.playerDisplays.get(i);
         JButton button = this.playerButtons.get(i);
@@ -74,6 +84,11 @@ public class PlayerDisplayPanel extends JPanel {
         panel.revalidate();
     }
 
+    /**
+     * updates players display to get updated infomation on money,location, properties
+     * @param index Integer
+     * @param p Player the player being updated
+     */
     public void updatePlayerDisplay(int index, Player p) {
         JPanel panel = this.playerDisplays.get(index);
         JButton button = this.playerButtons.get(index);
@@ -97,6 +112,12 @@ public class PlayerDisplayPanel extends JPanel {
     }
 
 
+    /**
+     * updates the current turn that is being played
+     * @param currentTurn Integer of the current turn
+     * @param index Integer
+     * @param p Player
+     */
     public void updateCurrentTurn(int currentTurn, int index, Player p){
         String[] text = this.playerButtons.get(index).getText().split(" ");
 
