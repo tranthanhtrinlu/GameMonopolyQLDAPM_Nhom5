@@ -159,7 +159,7 @@ public class BoardGUI extends JFrame implements BoardView{
             return;
         }
         landedPlayer.setMoneyAmount(landedPlayer.getMoneyAmount() - rentCost);
-        owner.setMoneyAmount(landedPlayer.getMoneyAmount() + (rentCost * doubleAmount));
+        owner.setMoneyAmount(owner.getMoneyAmount() + (rentCost * doubleAmount));
     }
 
 
@@ -213,7 +213,7 @@ public class BoardGUI extends JFrame implements BoardView{
             return;
         }
         e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - payment);
-        owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
+        owner.setMoneyAmount(owner.getMoneyAmount() + payment);
     }
 
     // **END OF RAIL ROAD IMPLEMENTATION** //
@@ -266,7 +266,7 @@ public class BoardGUI extends JFrame implements BoardView{
             return;
         }
         e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - payment);
-        owner.setMoneyAmount(e.getPlayer().getMoneyAmount() + payment);
+        owner.setMoneyAmount(owner.getMoneyAmount() + payment);
     }
 
     // ** END OF UTILITY IMPLEMENTATION **
