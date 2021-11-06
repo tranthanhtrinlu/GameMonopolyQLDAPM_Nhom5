@@ -1,5 +1,6 @@
 package View.Components;
 
+import Model.BoardModel;
 import View.BoardGUI;
 
 import javax.swing.*;
@@ -10,10 +11,6 @@ public class GameDisplayPanel extends JPanel {
     private final static int DIM1 = 96;
     private final static int DIM2 = 64;
     private final static int DIM3 = 3;
-
-    private final static int GAME_START_X = BoardGUI.GAME_WIDTH-DIM1;
-    private final static int GAME_START_Y = BoardGUI.GAME_HEIGHT-DIM1;
-    private final static int[] PLAYER_PIECE_DIM = new int[]{24,24};
 
     private final static int BOARD_START_TOP_X_POS = 0; // after the side panel
     private final static int BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS = DIM1; // after the top right corner image
@@ -28,28 +25,21 @@ public class GameDisplayPanel extends JPanel {
     private final ImageIcon verticalBorder, horizontalBorder;
 
     private ArrayList<JLabel> playerPieces;
+    private ArrayList<JPanel> playerPiecesDisplay;
 
     public GameDisplayPanel(){
         this.playerPieces = new ArrayList<>();
-        this.playerPieces.add(new JLabel("P1"));
-        this.playerPieces.get(0).setBounds(689-74-64-64-64-64-64-64-64-64-79, 689, PLAYER_PIECE_DIM[0], PLAYER_PIECE_DIM[1]);
-        this.playerPieces.get(0).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-        this.playerPieces.get(0).setFont(new Font("Verdana", Font.BOLD, 12));
-        this.playerPieces.get(0).setForeground(Color.BLACK);
-        this.playerPieces.get(0).setBackground(Color.WHITE);
-
-
+        this.playerPiecesDisplay = new ArrayList<>();
         Image hLine = new ImageIcon (this.getClass().getResource("/MonopolyBoardImages/BlackBorders/HORIZONTAL_BAR.png")).getImage();
         Image vLine = new ImageIcon (this.getClass().getResource("/MonopolyBoardImages/BlackBorders/VERTICAL_BAR.png")).getImage();
         hLine = hLine.getScaledInstance(H_LINE_WIDTH_HEIGHT[0], H_LINE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
         vLine = vLine.getScaledInstance(V_LINE_WIDTH_HEIGHT[0],V_LINE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
         this.horizontalBorder = new ImageIcon(hLine);
         this.verticalBorder = new ImageIcon(vLine);
-        this.add(playerPieces.get(0));
-        this.setTopImages();
-        this.setMiddleLeftImages();
-        this.setMiddleRightImages();
         this.setBottomImages();
+        this.setMiddleLeftImages();
+        this.setTopImages();
+        this.setMiddleRightImages();
         this.setLayout(null);
         this.setBackground(new Color(205, 230, 208));
     }
@@ -72,19 +62,26 @@ public class GameDisplayPanel extends JPanel {
         for (int i = 0; i<11; i++){
             Image location = topPhotos.get(i);
             JLabel imageLabel, border;
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             if (i % 10 == 0){ // at a corner
                 location = location.getScaledInstance(CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
                 imageLabel = new JLabel(new ImageIcon(location));
                 imageLabel.setBounds(xPos, 0, CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1]);
+                panel.setBounds(xPos, 0, CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1]);
             }
             else{
                 location = location.getScaledInstance(TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
                 imageLabel = new JLabel(new ImageIcon(location));
                 imageLabel.setBounds(xPos, 0, TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1]);
+                panel.setBounds(xPos, 0, TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1]);
             }
             xPos += imageLabel.getWidth();
             border = new JLabel(this.verticalBorder);
             border.setBounds(xPos-1, 0, V_LINE_WIDTH_HEIGHT[0],V_LINE_WIDTH_HEIGHT[1]);
+            panel.setOpaque(false);
+            this.playerPiecesDisplay.add(panel);
+            this.add(panel);
             this.add(imageLabel);
             if (i != 10)
                 this.add(border);
@@ -94,6 +91,7 @@ public class GameDisplayPanel extends JPanel {
     private void setMiddleLeftImages(){
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
         int xPos = BOARD_START_TOP_X_POS;
+        ArrayList<JPanel> temp = new ArrayList<>();
         ArrayList<Image> leftPhotos = new ArrayList<Image>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE3.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE2.png")).getImage());
@@ -108,21 +106,31 @@ public class GameDisplayPanel extends JPanel {
 
         for (int i = 0; i < 9; i++){
             Image location = leftPhotos.get(i);
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
             location = location.getScaledInstance(MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
             JLabel imageLabel = new JLabel(new ImageIcon(location));
             imageLabel.setBounds(xPos, yPos, MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1]);
+            panel.setBounds(xPos, yPos, MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1]);
             yPos += imageLabel.getHeight();
             JLabel border = new JLabel(this.horizontalBorder);
             border.setBounds(xPos, yPos-1, H_LINE_WIDTH_HEIGHT[0], H_LINE_WIDTH_HEIGHT[1]);
+            panel.setOpaque(false);
+            temp.add(panel);
+            this.add(panel);
             this.add(imageLabel);
             if (i != 8)
                 this.add(border);
+        }
+        for (int i = temp.size()-1; i>=0; i--){
+            this.playerPiecesDisplay.add(temp.get(i));
         }
     }
 
     private void setBottomImages(){
         int xPos = BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_BOTTOM_Y_POS;
+        ArrayList<JPanel> temp = new ArrayList<>();
         ArrayList<Image> bottomPhotos = new ArrayList<Image>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/JAIL.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE3.png")).getImage());
@@ -139,22 +147,32 @@ public class GameDisplayPanel extends JPanel {
         for (int i = 0; i<11; i++){
             Image location = bottomPhotos.get(i);
             JLabel imageLabel, border;
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
             if (i % 10 == 0){ // at a corner
                 location = location.getScaledInstance(CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
                 imageLabel = new JLabel(new ImageIcon(location));
                 imageLabel.setBounds(xPos, yPos, CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1]);
+                panel.setBounds(xPos, yPos, CORNER_WIDTH_HEIGHT[0], CORNER_WIDTH_HEIGHT[1]);
             }
             else{
                 location = location.getScaledInstance(TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
                 imageLabel = new JLabel(new ImageIcon(location));
                 imageLabel.setBounds(xPos, yPos, TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1]);
+                panel.setBounds(xPos, yPos, TOP_BOTTOM_WIDTH_HEIGHT[0], TOP_BOTTOM_WIDTH_HEIGHT[1]);
             }
+            panel.setOpaque(false);
+            temp.add(panel);
+            this.add(panel);
             xPos += imageLabel.getWidth();
             border = new JLabel(this.verticalBorder);
             border.setBounds(xPos-1, yPos, V_LINE_WIDTH_HEIGHT[0],V_LINE_WIDTH_HEIGHT[1]);
             this.add(imageLabel);
             if (i != 10)
                 this.add(border);
+        }
+        for (int i = temp.size()-1; i>=0 ; i--){
+            this.playerPiecesDisplay.add(temp.get(i));
         }
     }
 
@@ -175,27 +193,50 @@ public class GameDisplayPanel extends JPanel {
 
         for (int i = 0; i < 9; i++){
             Image location = rightPhotos.get(i);
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
             location = location.getScaledInstance(MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
             JLabel imageLabel = new JLabel(new ImageIcon(location));
             imageLabel.setBounds(xPos, yPos, MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1]);
+            panel.setBounds(xPos, yPos, MIDDLE_WIDTH_HEIGHT[0], MIDDLE_WIDTH_HEIGHT[1]);
             yPos += imageLabel.getHeight();
             JLabel border = new JLabel(this.horizontalBorder);
             border.setBounds(xPos, yPos-1, H_LINE_WIDTH_HEIGHT[0], H_LINE_WIDTH_HEIGHT[1]);
+            panel.setOpaque(false);
+            this.playerPiecesDisplay.add(panel);
+            this.add(panel);
             this.add(imageLabel);
             if (i != 8)
                 this.add(border);
         }
     }
 
-    public void movePieceImage(int currentPlayer){
-        // Moves the piece accordingly, do some math
+    public void addInitialPlayers(int num){
+        System.out.println(this.playerPiecesDisplay.size());
+        this.playerPieces.add(new JLabel("P"+(num+1)));
+        this.playerPieces.get(num).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+        this.playerPieces.get(num).setFont(new Font("Verdana", Font.BOLD, 12));
+        this.playerPieces.get(num).setForeground(Color.BLACK);
+        this.playerPiecesDisplay.get(0).add(this.playerPieces.get(num));
+        this.playerPiecesDisplay.get(0).revalidate();
+
     }
 
-    public void removePieceFromBoard(int currentPlayer){
-        // remove piece from the board;
+    public void movePieceImage(int currentPlayer, int oldPlayerPosition, int playerPosition){
+        this.playerPiecesDisplay.get(oldPlayerPosition).remove(this.playerPieces.get(currentPlayer));
+        this.playerPiecesDisplay.get(oldPlayerPosition).revalidate();
+        this.playerPiecesDisplay.get(oldPlayerPosition).repaint();
+        this.playerPiecesDisplay.get(playerPosition).add(this.playerPieces.get(currentPlayer));
+        this.playerPiecesDisplay.get(playerPosition).revalidate();
+        this.playerPiecesDisplay.get(playerPosition).repaint();
     }
 
-
-    public void movePlayerPiece(int currentTurn, int diceSum) {
+    public void removePieceFromBoard(int currentPlayer, int playerPosition){
+        JLabel currentLabel = this.playerPieces.get(currentPlayer);
+        this.playerPiecesDisplay.get(playerPosition).remove(currentLabel);
+        this.playerPiecesDisplay.get(playerPosition).revalidate();
+        this.playerPiecesDisplay.get(playerPosition).repaint();
+        this.playerPieces.remove(currentLabel);
     }
+
 }

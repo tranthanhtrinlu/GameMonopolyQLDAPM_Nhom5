@@ -9,6 +9,7 @@ public class PlayerDisplayPanel extends JPanel {
     private final static String CURRENT_TURN = "(Playing)";
     private final static String DROP_DOWN_STRING = "+";
     private final static String UP_STRING = "-";
+    private final static String OUT_STRING = "(out)";
 
     private ArrayList<JButton> playerButtons;
     private ArrayList<JPanel> playerDisplays;
@@ -29,6 +30,7 @@ public class PlayerDisplayPanel extends JPanel {
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN);
         else
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING);
+        //playerButton.setPreferredSize(new Dimension(200, playerButton.getHeight()));
 
         playerButton.addActionListener(e -> {
             String[] text = playerButton.getText().split(" ");
@@ -65,7 +67,7 @@ public class PlayerDisplayPanel extends JPanel {
     public void removePlayerView(int i, Player p){
         JPanel panel = this.playerDisplays.get(i);
         JButton button = this.playerButtons.get(i);
-        button.setText(p.getPlayerName() + " (Out)");
+        button.setText(p.getPlayerName() + " " + OUT_STRING);
         panel.removeAll();
         button.setEnabled(false);
         panel.add(button);
@@ -97,6 +99,7 @@ public class PlayerDisplayPanel extends JPanel {
 
     public void updateCurrentTurn(int currentTurn, int index, ArrayList<Player> players){
         String[] text = this.playerButtons.get(index).getText().split(" ");
+
         if (index == currentTurn){
             String s;
             s = players.get(index).getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN;

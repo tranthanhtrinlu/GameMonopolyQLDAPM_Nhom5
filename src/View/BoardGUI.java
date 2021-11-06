@@ -11,13 +11,8 @@ import View.Controllers.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+
 
 public class BoardGUI extends JFrame implements BoardView{
     public final static int GAME_WIDTH = 985;
@@ -25,20 +20,19 @@ public class BoardGUI extends JFrame implements BoardView{
     private final static int[] DICE_DIM = new int[]{96, 96};
 
 
-    private GameDisplayPanel gamePanel;
-    private PlayerDisplayPanel sidePanel;
-    private JPanel gameControlPanel;
+    private final GameDisplayPanel gamePanel;
+    private final PlayerDisplayPanel sidePanel;
+    private final JPanel gameControlPanel;
 
     protected BoardModel model;
-    private ArrayList<Player> gamePlayers;
+    private final ArrayList<Player> gamePlayers;
     private int currentTurn;
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
     private final ArrayList<Image> diceImages;
-    private JLabel dice1, dice2;
-    private boolean finishedRolling;
+    private final JLabel dice1, dice2;
+
     public BoardGUI(){
         super("Monopoly");
-        this.finishedRolling = false;
         this.gamePanel = new GameDisplayPanel();
         this.sidePanel = new PlayerDisplayPanel();
         this.currentTurn = 0;
@@ -69,7 +63,7 @@ public class BoardGUI extends JFrame implements BoardView{
         this.sellHouses.addActionListener(controller);
 
         this.gameControlPanel = new JPanel();
-        this.gameControlPanel.setLayout(new BoxLayout(this.gameControlPanel, BoxLayout.Y_AXIS));
+        this.gameControlPanel.setLayout(new GridLayout(10,1));
         this.gameControlPanel.setBounds(520,315, 150,200);
         this.gameControlPanel.setBackground(new Color(255,255,255));
         this.setLayout(null);
@@ -91,7 +85,9 @@ public class BoardGUI extends JFrame implements BoardView{
         this.add(this.dice2);
         this.add(this.gameControlPanel);
         this.add(this.gamePanel);
-        this.add(this.sidePanel);
+        JScrollPane scroll = new JScrollPane(this.sidePanel);
+        scroll.setBounds(0,0,200, GAME_HEIGHT);
+        this.add(scroll);
         this.model.addView(this);
         this.model.addViewToListener(this);
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
@@ -105,6 +101,7 @@ public class BoardGUI extends JFrame implements BoardView{
         for (int i = 0; i < num; i++){
             this.gamePlayers.add(new Player(names.get(i)));
             this.sidePanel.addNewPlayerViewButton(this.gamePlayers.get(i), i);
+            this.gamePanel.addInitialPlayers(i);
         }
         this.updateChoicePanel();
     }
@@ -191,8 +188,6 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
-
-
     /**
      * Method to handle a railroad that a player who owns it lands on.
      * @param e A Events.RailRoadEvent e.
@@ -202,7 +197,6 @@ public class BoardGUI extends JFrame implements BoardView{
         ConfirmMessageController messageController = new ConfirmMessageController();
         messageController.sendMessage(this, "You landed on " + e.getRailRoad().getName() + ", Property you own");
     }
-
 
     /**
      * Overridden method to handle a railroad owned by a player not currently on their turn.
@@ -246,7 +240,6 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
-
     /**
      * Method to handle a utility that a player who owns it lands on.
      * @param e A Events.UtilityEvent e.
@@ -256,7 +249,6 @@ public class BoardGUI extends JFrame implements BoardView{
         ConfirmMessageController messageController = new ConfirmMessageController();
         messageController.sendMessage(this, "You landed on " + e.getUtility().getName() + ", Property you own");
     }
-
 
     /**
      * Overridden method to handle a utility owned by a player not currently on their turn.
@@ -334,7 +326,7 @@ public class BoardGUI extends JFrame implements BoardView{
         Player p = this.gamePlayers.get(this.currentTurn);
         this.model.announcePlayerMessage(p.getPlayerName() + " landed on " + e.getGoToJail().getName() + ", they go to jail.");
         e.getPlayer().setPosition(BoardModel.JAIL_POSITION);
-        p.setCurrLocation(e.getGoToJail().getName());
+        p.setCurrLocation("In Jail");
         e.getPlayer().setInJail(true);
     }
 
@@ -345,7 +337,8 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void FreePass(FreePassEvent e) {
-        // Do nothing
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName() + " Landed on a free pass, moving to the next player");
     }
 
 
@@ -391,9 +384,12 @@ public class BoardGUI extends JFrame implements BoardView{
 
     private void removePlayer(){
         this.gamePlayers.get(this.currentTurn).bankrupted();
-        this.gamePanel.removePieceFromBoard(this.currentTurn);
+        this.gamePanel.removePieceFromBoard(this.currentTurn, this.gamePlayers.get(this.currentTurn).getPosition());
         this.sidePanel.removePlayerView(this.currentTurn, this.gamePlayers.get(this.currentTurn));
         this.gamePlayers.remove(this.currentTurn);
+        if (this.gamePlayers.size() == 1){
+            this.model.announceWinner();
+        }
     }
 
 
@@ -486,19 +482,20 @@ public class BoardGUI extends JFrame implements BoardView{
     public void handleGameplayRoll(BoardEvent e){
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         Player p = this.gamePlayers.get(this.currentTurn);
-        gamePanel.movePlayerPiece(currentTurn, e.diceSum());
+        int old = p.getPosition();
         this.updateRoll(e.getRoll1(), e.getRoll2());
         this.buttonEnableCondition(false);
-        if (gamePlayers.get(currentTurn).movePlayer(e.diceSum())){
+        if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
             e.getModel().announceReachingGo();
         }
+        e.getModel().movePlayerPieces(this.currentTurn, old, this.gamePlayers.get(this.currentTurn).getPosition());
         if (place.getName().equals("In Jail") && !p.getInJail()){
             p.setCurrLocation(place.getName() + ", Just visiting");
-            e.boardElement(gamePlayers.get(currentTurn).getPosition()).locationElementFunctionality(gamePlayers.get(currentTurn), e.diceSum());
+            e.boardElement(gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.diceSum());
             this.buttonEnableCondition(true);
             return;
         }
-        gamePlayers.get(currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
+        this.gamePlayers.get(this.currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
         e.boardElement(p.getPosition()).locationElementFunctionality(p, e.diceSum());
         this.buttonEnableCondition(true);
     }
@@ -546,11 +543,23 @@ public class BoardGUI extends JFrame implements BoardView{
             this.sidePanel.updatePlayerDisplay(i, this.gamePlayers.get(i));
     }
 
+    @Override
+    public void handlePlayerPieceMovement(int currentTurn, int oldPos, int position) {
+        this.gamePanel.movePieceImage(currentTurn, oldPos, position);
+    }
+
+    @Override
+    public void handleAnnounceWinner() {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        Player p = this.gamePlayers.get(0);
+        controller.sendMessage(this, p.getPlayerName() + " wins the game\nThank you Playing\nExiting Program");
+        System.exit(0);
+    }
+
     private void updateRoll(int roll1, int roll2) {
         dice1.setIcon(new ImageIcon(diceImages.get(roll1-1)));
         dice2.setIcon(new ImageIcon(diceImages.get(roll2-1)));
     }
-
 
     /**
      * Update panel according to the views
@@ -560,14 +569,23 @@ public class BoardGUI extends JFrame implements BoardView{
         for (Player p : this.gamePlayers) {
             this.gameControlPanel.removeAll();
             boolean inJail = p.getInJail();
-            boolean hasProperty = p.numberOfEstateProperties() != 0;
+            boolean canPurchase = p.numberOfEstateProperties() != 0;
+            boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
             if (!inJail) {
-                if (hasProperty) {
+                if (canPurchase && canSell) {
+                    this.gameControlPanel.add(this.roll);
+                    this.gameControlPanel.add(this.purchaseEstateHouses);
+                    this.gameControlPanel.add(this.sellHouses);
+                    this.gameControlPanel.add(this.turnPass);
+                    this.gameControlPanel.add(this.quit);
+                }
+                else if (canPurchase){
                     this.gameControlPanel.add(this.roll);
                     this.gameControlPanel.add(this.purchaseEstateHouses);
                     this.gameControlPanel.add(this.turnPass);
                     this.gameControlPanel.add(this.quit);
-                } else {
+                }
+                else {
                     this.gameControlPanel.add(this.roll);
                     this.gameControlPanel.add(this.turnPass);
                     this.gameControlPanel.add(this.quit);
@@ -577,6 +595,7 @@ public class BoardGUI extends JFrame implements BoardView{
                 this.gameControlPanel.add(this.rollDouble);
                 this.gameControlPanel.add(this.quit);
             }
+            this.gameControlPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.gameControlPanel.revalidate();
         }
     }

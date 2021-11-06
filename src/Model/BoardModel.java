@@ -12,11 +12,8 @@ import java.util.Random;
  * Class MVC.BoardModel that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
  */
 public class BoardModel {
-    // CONSTANTS FOR ALL AROUND
     public static final int SIZE_OF_BOARD = 39; // 0-39 inclusive
     public static final int GO_MONEY = 200;
-    public static final int MIN_NUM_PLAYERS = 2;
-    public static final int MAX_NUM_PLAYERS = 5;
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
 
@@ -25,9 +22,6 @@ public class BoardModel {
     private int currentTurn;
     private int roll1;
     private int roll2;
-
-
-
 
     /**
      * Sets up the colours for element of the board.
@@ -55,6 +49,12 @@ public class BoardModel {
         this.currentTurn++;
         if (this.currentTurn == this.views.size())
             this.currentTurn = 0;
+    }
+
+    public void announceWinner() {
+        for (BoardView view : this.views){
+            view.handleAnnounceWinner();
+        }
     }
 
     /**
@@ -143,6 +143,13 @@ public class BoardModel {
         }
     }
 
+    public void movePlayerPieces(int currentTurn, int diceSum, int position) {
+        for (BoardView view : this.views){
+            view.handlePlayerPieceMovement(currentTurn, diceSum, position);
+        }
+    }
+
+
 
     public void announceBankruptedPlayer(Player p){
         for (BoardView view : this.views){
@@ -187,9 +194,9 @@ public class BoardModel {
                     view.handleNextTurn(e);
                     view.handleUpdateSidePanelDisplay(e);
                     view.handleNextTurnDisplay(e);
-                    view.updateChoicePanel();
                 }
                 this.incrementCurrentTurn();
+                currView.updateChoicePanel();
             }
         }
         else if (choice == 2){ // quit
@@ -198,9 +205,9 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
-                view.updateChoicePanel();
             }
             this.incrementCurrentTurn();
+            currView.updateChoicePanel();
         }
         else if (choice == 3){ // pass
             for (BoardView view : this.views){
@@ -208,8 +215,9 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
-                view.updateChoicePanel();
             }
+            this.incrementCurrentTurn();
+            currView.updateChoicePanel();
         }
         else if (choice == 4){ // pay out of jail
             if (currView.payJail(e)){
@@ -218,9 +226,9 @@ public class BoardModel {
                     view.handleNextTurn(e);
                     view.handleUpdateSidePanelDisplay(e);
                     view.handleNextTurnDisplay(e);
-                    view.updateChoicePanel();
                 }
                 this.incrementCurrentTurn();
+                currView.updateChoicePanel();
             }
         }
         else if (choice == 5){ // roll double out of jail
@@ -230,9 +238,9 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
-                view.updateChoicePanel();
             }
             this.incrementCurrentTurn();
+            currView.updateChoicePanel();
         }
         else if (choice == 6){ // purchase house
             /*for (BoardView view : this.views){

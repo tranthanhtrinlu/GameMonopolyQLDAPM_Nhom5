@@ -86,11 +86,30 @@ public class Player{
         int k = 0;
         for (Location ownedProperty : this.ownedProperties) {
             if (ownedProperty instanceof Property) {
-                k++;
+                if (this.ownedPropertiesBasedOnColors.get(((Property) ownedProperty).getColor()) == ((Property) ownedProperty).getNumberOfColor())
+                    k++;
             }
         }
         return k;
     }
+
+    /**
+     * Integer method that checks the number of properties that has houses on them
+     * @return An integer k
+     */
+    public int numberOfEstatePropertiesWithHouses(){
+        int k = 0;
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                if (((Property) ownedProperty).getNumOfHouses() > 0)
+                    k++;
+            }
+        }
+        return k;
+    }
+
+
+
 
     /**
      * get the size of teh property owned arrays
