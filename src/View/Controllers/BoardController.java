@@ -14,6 +14,10 @@ public class BoardController implements ActionListener {
     }
 
 
+    /**
+     *
+     * @param e ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String[] inputs = e.getActionCommand().split(" ");
