@@ -219,8 +219,8 @@ public class GameDisplayPanel extends JPanel {
         this.playerPieces.get(num).setForeground(Color.BLACK);
         this.playerPiecesDisplay.get(0).add(this.playerPieces.get(num));
         this.playerPiecesDisplay.get(0).revalidate();
-
     }
+
 
     public void movePieceImage(int currentPlayer, int oldPlayerPosition, int playerPosition){
         this.playerPiecesDisplay.get(oldPlayerPosition).remove(this.playerPieces.get(currentPlayer));

@@ -16,13 +16,15 @@ public class BoardModel {
     public static final int GO_MONEY = 200;
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
+    private int centerMoney;
+
+
 
     private List<Location> board;
     private List<BoardView> views;
     private int currentTurn;
     private int roll1;
     private int roll2;
-
     /**
      * Sets up the colours for element of the board.
      */
@@ -40,7 +42,33 @@ public class BoardModel {
         this.initializeBoard();
         this.roll1 = 0;
         this.roll2 = 0;
+        this.centerMoney = 0;
     }
+
+    /**
+     * gets how much money is in the center
+     * @return Integer centerMoney
+     */
+    public int getCenterMoney() {
+        return this.centerMoney;
+    }
+
+    /**
+     * will set centerMoney
+     * @param centerMoney Integer money in center
+     */
+    public void setCenterMoney(int centerMoney) {
+        this.centerMoney = centerMoney;
+    }
+
+    /**
+     * used to add money to the center
+     * @param add Integer added
+     */
+    public void addToCenterMoney(int add){
+        this.centerMoney += add;
+    }
+
 
     /**
      * Method for incrementing the amount of turns.
@@ -191,7 +219,14 @@ public class BoardModel {
                     view.handleAnnounceWinner();
                 }
                 this.incrementCurrentTurn();
-                currView.updateChoicePanel();
+                this.views.get(this.currentTurn).updateChoicePanel();
+            }
+            else{
+                for (BoardView view : this.views){
+                    view.updateGamePlayers(e);
+                    view.handleUpdateSidePanelDisplay(e);
+                }
+                this.views.get(this.currentTurn).updateChoicePanel();
             }
         }
         else if (choice == 2){ // quit
@@ -203,7 +238,7 @@ public class BoardModel {
                 view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
-            currView.updateChoicePanel();
+            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 3){ // pass
             for (BoardView view : this.views){
@@ -214,7 +249,7 @@ public class BoardModel {
                 view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
-            currView.updateChoicePanel();
+            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 4){ // pay out of jail
             if (currView.payJail(e)){
@@ -226,7 +261,7 @@ public class BoardModel {
                     view.handleAnnounceWinner();
                 }
                 this.incrementCurrentTurn();
-                currView.updateChoicePanel();
+                this.views.get(this.currentTurn).updateChoicePanel();
             }
         }
         else if (choice == 5){ // roll double out of jail
@@ -239,7 +274,7 @@ public class BoardModel {
                 view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
-            currView.updateChoicePanel();
+            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 6){ // purchase house
             /*for (BoardView view : this.views){

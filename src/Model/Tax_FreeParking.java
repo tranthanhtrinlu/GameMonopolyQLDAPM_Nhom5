@@ -14,7 +14,6 @@ import java.util.List;
 */ 
 public class Tax_FreeParking extends Location{
 
-    private int centerMoney;
     private List<Tax_FreeParkingListener> tax_freeParkingListenerList;
 
     /**
@@ -24,32 +23,7 @@ public class Tax_FreeParking extends Location{
      */
     public Tax_FreeParking(int cost, String name) {
         super(cost, name);
-        this.centerMoney = 0;
         this.tax_freeParkingListenerList = new ArrayList<>();
-    }
-
-    /**
-     * gets how much money is in the center
-     * @return Integer centerMoney
-     */
-    public int getCenterMoney() {
-        return this.centerMoney;
-    }
-
-    /**
-     * will set centerMoney
-     * @param centerMoney Integer money in center
-     */
-    public void setCenterMoney(int centerMoney) {
-        this.centerMoney = centerMoney;
-    }
-
-    /**
-     * used to add money to the center
-     * @param add Integer added
-     */
-    public void addToCenterMoney(int add){
-        this.centerMoney += add;
     }
 
     /**
@@ -80,7 +54,7 @@ public class Tax_FreeParking extends Location{
     @Override
     public String toString(Player p) {
         if (this.getName().equals("FREE PARKING")){
-            return p.getPlayerName() + " Landed on free parking. Earned money is $" + this.centerMoney;
+            return p.getPlayerName() + " Landed on free parking. Earned money is $";
         }
         return p.getPlayerName() + " landed on " + this.getName() + ". Loss of money is $" + this.getCost();
     }

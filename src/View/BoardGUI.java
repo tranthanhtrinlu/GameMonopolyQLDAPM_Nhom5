@@ -1,5 +1,4 @@
 package View;
-
 import Events.*;
 import Listener.BoardView;
 import Model.BoardModel;
@@ -280,11 +279,11 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void FreeParking(Tax_FreeParkingEvent e) {
-        if (e.getLocation().getCenterMoney() == 0)
-            e.getLocation().setCenterMoney(100);
-        this.model.announcePlayerMessage(e.getPlayer().getPlayerName() + " landed on free parking, they receive $" + e.getLocation().getCenterMoney());
-        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() + e.getLocation().getCenterMoney());
-        e.getLocation().setCenterMoney(0);
+        if (this.model.getCenterMoney() == 0)
+            this.model.setCenterMoney(100);
+        this.model.announcePlayerMessage(e.getPlayer().getPlayerName() + " landed on free parking, they receive $" + this.model.getCenterMoney());
+        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() + this.model.getCenterMoney());
+        this.model.setCenterMoney(0);
     }
 
     /**
@@ -296,11 +295,11 @@ public class BoardGUI extends JFrame implements BoardView{
     public void payTax(Tax_FreeParkingEvent e) {
         this.model.announcePlayerMessage(e.getPlayer().getPlayerName() + " landed on " + e.getLocation().getName() + ", they lose $" + e.getLocation().getCost());
         if (e.getPlayer().getMoneyAmount() <= e.getLocation().getCost()){
-            e.getLocation().addToCenterMoney(e.getPlayer().getMoneyAmount());
+            this.model.addToCenterMoney(e.getPlayer().getMoneyAmount());
             this.model.announceBankruptedPlayer(e.getPlayer());
             return;
         }
-        e.getLocation().addToCenterMoney(e.getLocation().getCost());
+        this.model.addToCenterMoney(e.getLocation().getCost());
         e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - e.getLocation().getCost());
     }
 
@@ -558,7 +557,12 @@ public class BoardGUI extends JFrame implements BoardView{
 
     @Override
     public void handlePlayerPieceMovement(int currentTurn, int oldPos, int position) {
-        this.gamePanel.movePieceImage(currentTurn, oldPos, position);
+        if (this.gamePlayers.get(this.currentTurn).getPosition() == BoardModel.JAIL_POSITION){
+            this.gamePanel.movePieceImage(currentTurn, oldPos, BoardModel.JAIL_POSITION);
+        }
+        else{
+            this.gamePanel.movePieceImage(currentTurn, oldPos, position);
+        }
     }
 
     @Override
