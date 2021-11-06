@@ -18,7 +18,6 @@ public class BoardGUI extends JFrame implements BoardView{
     public final static int GAME_HEIGHT = 807;
     private final static int[] DICE_DIM = new int[]{96, 96};
 
-
     private final GameDisplayPanel gamePanel;
     private final PlayerDisplayPanel sidePanel;
     private final JPanel gameControlPanel;

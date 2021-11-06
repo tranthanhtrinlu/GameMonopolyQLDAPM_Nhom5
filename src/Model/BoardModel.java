@@ -18,8 +18,6 @@ public class BoardModel {
     public static final int TOTAL_UTILITIES = 2;
     private int centerMoney;
 
-
-
     private List<Location> board;
     private List<BoardView> views;
     private int currentTurn;

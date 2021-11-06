@@ -61,8 +61,6 @@ public class StartGameController {
                     break;
             }
         }
-        // if result == -1 check if any names are missing. needs to be dummy proof
         return nameText;
-
     }
 }
