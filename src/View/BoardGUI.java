@@ -30,6 +30,7 @@ public class BoardGUI extends JFrame implements BoardView{
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
     private final ArrayList<Image> diceImages;
     private final JLabel dice1, dice2;
+    private int numberOfPlayers;
 
     public BoardGUI(){
         super("Monopoly");
@@ -96,9 +97,9 @@ public class BoardGUI extends JFrame implements BoardView{
         this.setVisible(true);
 
         StartGameController start = new StartGameController();
-        int num = start.getNumOfPlayers(this);
-        ArrayList<String> names = start.getNameOfPlayers(num, this);
-        for (int i = 0; i < num; i++){
+        this.numberOfPlayers = start.getNumOfPlayers(this);
+        ArrayList<String> names = start.getNameOfPlayers(this.numberOfPlayers, this);
+        for (int i = 0; i < this.numberOfPlayers; i++){
             this.gamePlayers.add(new Player(names.get(i)));
             this.sidePanel.addNewPlayerViewButton(this.gamePlayers.get(i), i);
             this.gamePanel.addInitialPlayers(i);
@@ -126,7 +127,6 @@ public class BoardGUI extends JFrame implements BoardView{
             this.model.announcePurchasingProperty(e.getProperty());
         }
     }
-
 
     /**
      * Overridden method to handle a property already owned by a player.
@@ -383,13 +383,12 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     private void removePlayer(){
-        this.gamePlayers.get(this.currentTurn).bankrupted();
-        this.gamePanel.removePieceFromBoard(this.currentTurn, this.gamePlayers.get(this.currentTurn).getPosition());
-        this.sidePanel.removePlayerView(this.currentTurn, this.gamePlayers.get(this.currentTurn));
-        this.gamePlayers.remove(this.currentTurn);
-        if (this.gamePlayers.size() == 1){
-            this.model.announceWinner();
-        }
+        Player p = this.gamePlayers.get(this.currentTurn);
+        p.setOut(true);
+        p.bankrupted();
+        this.gamePanel.removePieceFromBoard(this.currentTurn,p.getPosition());
+        this.sidePanel.removePlayerView(this.currentTurn, p);
+        this.numberOfPlayers -= 1;
     }
 
 
@@ -421,8 +420,16 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleNextTurn(BoardEvent e) {
         this.currentTurn++;
-        if (this.currentTurn == this.gamePlayers.size())
-            this.currentTurn = 0;
+        while (true){
+            if (this.currentTurn == this.gamePlayers.size())
+                this.currentTurn = 0;
+
+            if (this.gamePlayers.get(this.currentTurn).getOut()){
+                this.currentTurn++;
+                continue;
+            }
+            break;
+        }
     }
 
 
@@ -533,14 +540,20 @@ public class BoardGUI extends JFrame implements BoardView{
 
     @Override
     public void handleNextTurnDisplay(BoardEvent e){
-        for (int i = 0; i<this.gamePlayers.size(); i++)
-            this.sidePanel.updateCurrentTurn(this.currentTurn, i, this.gamePlayers);
+        for (int i = 0; i<this.gamePlayers.size(); i++){
+            if (this.gamePlayers.get(i).getOut())
+                continue;
+            this.sidePanel.updateCurrentTurn(this.currentTurn, i, this.gamePlayers.get(i));
+        }
     }
 
     @Override
     public void handleUpdateSidePanelDisplay(BoardEvent e){
-        for (int i = 0; i<this.gamePlayers.size(); i++)
+        for (int i = 0; i<this.gamePlayers.size(); i++) {
+            if (this.gamePlayers.get(i).getOut())
+                continue;
             this.sidePanel.updatePlayerDisplay(i, this.gamePlayers.get(i));
+        }
     }
 
     @Override
@@ -551,9 +564,11 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleAnnounceWinner() {
         ConfirmMessageController controller = new ConfirmMessageController();
-        Player p = this.gamePlayers.get(0);
-        controller.sendMessage(this, p.getPlayerName() + " wins the game\nThank you Playing\nExiting Program");
-        System.exit(0);
+        Player p = this.gamePlayers.get(this.currentTurn);
+        if (this.numberOfPlayers == 1){
+            controller.sendMessage(this, p.getPlayerName() + " wins the game\nThank you Playing\nExiting Program");
+            System.exit(0);
+        }
     }
 
     private void updateRoll(int roll1, int roll2) {
@@ -569,8 +584,11 @@ public class BoardGUI extends JFrame implements BoardView{
         for (Player p : this.gamePlayers) {
             this.gameControlPanel.removeAll();
             boolean inJail = p.getInJail();
-            boolean canPurchase = p.numberOfEstateProperties() != 0;
-            boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
+            //boolean canPurchase = p.numberOfEstateProperties() != 0;
+            //boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
+            boolean canPurchase = false;
+            boolean canSell = false;
+
             if (!inJail) {
                 if (canPurchase && canSell) {
                     this.gameControlPanel.add(this.roll);

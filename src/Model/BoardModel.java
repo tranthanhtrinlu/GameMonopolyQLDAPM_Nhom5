@@ -51,12 +51,6 @@ public class BoardModel {
             this.currentTurn = 0;
     }
 
-    public void announceWinner() {
-        for (BoardView view : this.views){
-            view.handleAnnounceWinner();
-        }
-    }
-
     /**
      * Boolean method for determining whether a player has rolled doubles.
      * @return True if doubles are rolled, false otherwise.
@@ -194,6 +188,7 @@ public class BoardModel {
                     view.handleNextTurn(e);
                     view.handleUpdateSidePanelDisplay(e);
                     view.handleNextTurnDisplay(e);
+                    view.handleAnnounceWinner();
                 }
                 this.incrementCurrentTurn();
                 currView.updateChoicePanel();
@@ -205,6 +200,7 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
+                view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
             currView.updateChoicePanel();
@@ -215,6 +211,7 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
+                view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
             currView.updateChoicePanel();
@@ -226,6 +223,7 @@ public class BoardModel {
                     view.handleNextTurn(e);
                     view.handleUpdateSidePanelDisplay(e);
                     view.handleNextTurnDisplay(e);
+                    view.handleAnnounceWinner();
                 }
                 this.incrementCurrentTurn();
                 currView.updateChoicePanel();
@@ -238,6 +236,7 @@ public class BoardModel {
                 view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e);
+                view.handleAnnounceWinner();
             }
             this.incrementCurrentTurn();
             currView.updateChoicePanel();

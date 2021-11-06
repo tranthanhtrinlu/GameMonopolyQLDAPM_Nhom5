@@ -20,6 +20,7 @@ public class Player{
     private String currLocation;
     private int numOfRailroads;
     private int numOfUtilities;
+    private boolean out;
 
     /**
      *  MVC.Player default constructor
@@ -28,6 +29,7 @@ public class Player{
     public Player(String name){
         this.playerName = name;
         this.moneyAmount = 1500;
+        this.out = false;
         this.ownedPropertiesBasedOnColors = new HashMap<>();
         this.ownedProperties = new ArrayList<>();
         this.position = 0;
@@ -48,6 +50,15 @@ public class Player{
             s.append(location.getName()).append(", ");
         }
         return s.toString();
+    }
+
+
+    public void setOut(boolean out) {
+        this.out = out;
+    }
+
+    public boolean getOut(){
+        return this.out;
     }
 
     /**

@@ -236,7 +236,6 @@ public class GameDisplayPanel extends JPanel {
         this.playerPiecesDisplay.get(playerPosition).remove(currentLabel);
         this.playerPiecesDisplay.get(playerPosition).revalidate();
         this.playerPiecesDisplay.get(playerPosition).repaint();
-        this.playerPieces.remove(currentLabel);
     }
 
 }

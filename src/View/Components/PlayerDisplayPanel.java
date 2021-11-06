@@ -1,6 +1,5 @@
 package View.Components;
 import Model.Player;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -70,6 +69,7 @@ public class PlayerDisplayPanel extends JPanel {
         button.setText(p.getPlayerName() + " " + OUT_STRING);
         panel.removeAll();
         button.setEnabled(false);
+        System.out.println(button.getText());
         panel.add(button);
         panel.revalidate();
     }
@@ -97,25 +97,31 @@ public class PlayerDisplayPanel extends JPanel {
     }
 
 
-    public void updateCurrentTurn(int currentTurn, int index, ArrayList<Player> players){
+    public void updateCurrentTurn(int currentTurn, int index, Player p){
         String[] text = this.playerButtons.get(index).getText().split(" ");
 
-        if (index == currentTurn){
-            String s;
-            s = players.get(index).getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN;
-            if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
-                s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN;
-            }
-            this.playerButtons.get(index).setText(s);
+
+        if (text[text.length-1].equals(OUT_STRING)){
+            this.playerButtons.get(index).setText(p.getPlayerName() + " " + OUT_STRING);
         }
         else{
-            String s;
-            s = players.get(index).getPlayerName() + " " + UP_STRING;
-            if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
-                s = players.get(index).getPlayerName() + " " + DROP_DOWN_STRING;
+            if (index == currentTurn){
+                String s;
+                s = p.getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN;
+                if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
+                    s = p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN;
+                }
+                this.playerButtons.get(index).setText(s);
             }
-            this.playerButtons.get(index).setText(s);
+            else{
+                String s;
+                s = p.getPlayerName() + " " + UP_STRING;
+                if (text[text.length - 1].equals(DROP_DOWN_STRING) || (text[text.length-1].equals(CURRENT_TURN) && text[text.length-2].equals(DROP_DOWN_STRING))){
+                    s = p.getPlayerName() + " " + DROP_DOWN_STRING;
+                }
+                this.playerButtons.get(index).setText(s);
+            }
+            this.playerDisplays.get(index).revalidate();
         }
-        this.playerDisplays.get(index).revalidate();
     }
 }
