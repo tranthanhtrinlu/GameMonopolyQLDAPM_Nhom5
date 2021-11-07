@@ -9,7 +9,7 @@ import java.util.EventObject;
  */
 public class PropertyEvent extends EventObject {
 
-    private Player player;
+    private final Player player;
 
     /**
      * constructor for property event

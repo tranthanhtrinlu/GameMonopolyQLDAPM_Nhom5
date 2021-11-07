@@ -1,7 +1,10 @@
 package View.Controllers;
-
 import javax.swing.*;
 
+/**
+ * User input message controller for when they land on a location
+ * @author Kareem El-Hajjar
+ */
 public class LocationController {
 
     /**

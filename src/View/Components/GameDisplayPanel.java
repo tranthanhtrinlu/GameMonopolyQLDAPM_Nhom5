@@ -1,12 +1,12 @@
 package View.Components;
-
-import Model.BoardModel;
-import View.BoardGUI;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * GameDisplayPanel for the BoardGUI
+ * @author Tony Massaad
+ */
 public class GameDisplayPanel extends JPanel {
     private final static int DIM1 = 96;
     private final static int DIM2 = 64;
@@ -24,8 +24,8 @@ public class GameDisplayPanel extends JPanel {
 
     private final ImageIcon verticalBorder, horizontalBorder;
 
-    private ArrayList<JLabel> playerPieces;
-    private ArrayList<JPanel> playerPiecesDisplay;
+    private final ArrayList<JLabel> playerPieces;
+    private final ArrayList<JPanel> playerPiecesDisplay;
 
     public GameDisplayPanel(){
         this.playerPieces = new ArrayList<>();

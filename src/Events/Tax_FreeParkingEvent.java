@@ -9,7 +9,7 @@ import java.util.EventObject;
  */
 public class Tax_FreeParkingEvent extends EventObject {
 
-    private Player player;
+    private final Player player;
 
     /**
      * Constructs a prototypical Event.

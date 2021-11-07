@@ -4,19 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+
+/**
+ * Player displays side panel which always tracks the state of each player for every view
+ * @author Tony Massaad
+ */
 public class PlayerDisplayPanel extends JPanel {
     private final static String CURRENT_TURN = "(Playing)";
     private final static String DROP_DOWN_STRING = "+";
     private final static String UP_STRING = "-";
     private final static String OUT_STRING = "(out)";
+    private final ArrayList<JButton> playerButtons;
+    private final ArrayList<JPanel> playerDisplays;
 
-    private ArrayList<JButton> playerButtons;
-    private ArrayList<JPanel> playerDisplays;
-    private ArrayList<Boolean> turns;
     public PlayerDisplayPanel(){
         this.playerButtons = new ArrayList<>();
         this.playerDisplays = new ArrayList<>();
-        this.turns = new ArrayList<>();
         this.setBackground(new Color(224, 225, 224));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     }
@@ -34,7 +37,6 @@ public class PlayerDisplayPanel extends JPanel {
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN);
         else
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING);
-        //playerButton.setPreferredSize(new Dimension(200, playerButton.getHeight()));
 
         playerButton.addActionListener(e -> {
             String[] text = playerButton.getText().split(" ");

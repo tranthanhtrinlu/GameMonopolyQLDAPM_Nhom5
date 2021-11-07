@@ -10,10 +10,10 @@ import java.util.List;
  */
 public class BoardEvent extends EventObject {
 
-    private List<Location> board;
-    private boolean doubles;
-    private int roll1;
-    private int roll2;
+    private final List<Location> board;
+    private final boolean doubles;
+    private final int roll1;
+    private final int roll2;
 
     /**
      * Default constructor for Events.BoardEvent.

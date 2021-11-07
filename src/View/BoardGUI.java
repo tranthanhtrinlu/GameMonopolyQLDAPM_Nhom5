@@ -12,7 +12,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-
+/**
+ * BoardGUI Class, also known as the boardView class
+ * @author Tony Massaad
+ */
 public class BoardGUI extends JFrame implements BoardView{
     public final static int GAME_WIDTH = 985;
     public final static int GAME_HEIGHT = 807;
@@ -147,10 +150,10 @@ public class BoardGUI extends JFrame implements BoardView{
     public void propertyRent(PropertyEvent e) {
         Player owner = e.getProperty().getOwner();
         Player landedPlayer = e.getPlayer();
-        this.model.announcePlayerMessage("You landed on " + e.getProperty().getName() + " Owned by " + owner.getPlayerName() + " and rent is $" + e.getProperty().getRent());
         int doubleAmount = 1;
         if (owner.numberOfColoredPropertiesOwned(e.getProperty().getColor(), e.getProperty().getNumberOfColor()))
             doubleAmount = 2;
+        this.model.announcePlayerMessage("You landed on " + e.getProperty().getName() + " Owned by " + owner.getPlayerName() + " and rent is $" + e.getProperty().getRent()*doubleAmount);
         int landedPlayerMoney = landedPlayer.getMoneyAmount();
         int rentCost = e.getProperty().getRentCost(e.getProperty().getNumOfHouses());
         if (landedPlayerMoney <= rentCost){
@@ -355,7 +358,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     /**
      * Announce property purchasing to every player
-     * @param place
+     * @param place Location, the current place
      */
     @Override
     public void handleAnnounceLocationPurchasing(Location place){
@@ -536,6 +539,10 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
 
+    /**
+     * handle the next turn of the player according to the view
+     * @param e BoardEvent, the BoardEvent
+     */
     @Override
     public void handleNextTurnDisplay(BoardEvent e){
         for (int i = 0; i<this.gamePlayers.size(); i++){
@@ -545,6 +552,10 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    /**
+     * handle the update of the side panel for each player in a view
+     * @param e BoardEvent, the board event
+     */
     @Override
     public void handleUpdateSidePanelDisplay(BoardEvent e){
         for (int i = 0; i<this.gamePlayers.size(); i++) {
@@ -554,6 +565,12 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    /**
+     * handle the piece display on the board for each player in a view
+     * @param currentTurn Integer, the current turn
+     * @param oldPos Integer, the old position
+     * @param position Integer, the new position
+     */
     @Override
     public void handlePlayerPieceMovement(int currentTurn, int oldPos, int position) {
         if (this.gamePlayers.get(this.currentTurn).getPosition() == BoardModel.JAIL_POSITION){
@@ -564,6 +581,10 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    /**
+     * Handle the announcement of the winner if there is a winner
+     * if winner, send message and end game.
+     */
     @Override
     public void handleAnnounceWinner() {
         ConfirmMessageController controller = new ConfirmMessageController();
@@ -574,6 +595,21 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    /**
+     * announce that the current player rolled a double to every view
+     */
+    @Override
+    public void handleAnnounceRollingAgain() {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        Player p = this.gamePlayers.get(this.currentTurn);
+        controller.sendMessage(this, p.getPlayerName() + " Rolled a double. They get to roll again!");
+    }
+
+    /**
+     * update the dice rolls on the board
+     * @param roll1 Integer, the first roll
+     * @param roll2 Integer, the second roll
+     */
     private void updateRoll(int roll1, int roll2) {
         dice1.setIcon(new ImageIcon(diceImages.get(roll1-1)));
         dice2.setIcon(new ImageIcon(diceImages.get(roll2-1)));

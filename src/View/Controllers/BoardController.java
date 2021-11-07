@@ -1,10 +1,12 @@
 package View.Controllers;
-
 import Model.BoardModel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * BoardController that handles the input of the current player choice.
+ * @author Max Curkovic
+ */
 public class BoardController implements ActionListener {
 
     private final BoardModel model;
@@ -17,7 +19,10 @@ public class BoardController implements ActionListener {
         this.model = model;
     }
 
-
+    /**
+     * The Action Event for when a certain button is pressed according to the command of the button
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String[] inputs = e.getActionCommand().split(" ");

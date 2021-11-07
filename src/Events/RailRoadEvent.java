@@ -9,7 +9,7 @@ import java.util.EventObject;
  */
 public class RailRoadEvent extends EventObject {
 
-    private Player player;
+    private final Player player;
 
     /**
      * constructor for railroad
