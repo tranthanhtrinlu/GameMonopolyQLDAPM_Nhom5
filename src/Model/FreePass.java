@@ -77,4 +77,7 @@ public class FreePass extends Location {
         this.listeners.add(view);
     }
 
+    public List<FreePassListener> getListeners() {
+        return listeners;
+    }
 }

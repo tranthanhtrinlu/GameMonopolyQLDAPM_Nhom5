@@ -4,8 +4,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Max Curkovic
+ * All necessary tests for the BoardModel class.
+ */
 public class BoardModelTest {
 
+    /**
+     * Test to ensure that money is properly added to the center of the board.
+     */
     @Test
     public void addToCenterMoney() {
         BoardModel boardModel = new BoardModel();
@@ -13,39 +20,13 @@ public class BoardModelTest {
         assertEquals(100, boardModel.getCenterMoney());
     }
 
+    /**
+     * Test for the incrementation of the current turn.
+     */
     @Test
     public void incrementCurrentTurn() {
-    }
-
-    @Test
-    public void addView() {
-    }
-
-    @Test
-    public void addViewToListener() {
-    }
-
-    @Test
-    public void announcePurchasingProperty() {
-    }
-
-    @Test
-    public void movePlayerPieces() {
-    }
-
-    @Test
-    public void announceBankruptedPlayer() {
-    }
-
-    @Test
-    public void announceReachingGo() {
-    }
-
-    @Test
-    public void announcePlayerMessage() {
-    }
-
-    @Test
-    public void playCurrPlayerTurn() {
+        BoardModel boardModel = new BoardModel();
+        boardModel.incrementCurrentTurn();
+        assertEquals(1, boardModel.getCurrentTurn());
     }
 }

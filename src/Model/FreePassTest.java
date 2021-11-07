@@ -4,25 +4,18 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Max Curkovic
+ * All necessary tests for the FreePass class.
+ */
 public class FreePassTest {
 
+    /**
+     * Test to test the cost of the FreePass element.
+     */
     @Test
-    public void locationElementFunctionality() {
-    }
-
-    @Test
-    public void testToString() {
-    }
-
-    @Test
-    public void buy() {
-    }
-
-    @Test
-    public void resetOwner() {
-    }
-
-    @Test
-    public void addListener() {
+    public void testCost(){
+        FreePass free = new FreePass(0, "Free Pass");
+        assertEquals(0, free.getCost());
     }
 }

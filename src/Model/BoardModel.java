@@ -78,6 +78,14 @@ public class BoardModel {
     }
 
     /**
+     * Getter for the current turn.
+     * @return Integer currentTurn
+     */
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    /**
      * Boolean method for determining whether a player has rolled doubles.
      * @return True if doubles are rolled, false otherwise.
      */
