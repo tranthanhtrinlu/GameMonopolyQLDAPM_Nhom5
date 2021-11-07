@@ -44,6 +44,9 @@ public class GameDisplayPanel extends JPanel {
         this.setBackground(new Color(205, 230, 208));
     }
 
+    /**
+     * sets the starting postion for images in the top
+     */
     private void setTopImages(){
         int  xPos = BOARD_START_TOP_X_POS;
         ArrayList<Image> topPhotos = new ArrayList<Image>(){{
@@ -88,6 +91,9 @@ public class GameDisplayPanel extends JPanel {
         }
     }
 
+    /**
+     * sets the starting postion for images in the middleleft
+     */
     private void setMiddleLeftImages(){
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
         int xPos = BOARD_START_TOP_X_POS;
@@ -127,6 +133,9 @@ public class GameDisplayPanel extends JPanel {
         }
     }
 
+    /**
+     * sets the starting postion for images in the bottom
+     */
     private void setBottomImages(){
         int xPos = BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_BOTTOM_Y_POS;
@@ -176,6 +185,9 @@ public class GameDisplayPanel extends JPanel {
         }
     }
 
+    /**
+     * sets images in there starting postions for middle
+     */
     private void setMiddleRightImages(){
         int xPos = BOARD_START_RIGHT_X_POS + BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
@@ -211,6 +223,10 @@ public class GameDisplayPanel extends JPanel {
         }
     }
 
+    /**
+     * add the starting players that will be playing the game
+     * @param num Integer amount of players
+     */
     public void addInitialPlayers(int num){
         System.out.println(this.playerPiecesDisplay.size());
         this.playerPieces.add(new JLabel("P"+(num+1)));
@@ -222,6 +238,12 @@ public class GameDisplayPanel extends JPanel {
     }
 
 
+    /**
+     * will move the image of a players piece across the board
+     * @param currentPlayer Player currently moving
+     * @param oldPlayerPosition the starting postion of the player
+     * @param playerPosition the ending position of the player
+     */
     public void movePieceImage(int currentPlayer, int oldPlayerPosition, int playerPosition){
         this.playerPiecesDisplay.get(oldPlayerPosition).remove(this.playerPieces.get(currentPlayer));
         this.playerPiecesDisplay.get(oldPlayerPosition).revalidate();
@@ -231,6 +253,11 @@ public class GameDisplayPanel extends JPanel {
         this.playerPiecesDisplay.get(playerPosition).repaint();
     }
 
+    /**
+     * will remove the players piece form the board
+     * @param currentPlayer player that is currently being removed
+     * @param playerPosition Postion of the player
+     */
     public void removePieceFromBoard(int currentPlayer, int playerPosition){
         JLabel currentLabel = this.playerPieces.get(currentPlayer);
         this.playerPiecesDisplay.get(playerPosition).remove(currentLabel);

@@ -9,6 +9,10 @@ public class BoardController implements ActionListener {
 
     private final BoardModel model;
 
+    /**
+     * constructor for boardController
+     * @param model BoardModel
+     */
     public BoardController(BoardModel model){
         this.model = model;
     }
