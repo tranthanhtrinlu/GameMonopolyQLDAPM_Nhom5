@@ -58,6 +58,14 @@ public class Property extends Location{
     }
 
     /**
+     * set the owner attribute of a property
+     * @param p Player, the player
+     */
+    public void setOwner(Player p){
+        this.owner = p;
+    }
+
+    /**
      * allows players to buy property and adds property to owner
      * @param p MVC.Player
      * @return false or true
@@ -95,14 +103,13 @@ public class Property extends Location{
     /**
      * adds house to a property based on how many the player wants
      * @param add Integer number of houses added
-     * @param p MVC.Player
-     * @return
+     * @return boolean, true if house added otherwise false
      */
-    public boolean addHouse(int add, Player p){
-        if (this.numOfHouses+add <= this.maxNumberOfHouses && p.getMoneyAmount() >= add*this.costPerHouse) {
+    public boolean addHouse(int add){
+        if (this.numOfHouses+add <= this.maxNumberOfHouses && this.owner.getMoneyAmount() >= add*this.costPerHouse) {
             this.oldNumOfHouses = this.numOfHouses;
             this.numOfHouses += add;
-            p.setMoneyAmount(p.getMoneyAmount() - (add*this.costPerHouse));
+            this.owner.setMoneyAmount(this.owner.getMoneyAmount() - (add*this.costPerHouse));
             return true;
         }
         return false;
@@ -118,11 +125,11 @@ public class Property extends Location{
         return this.rentCosts.get(this.numOfHouses);
     }
 
-    @Override
     /**
      * Method for property functionality
      * @return A boolean
      */
+    @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
@@ -198,6 +205,7 @@ public class Property extends Location{
      * @return An integer rent cost
      */
     public int getRentCost(int index){
+        if (index < 0 || index >= this.rentCosts.size()) return -1;
         return this.rentCosts.get(index);
     }
 

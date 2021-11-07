@@ -1,5 +1,6 @@
-package Model;
+package JUnitTesting;
 
+import Model.GoToJail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

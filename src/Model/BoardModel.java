@@ -147,7 +147,7 @@ public class BoardModel {
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("PARK PLACE", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2));
         this.board.add(new Tax_FreeParking(100, "LUXURY TAX"));
-        this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,200, Color.DARKBLUE, 3));
+        this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2));
     }
 
     /**

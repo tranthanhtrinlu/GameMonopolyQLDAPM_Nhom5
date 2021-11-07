@@ -1,5 +1,6 @@
-package Model;
+package JUnitTesting;
 
+import Model.Tax_FreeParking;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
