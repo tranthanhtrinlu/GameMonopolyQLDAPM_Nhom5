@@ -163,14 +163,24 @@ public class BoardModel {
         }
     }
 
-    public void movePlayerPieces(int currentTurn, int diceSum, int position) {
+
+    /**
+     * update every view the pieces on the board
+     * @param currentTurn Integer, the current turn
+     * @param oldPos Integer, the old pos
+     * @param position Integer, new position
+     */
+    public void movePlayerPieces(int currentTurn, int oldPos, int position) {
         for (BoardView view : this.views){
-            view.handlePlayerPieceMovement(currentTurn, diceSum, position);
+            view.handlePlayerPieceMovement(currentTurn, oldPos, position);
         }
     }
 
 
-
+    /**
+     * Announce to every view that a player went bankrupted
+     * @param p
+     */
     public void announceBankruptedPlayer(Player p){
         for (BoardView view : this.views){
             view.handleAnnounceBankruptedPlayer(p);
@@ -217,15 +227,15 @@ public class BoardModel {
                     view.handleAnnounceWinner();
                 }
                 this.incrementCurrentTurn();
-                this.views.get(this.currentTurn).updateChoicePanel();
             }
             else{
                 for (BoardView view : this.views){
                     view.updateGamePlayers(e);
                     view.handleUpdateSidePanelDisplay(e);
+                    view.handleAnnounceRollingAgain();
                 }
-                this.views.get(this.currentTurn).updateChoicePanel();
             }
+            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 2){ // quit
             for (BoardView view : this.views){

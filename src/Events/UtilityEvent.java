@@ -9,8 +9,8 @@ import java.util.EventObject;
 */
 public class UtilityEvent extends EventObject {
 
-    private Player player;
-    private int totalDiceRoll;
+    private final Player player;
+    private final int totalDiceRoll;
     /**
      * Constructs a prototypical Event.
      *

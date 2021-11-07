@@ -9,7 +9,7 @@ import java.util.EventObject;
  */
 public class GoToJailEvent extends EventObject {
 
-    private Player player;
+    private final Player player;
 
     /**
      * Constructs a prototypical Event.

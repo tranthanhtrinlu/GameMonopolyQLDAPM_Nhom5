@@ -1,12 +1,21 @@
 package View.Controllers;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Controller for intro to the game
+ * mainly for getting the number of players and their names
+ * @author Tony Massaad
+ */
 public class StartGameController {
 
+    /**
+     * gets the current number of players in the game
+     * @param frame JFrame
+     * @return Integer of number of players
+     */
     public int getNumOfPlayers(JFrame frame) {
         JPanel panel = new JPanel(new GridLayout(4,1));
         AtomicInteger num = new AtomicInteger(2);
@@ -33,6 +42,13 @@ public class StartGameController {
         return num.get();
     }
 
+    /**
+     * gets the name of all the players in the game
+     * Does not exit until all names according to num are filled
+     * @param num Integer num of players
+     * @param frame JFrame
+     * @return array of names
+     */
     public ArrayList<String> getNameOfPlayers(int num, JFrame frame) {
         ArrayList<JTextField> names = new ArrayList<>();
         ArrayList<String> nameText = new ArrayList<>();

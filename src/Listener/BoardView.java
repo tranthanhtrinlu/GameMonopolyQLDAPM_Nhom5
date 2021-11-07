@@ -79,4 +79,6 @@ public interface BoardView extends PropertyListener, RailRoadListener,
     void handlePlayerPieceMovement(int currentTurn, int diceSum, int position);
 
     void handleAnnounceWinner();
+
+    void handleAnnounceRollingAgain();
 }
