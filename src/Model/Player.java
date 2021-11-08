@@ -151,6 +151,14 @@ public class Player{
     }
 
     /**
+     * Getter for the color hashmap.
+     * @return A Color, Integer hashmap ownedPropertiesBasedOnColors.
+     */
+    public HashMap<BoardModel.Color, Integer> getOwnedPropertiesBasedOnColors() {
+        return ownedPropertiesBasedOnColors;
+    }
+
+    /**
      * setter method for setting the player position
      * @param position Integer
      */
