@@ -1,31 +1,27 @@
 package JUnitTesting;
 
+import Model.Player;
+import Model.Property;
+import Model.RailRoad;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class PlayerTest {
 
-    @Test
-    public void printOwnedProperties() {
-    }
-
-    @Test
-    public void setOut() {
-    }
-
-    @Test
-    public void getOut() {
-    }
-
-    @Test
-    public void getEstatePropertiesOfPlayer() {
-    }
 
     @Test
     public void getPropertyByName() {
+        RailRoad railRoad = new RailRoad("Max Line", 200);
+        Player player = new Player("Max");
+        railRoad.buy(player);
+        assertNotNull(player.getPropertyByName("Max Line"));
     }
 
+    /**
+     * I have commented out these tests as a reminder to complete them for Milestone 3.
+     */
+    /*
     @Test
     public void numberOfEstateProperties() {
     }
@@ -33,6 +29,7 @@ public class PlayerTest {
     @Test
     public void numberOfEstatePropertiesWithHouses() {
     }
+     */
 
     @Test
     public void getNumOfProperties() {
@@ -47,39 +44,11 @@ public class PlayerTest {
     }
 
     @Test
-    public void setPosition() {
-    }
-
-    @Test
-    public void setCurrLocation() {
-    }
-
-    @Test
     public void movePlayer() {
     }
 
     @Test
     public void setInJail() {
-    }
-
-    @Test
-    public void getTurnsInJail() {
-    }
-
-    @Test
-    public void setTurnsInJail() {
-    }
-
-    @Test
-    public void getInJail() {
-    }
-
-    @Test
-    public void getPlayerName() {
-    }
-
-    @Test
-    public void getMoneyAmount() {
     }
 
     @Test
@@ -95,31 +64,11 @@ public class PlayerTest {
     }
 
     @Test
-    public void setMoneyAmount() {
-    }
-
-    @Test
     public void addNumOfRailroads() {
     }
 
     @Test
-    public void getNumOfRailroads() {
-    }
-
-    @Test
-    public void getNumOfUtilities() {
-    }
-
-    @Test
     public void addNumOfUtilities() {
-    }
-
-    @Test
-    public void getPosition() {
-    }
-
-    @Test
-    public void getCurrLocation() {
     }
 
     @Test

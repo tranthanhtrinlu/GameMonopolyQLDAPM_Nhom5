@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Max Curkovic
+ * All necessary tests for the Utility class.
+ */
 public class UtilityTest {
 
     /**
@@ -35,6 +39,9 @@ public class UtilityTest {
         assertNull(utility.getOwner());
     }
 
+    /**
+     * Tests the payment() method only for a utility.
+     */
     @Test
     public void testPayment() {
         Utility utility = new Utility("Electric Company", 100);
