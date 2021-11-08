@@ -19,7 +19,7 @@ public class PlayerTest {
      * Tests getting the property by name.
      */
     @Test
-    public void getPropertyByName() {
+    public void testGetPropertyByName() {
         Property property = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
         Player player = new Player("Max");
         property.buy(player);
@@ -30,7 +30,7 @@ public class PlayerTest {
      * Tests getting the number of properties of a player.
      */
     @Test
-    public void getNumOfProperties() {
+    public void testGetNumOfProperties() {
         RailRoad railRoad = new RailRoad("Max Line", 200);
         Player player = new Player("Max");
         railRoad.buy(player);
@@ -41,7 +41,7 @@ public class PlayerTest {
      * Tests getting a certain property using the index in the list.
      */
     @Test
-    public void getPropertyByIndex() {
+    public void testGetPropertyByIndex() {
         RailRoad railRoad = new RailRoad("Max Line", 200);
         Player player = new Player("Max");
         railRoad.buy(player);
@@ -52,7 +52,7 @@ public class PlayerTest {
      * Tests getting the number of colored properties owned by the player.
      */
     @Test
-    public void numberOfColoredPropertiesOwned() {
+    public void testNumberOfColoredPropertiesOwned() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
         Property property2 = new Property("BALTIC AVENUE", 60,50,4,20,60,180,320,450, BoardModel.Color.BROWN, 2);
         Player player = new Player("Max");
@@ -65,7 +65,7 @@ public class PlayerTest {
      * Tests setting the player in jail.
      */
     @Test
-    public void setInJail() {
+    public void testSetInJail() {
         Player player = new Player("Max");
         player.setInJail(true);
         assertTrue(player.getInJail());
@@ -75,7 +75,7 @@ public class PlayerTest {
      * Tests adding the property to the list of player properties.
      */
     @Test
-    public void addProperty() {
+    public void testAddProperty() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
         Player player = new Player("Max");
         player.addProperty(property1);
@@ -86,7 +86,7 @@ public class PlayerTest {
      * Tests adding a color to a property.
      */
     @Test
-    public void addColorToProperty() {
+    public void testAddColorToProperty() {
         Player player = new Player("Max");
         player.addColorToProperty(BoardModel.Color.GREEN, 3);
         assertNotNull(player.getOwnedPropertiesBasedOnColors());
@@ -96,7 +96,7 @@ public class PlayerTest {
      * Tests whether a player is bankrupt.
      */
     @Test
-    public void bankrupted() {
+    public void testBankrupted() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
         Player player = new Player("Max");
         property1.buy(player);
@@ -108,7 +108,7 @@ public class PlayerTest {
      * Tests the addition of railroads to the player's list of owned properties.
      */
     @Test
-    public void addNumOfRailroads() {
+    public void testAddNumOfRailroads() {
         Player player = new Player("Max");
         player.addNumOfRailroads();
         assertEquals(1, player.getNumOfRailroads());
@@ -118,7 +118,7 @@ public class PlayerTest {
      * Tests the addition of utilities to the player's list of owned properties.
      */
     @Test
-    public void addNumOfUtilities() {
+    public void testAddNumOfUtilities() {
         Player player = new Player("Max");
         player.addNumOfUtilities();
         assertEquals(1, player.getNumOfUtilities());
@@ -128,7 +128,7 @@ public class PlayerTest {
      * Tests the player's jail payment.
      */
     @Test
-    public void payJail() {
+    public void testPayJail() {
         Player player = new Player("Max");
         player.setMoneyAmount(70);
         assertTrue(player.payJail());
