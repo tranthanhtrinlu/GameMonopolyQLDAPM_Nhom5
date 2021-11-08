@@ -2,8 +2,9 @@ package Model;
 
 import Events.BoardEvent;
 import Events.RailRoadEvent;
-import Listener.BoardView;
 import Listener.RailRoadListener;
+import Listener.BoardView;
+
 
 import java.util.ArrayList;
 import java.util.List;

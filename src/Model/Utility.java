@@ -2,8 +2,9 @@ package Model;
 
 import Events.BoardEvent;
 import Events.UtilityEvent;
-import Listener.BoardView;
 import Listener.UtilityListener;
+import Listener.BoardView;
+
 
 import java.util.ArrayList;
 import java.util.List;
