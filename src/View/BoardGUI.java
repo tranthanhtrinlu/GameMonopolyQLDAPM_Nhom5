@@ -121,7 +121,7 @@ public class BoardGUI extends JFrame implements BoardView{
         ConfirmMessageController messageController = new ConfirmMessageController();
         int result = control.LocationNoOwnerController(this, e.getProperty().getName(), e.getProperty().getCost());
         if (result == JOptionPane.YES_OPTION) {
-            if (e.getProperty().buy(e.getPlayer())) {
+            if (e.getProperty().buy(e.getPlayer())) { // not enough
                 messageController.sendMessage(this, "Not enough Money, moving to the next player");
                 return;
             }
@@ -483,6 +483,7 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     /**
+     * Handle event for when the player presses roll
      * Handle event for when the player presses roll
      * @param e BoardEvent, the BoardEvent
      */
