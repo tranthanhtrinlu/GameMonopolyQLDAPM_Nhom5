@@ -81,4 +81,12 @@ public interface BoardView extends PropertyListener, RailRoadListener,
     void handleAnnounceWinner();
 
     void handleAnnounceRollingAgain();
+
+    void handleUpdateRoll(int lastRoll1, int lastRoll2);
+
+    Player getCurrentPlayer();
+
+    int getCurrentTurn();
+
+    void buttonEnableCondition(boolean b);
 }

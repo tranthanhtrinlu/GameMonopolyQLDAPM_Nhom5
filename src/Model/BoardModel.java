@@ -1,11 +1,7 @@
 package Model;
-
 import Events.BoardEvent;
 import Listener.BoardView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Tony Massaad
@@ -16,6 +12,7 @@ public class BoardModel {
     public static final int GO_MONEY = 200;
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
+    private static final int ROLLING_DICE_DELAY = 10;
     private int centerMoney;
 
     private List<Location> board;
@@ -215,7 +212,6 @@ public class BoardModel {
         }
     }
 
-
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
      */
@@ -224,26 +220,67 @@ public class BoardModel {
         boolean doubles = rollDiceOfTwo();
         BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
 
-        if (choice == 1){ // roll
-            currView.handleGameplayRoll(e);
-            if (!doubles){
-                for (BoardView view : this.views){
-                    view.updateGamePlayers(e);
-                    view.handleNextTurn(e);
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleNextTurnDisplay(e);
-                    view.handleAnnounceWinner();
+        if (choice == 1){
+            currView.buttonEnableCondition(false);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                private int counter = 0;
+                private final Random r = new Random();
+                @Override
+                public void run() {
+                    if (counter < ROLLING_DICE_DELAY) {
+                        counter++;
+                        int lastRoll1 = r.nextInt(6) + 1;
+                        int lastRoll2 = r.nextInt(6) + 1;
+                        for (BoardView view : views){
+                            view.handleUpdateRoll(lastRoll1, lastRoll2);
+                        }
+                    } else {
+                        for (BoardView view : views){
+                            view.handleUpdateRoll(roll1, roll2);
+                        }
+                        Timer timer2 = new Timer();
+                        timer2.schedule(new TimerTask() {
+                            private final Player p = currView.getCurrentPlayer();
+                            private final int turn = currView.getCurrentTurn();
+                            private int pos = p.getPosition();
+                            private final int sum = roll1 + roll2;
+                            @Override
+                            public void run() {
+                                if (p.getPosition()+sum != pos){
+                                    int oldPos = pos;
+                                    pos++;
+                                    movePlayerPieces(turn, oldPos, pos);
+                                }
+                                else{
+                                    currView.handleGameplayRoll(e);
+                                    if (!doubles){
+                                        for (BoardView view : views){
+                                            view.updateGamePlayers(e);
+                                            view.handleNextTurn(e);
+                                            view.handleUpdateSidePanelDisplay(e);
+                                            view.handleNextTurnDisplay(e);
+                                            view.handleAnnounceWinner();
+                                        }
+                                        incrementCurrentTurn();
+                                    }
+                                    else{
+                                        for (BoardView view : views){
+                                            view.updateGamePlayers(e);
+                                            view.handleUpdateSidePanelDisplay(e);
+                                            view.handleAnnounceRollingAgain();
+                                        }
+                                    }
+                                    currView.buttonEnableCondition(true);
+                                    views.get(currentTurn).updateChoicePanel();
+                                    timer2.cancel();
+                                }
+                            }
+                        }, 0, 200);
+                        timer.cancel();
+                    }
                 }
-                this.incrementCurrentTurn();
-            }
-            else{
-                for (BoardView view : this.views){
-                    view.updateGamePlayers(e);
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleAnnounceRollingAgain();
-                }
-            }
-            this.views.get(this.currentTurn).updateChoicePanel();
+            }, 0, 200);
         }
         else if (choice == 2){ // quit
             for (BoardView view : this.views){
@@ -281,16 +318,39 @@ public class BoardModel {
             }
         }
         else if (choice == 5){ // roll double out of jail
-            currView.handleRollingDoubles(e); // change this to roll double choice
-            for (BoardView view : this.views){
-                view.updateGamePlayers(e);
-                view.handleNextTurn(e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e);
-                view.handleAnnounceWinner();
-            }
-            this.incrementCurrentTurn();
-            this.views.get(this.currentTurn).updateChoicePanel();
+            currView.buttonEnableCondition(false);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                private int counter = 0;
+                private final Random r = new Random();
+                @Override
+                public void run() {
+                    if (counter < ROLLING_DICE_DELAY) {
+                        counter++;
+                        int lastRoll1 = r.nextInt(6) + 1;
+                        int lastRoll2 = r.nextInt(6) + 1;
+                        for (BoardView view : views){
+                            view.handleUpdateRoll(lastRoll1, lastRoll2);
+                        }
+                    } else {
+                        for (BoardView view : views) {
+                            view.handleUpdateRoll(roll1, roll2);
+                        }
+                        currView.handleRollingDoubles(e);
+                        for (BoardView view : views){
+                            view.updateGamePlayers(e);
+                            view.handleNextTurn(e);
+                            view.handleUpdateSidePanelDisplay(e);
+                            view.handleNextTurnDisplay(e);
+                            view.handleAnnounceWinner();
+                        }
+                        incrementCurrentTurn();
+                        currView.buttonEnableCondition(true);
+                        views.get(currentTurn).updateChoicePanel();
+                        timer.cancel();
+                    }
+                }
+            }, 0, 200);
         }
         else if (choice == 6){ // purchase house
             /*for (BoardView view : this.views){

@@ -462,7 +462,7 @@ public class BoardGUI extends JFrame implements BoardView{
     public void handleRollingDoubles(BoardEvent e){
         Player p = this.gamePlayers.get(this.currentTurn);
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
-        this.updateRoll(e.getRoll1(), e.getRoll2());
+        this.handleUpdateRoll(e.getRoll1(), e.getRoll2());
         if (e.getDoubles()){
             this.model.announcePlayerMessage(p.getPlayerName() + " rolled a double! they are now Just Visiting Jail");
             p.setInJail(false);
@@ -491,25 +491,20 @@ public class BoardGUI extends JFrame implements BoardView{
     public void handleGameplayRoll(BoardEvent e){
         Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
         Player p = this.gamePlayers.get(this.currentTurn);
-        int old = p.getPosition();
-        this.updateRoll(e.getRoll1(), e.getRoll2());
-        this.buttonEnableCondition(false);
         if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
             e.getModel().announceReachingGo();
         }
-        e.getModel().movePlayerPieces(this.currentTurn, old, this.gamePlayers.get(this.currentTurn).getPosition());
         if (place.getName().equals("In Jail") && !p.getInJail()){
             p.setCurrLocation(place.getName() + ", Just visiting");
             e.boardElement(gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.diceSum());
-            this.buttonEnableCondition(true);
             return;
         }
         this.gamePlayers.get(this.currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
         e.boardElement(p.getPosition()).locationElementFunctionality(p, e.diceSum());
-        this.buttonEnableCondition(true);
     }
 
-    private void buttonEnableCondition(boolean b){
+    @Override
+    public void buttonEnableCondition(boolean b){
         this.turnPass.setEnabled(b);
         this.quit.setEnabled(b);
         this.roll.setEnabled(b);
@@ -611,9 +606,20 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param roll1 Integer, the first roll
      * @param roll2 Integer, the second roll
      */
-    private void updateRoll(int roll1, int roll2) {
+    @Override
+    public void handleUpdateRoll(int roll1, int roll2) {
         dice1.setIcon(new ImageIcon(diceImages.get(roll1-1)));
         dice2.setIcon(new ImageIcon(diceImages.get(roll2-1)));
+    }
+
+    @Override
+    public Player getCurrentPlayer() {
+        return this.gamePlayers.get(this.currentTurn);
+    }
+
+    @Override
+    public int getCurrentTurn() {
+        return this.currentTurn;
     }
 
     /**
