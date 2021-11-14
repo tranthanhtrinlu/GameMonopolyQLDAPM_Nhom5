@@ -1,6 +1,5 @@
 package Listener;
 import Events.*;
-import Model.Location;
 import Model.Player;
 
 /**
@@ -9,20 +8,7 @@ import Model.Player;
  */
 
 public interface BoardView extends PropertyListener, RailRoadListener,
-        UtilityListener, Tax_FreeParkingListener, LandOnJailListener, GoToJailListener, FreePassListener {
-
-
-
-    /**
-     * Abstract method for handling the announcement of reaching GO!.
-     */
-    void announceReachingGo();
-
-    /**
-     * Abstract method for handling the player's next turn.
-     * @param e A Events.BoardEvent e.
-     */
-    void handleNextTurn(BoardEvent e);
+        UtilityListener, LandOnJailListener, GoToJailListener, FreePassListener, TaxListener, FreeParkingListener {
 
     /**
      * Abstract method for handling the announcement of a player passing their turn.
@@ -42,51 +28,31 @@ public interface BoardView extends PropertyListener, RailRoadListener,
      * @param e A Events.BoardEvent e.
      * @return True if the player posted bail, false otherwise.
      */
-    boolean payJail(BoardEvent e);
-
-
-    /**
-     * Abstract boolean method for updating the game players.
-     * @param e A Events.BoardEvent e.
-     * @return True if the game players were updated, false otherwise.
-     */
-    boolean updateGamePlayers(BoardEvent e);
-
-    /**
-     * Player regular roll
-     * @param e BoardEvent, the BoardEvent
-     */
-    void handleGameplayRoll(BoardEvent e);
-
-    /**
-     * player attempts to roll double
-     * @param e BoardEvent, the BoardEvent
-     */
-    void handleRollingDoubles(BoardEvent e);
-
-    void handleMessageAnnouncement(String s);
-
-    void handleAnnounceLocationPurchasing(Location place);
+    void payJail(boolean payed, BoardEvent e);
 
     void handleAnnounceBankruptedPlayer(Player p);
 
-    void updateChoicePanel();
+    void updateChoicePanel(Player player);
 
-    void handleNextTurnDisplay(BoardEvent e);
+    void handleNextTurnDisplay(BoardEvent e, int updatedTurn);
 
     void handleUpdateSidePanelDisplay(BoardEvent e);
 
     void handlePlayerPieceMovement(int currentTurn, int diceSum, int position);
 
-    void handleAnnounceWinner();
+    void handleAnnounceWinner(BoardEvent e);
 
-    void handleAnnounceRollingAgain();
+    void handleAnnounceRollingAgain(BoardEvent e);
 
     void handleUpdateRoll(int lastRoll1, int lastRoll2);
 
-    Player getCurrentPlayer();
-
-    int getCurrentTurn();
-
     void buttonEnableCondition(boolean b);
+
+    void handleRemoveOfPlayerPiece(BoardEvent e);
+
+    void handleRemoveOfPlayerView(BoardEvent e);
+
+    void announceReachingGo(BoardEvent e);
+
+    void handleRollingDoubles(BoardEvent e);
 }

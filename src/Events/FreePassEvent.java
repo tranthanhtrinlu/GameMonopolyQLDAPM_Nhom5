@@ -9,14 +9,19 @@ import java.util.EventObject;
  */
 public class FreePassEvent extends EventObject {
 
+
+    private final Player player;
+
     /**
      * Constructs a prototypical Event.
      *
      * @param pass the object on which the Event initially occurred
+     * @param p
      * @throws IllegalArgumentException if source is null
      */
-    public FreePassEvent(FreePass pass) {
+    public FreePassEvent(FreePass pass, Player p) {
         super(pass);
+        this.player = p;
     }
 
     /**
@@ -34,5 +39,9 @@ public class FreePassEvent extends EventObject {
     @Override
     public Object getSource() {
         return super.getSource();
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }

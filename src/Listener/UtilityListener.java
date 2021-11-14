@@ -12,7 +12,7 @@ public interface UtilityListener {
      * gives player choice to purchase the utitlity
      * @param e Events.UtilityEvent
      */
-    void UtilityNoOwner(UtilityEvent e);
+    boolean UtilityNoOwner(UtilityEvent e);
 
     /**
      * Listener for when the player lands on a MVC.Utility that they own themselves
@@ -27,4 +27,7 @@ public interface UtilityListener {
      */
     void UtilityPay(UtilityEvent e);
 
+    void announceCannotBuyUtility(UtilityEvent utilityEvent);
+
+    void announcePurchaseOfUtility(UtilityEvent utilityEvent);
 }

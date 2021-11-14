@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.GoToJailEvent;
 import Listener.BoardView;
 import Listener.GoToJailListener;
@@ -30,12 +29,17 @@ public class GoToJail extends Location{
      * Describes functionality of the MVC.GoToJail element
      * @param p MVC.Player object p
      * @param totalDiceRoll Integer sum of dice roll
+     * @param currentTurn
      * @return A boolean, always returns false
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        int oldPos = p.getPosition();
+        p.setPosition(BoardModel.JAIL_POSITION);
+        p.setCurrLocation("In Jail");
+        p.setInJail(true);
         for (GoToJailListener listener : this.goToJailListener){
-            listener.SendPlayerToJail(new GoToJailEvent(this, p));
+            listener.SendPlayerToJail(new GoToJailEvent(this, p, currentTurn, oldPos, p.getPosition()));
         }
         return false;
     }

@@ -1,5 +1,6 @@
 package Listener;
 import Events.*;
+import Model.Property;
 
 
 /**
@@ -11,8 +12,9 @@ public interface PropertyListener {
      * Listener for when the player lands on a property that is not owned
      * Provides the option to purchase the property
      * @param e Events.PropertyEvent that takes the property and player
+     * @return boolean, true if wanting to purchase property, otherwise false
      */
-    void propertyNoOwner(PropertyEvent e);
+    boolean propertyNoOwner(PropertyEvent e);
 
     /**
      * Listener for when the player lands on a property they own themselves
@@ -28,4 +30,7 @@ public interface PropertyListener {
      */
     void propertyRent(PropertyEvent e);
 
+    void announceCannotBuy(PropertyEvent e);
+
+    void announcePurchaseProperty(PropertyEvent e);
 }

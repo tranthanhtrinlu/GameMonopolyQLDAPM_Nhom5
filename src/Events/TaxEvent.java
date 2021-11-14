@@ -1,13 +1,12 @@
 package Events;
-import Model.*;
+
+import Model.FreeParking;
+import Model.Player;
+import Model.Tax;
 
 import java.util.EventObject;
 
-/**
- * @author Cory Helm
- * Class Events.Tax_FreeParkingEvent for defining the events for Tax and Free Parking. Extends EventObject
- */
-public class Tax_FreeParkingEvent extends EventObject {
+public class TaxEvent extends EventObject {
 
     private final Player player;
 
@@ -17,7 +16,7 @@ public class Tax_FreeParkingEvent extends EventObject {
      * @param source the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public Tax_FreeParkingEvent(Tax_FreeParking source, Player p) {
+    public TaxEvent(Tax source, Player p) {
         super(source);
         this.player = p;
     }
@@ -34,8 +33,8 @@ public class Tax_FreeParkingEvent extends EventObject {
      * Getter method for the MVC.Tax_FreeParking.
      * @return A MVC.Tax_FreeParking event.
      */
-    public Tax_FreeParking getLocation(){
-        return (Tax_FreeParking) this.getSource();
+    public Tax getLocation(){
+        return (Tax) this.getSource();
     }
 
     /**

@@ -10,15 +10,17 @@ import java.util.EventObject;
 public class RailRoadEvent extends EventObject {
 
     private final Player player;
+    private final int rentCost;
 
     /**
      * constructor for railroad
      * @param rail MVC.RailRoad property
      * @param p MVC.Player
      */
-    public RailRoadEvent(RailRoad rail, Player p) {
+    public RailRoadEvent(RailRoad rail, Player p, int rentCost) {
         super(rail);
         this.player = p;
+        this.rentCost = rentCost;
     }
 
     /**
@@ -44,5 +46,13 @@ public class RailRoadEvent extends EventObject {
     @Override
     public Object getSource() {
         return super.getSource();
+    }
+
+    /**
+     * Get the rent cost
+     * @return Integer, the rent cost
+     */
+    public int getRentCost() {
+        return this.rentCost;
     }
 }

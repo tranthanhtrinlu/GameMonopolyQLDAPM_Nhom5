@@ -1,6 +1,7 @@
 package Model;
 import Events.BoardEvent;
 import Listener.BoardView;
+
 import java.util.*;
 
 /**
@@ -13,13 +14,18 @@ public class BoardModel {
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
     private static final int ROLLING_DICE_DELAY = 10;
-    private int centerMoney;
+    protected static int centerMoney = 0;
 
     private List<Location> board;
     private List<BoardView> views;
     private int currentTurn;
+    private int numberOfPlayers;
+    private Status status;
     private int roll1;
     private int roll2;
+    private final ArrayList<Player> gamePlayers;
+
+
     /**
      * Sets up the colours for element of the board.
      */
@@ -27,51 +33,59 @@ public class BoardModel {
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
     }
 
+    public enum Status{
+        FINISHED, UNFINISHED;
+    }
+
     /**
      * Default constructor for the MVC.BoardModel.
      */
     public BoardModel(){
+        this.gamePlayers = new ArrayList<>();
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
         this.currentTurn = 0;
         this.initializeBoard();
         this.roll1 = 0;
         this.roll2 = 0;
-        this.centerMoney = 0;
+        this.status = Status.UNFINISHED;
     }
 
     /**
      * gets how much money is in the center
      * @return Integer centerMoney
      */
-    public int getCenterMoney() {
-        return this.centerMoney;
+    protected static int getCenterMoney() {
+        return BoardModel.centerMoney;
     }
 
     /**
      * will set centerMoney
      * @param centerMoney Integer money in center
      */
-    public void setCenterMoney(int centerMoney) {
-        this.centerMoney = centerMoney;
+    protected static void setCenterMoney(int centerMoney) {
+        BoardModel.centerMoney = centerMoney;
     }
 
     /**
      * used to add money to the center
      * @param add Integer added
      */
-    public void addToCenterMoney(int add){
-        this.centerMoney += add;
+    protected static void addToCenterMoney(int add){
+        BoardModel.centerMoney += add;
     }
 
 
-    /**
-     * Method for incrementing the amount of turns.
-     */
-    public void incrementCurrentTurn(){
-        this.currentTurn++;
-        if (this.currentTurn == this.views.size())
-            this.currentTurn = 0;
+    public void addGamePlayers(Player player) {
+        this.gamePlayers.add(player);
+    }
+
+    public Player getPlayersByIndex(int i) {
+        return this.gamePlayers.get(i);
+    }
+
+    public void setNumberOfPlayers(int num){
+        this.numberOfPlayers = num;
     }
 
     /**
@@ -109,7 +123,7 @@ public class BoardModel {
         this.board.add(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2));
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("BALTIC AVENUE", 60,50,4,20,60,180,320,450, Color.BROWN, 2));
-        this.board.add(new Tax_FreeParking(200, "INCOME TAX"));
+        this.board.add(new Tax(200, "INCOME TAX"));
         this.board.add(new RailRoad("Reading Railroad", 200));
         this.board.add(new Property("ORIENTAL AVENUE", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3));
         this.board.add(new FreePass(0, "Free Pass"));
@@ -125,7 +139,7 @@ public class BoardModel {
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("TENNESSEE AVENUE", 180,100,14,70,200,550,750,950, Color.ORANGE, 3));
         this.board.add(new Property("NEW YORK AVENUE", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3));
-        this.board.add(new Tax_FreeParking(0, "FREE PARKING"));
+        this.board.add(new FreeParking(0, "FREE PARKING"));
         this.board.add(new Property("KENTUCKY AVENUE",220,150,18,90,250,700,875,1050, Color.RED,3));
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("INDIANA AVENUE", 220,150,18,90,250,700,875,1050, Color.RED, 3));
@@ -143,7 +157,7 @@ public class BoardModel {
         this.board.add(new RailRoad("Short Line", 200));
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("PARK PLACE", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2));
-        this.board.add(new Tax_FreeParking(100, "LUXURY TAX"));
+        this.board.add(new Tax(100, "LUXURY TAX"));
         this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2));
     }
 
@@ -159,198 +173,246 @@ public class BoardModel {
 
 
     /**
-     * announce handle to announce a purchase of a property
-     * @param place Location, the place
+     * method for handling the next turn of the player.
      */
-    public void announcePurchasingProperty(Location place) {
-        for (BoardView view : this.views){
-            view.handleAnnounceLocationPurchasing(place);
+    public void nextTurn() {
+        this.currentTurn++;
+        while (true){
+            if (this.currentTurn == this.gamePlayers.size())
+                this.currentTurn = 0;
+
+            if (this.gamePlayers.get(this.currentTurn).getOut()){
+                this.currentTurn++;
+                continue;
+            }
+            break;
         }
     }
 
 
     /**
-     * update every view the pieces on the board
-     * @param currentTurn Integer, the current turn
-     * @param oldPos Integer, the old pos
-     * @param position Integer, new position
+     * Overridden boolean method for updating the game players if one loses the game or quits.
+     * @return True if the game players is updated, false otherwise.
      */
-    public void movePlayerPieces(int currentTurn, int oldPos, int position) {
-        for (BoardView view : this.views){
-            view.handlePlayerPieceMovement(currentTurn, oldPos, position);
+    private boolean checkBankrupt() {
+        Player p = this.gamePlayers.get(this.currentTurn);
+        if (p.getMoneyAmount() == 0){
+            this.removePlayer();
+            return true;
+        }
+        return false;
+    }
+
+    private void removePlayer(){
+        Player p = this.gamePlayers.get(this.currentTurn);
+        p.setOut(true);
+        p.bankrupted();
+        nextTurn();
+        this.numberOfPlayers -= 1;
+        updateStatus();
+    }
+
+    public void updateStatus(){
+        if (this.numberOfPlayers == 1){
+            this.status = Status.FINISHED;
         }
     }
 
 
-    /**
-     * Announce to every view that a player went bankrupted
-     * @param p
-     */
-    public void announceBankruptedPlayer(Player p){
-        for (BoardView view : this.views){
-            view.handleAnnounceBankruptedPlayer(p);
+    private void movePlayerFunctionality(BoardEvent e){
+        Timer timer2 = new Timer();
+        timer2.schedule(new TimerTask() {
+            private final Player p = gamePlayers.get(currentTurn);
+            private int pos = p.getPosition();
+            private final int sum = roll1 + roll2;
+            @Override
+            public void run() {
+                if (p.getPosition()+sum != pos){
+                    int oldPos = pos;
+                    pos++;
+                    for (BoardView view : views){
+                        view.handlePlayerPieceMovement(currentTurn, oldPos, pos);
+                        if (pos - SIZE_OF_BOARD+1 == 0)
+                            view.announceReachingGo(e);
+                    }
+                }
+                else{
+                    p.movePlayer(sum);
+                    Location place = board.get(p.getPosition());
+                    if (place.getName().equals("In Jail") && !p.getInJail()){ // change using enum
+                        p.setCurrLocation(place.getName() + ", Just visiting");
+                    }else{
+                        p.setCurrLocation(place.getName());
+                    }
+                    place.locationElementFunctionality(p, sum, currentTurn);
+
+                    if (checkBankrupt()){
+                        for (BoardView view : views){
+                            view.handleAnnounceBankruptedPlayer(p);
+                            view.handleRemoveOfPlayerPiece(e);
+                            view.handleRemoveOfPlayerView(e);
+
+                            view.handleUpdateSidePanelDisplay(e);
+                            view.handleNextTurnDisplay(e, currentTurn);
+                            if (status != Status.UNFINISHED){
+                                view.handleAnnounceWinner(e);
+                            }
+                        }
+                    }else{
+                        if (!e.getDoubles()){
+                            nextTurn();
+                            for (BoardView view : views){
+                                view.handleUpdateSidePanelDisplay(e);
+                                view.handleNextTurnDisplay(e, currentTurn);
+                            }
+                        }
+                        else{
+                            if (p.getInJail()){
+                                nextTurn();
+                                for (BoardView view : views){
+                                    view.handleUpdateSidePanelDisplay(e);
+                                    view.handleNextTurnDisplay(e, currentTurn);
+                                }
+                            }
+                            else{
+                                for (BoardView view : views){
+                                    view.handleUpdateSidePanelDisplay(e);
+                                    view.handleAnnounceRollingAgain(e);
+                                }
+                            }
+                        }
+                        for (BoardView view : views){
+                            view.buttonEnableCondition(true);
+                            view.updateChoicePanel(gamePlayers.get(currentTurn));
+                        }
+                    }
+                    timer2.cancel();
+                }
+            }
+        }, 0, 200);
+    }
+
+    private void rollingOutOfJailFunctionality(BoardEvent e){
+        if (e.getDoubles()){
+            e.getPlayer().setInJail(false);
+            for (BoardView view : views){
+                view.handleRollingDoubles(e);
+            }
+            movePlayerFunctionality(e);
+        }
+        else{
+            e.getPlayer().setTurnsInJail(e.getPlayer().getTurnsInJail() - 1);
+            if (e.getPlayer().getTurnsInJail() == 0){
+                e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - 50);
+            }
+            if (checkBankrupt()){
+                for (BoardView view : views){
+                    view.handleAnnounceBankruptedPlayer(e.getPlayer());
+                    view.handleRemoveOfPlayerPiece(e);
+                    view.handleRemoveOfPlayerView(e);
+
+                    view.handleUpdateSidePanelDisplay(e);
+                    view.handleNextTurnDisplay(e, currentTurn);
+                    if (status != Status.UNFINISHED){
+                        view.handleAnnounceWinner(e);
+                    }
+                }
+            }else{
+                nextTurn();
+                for (BoardView view : views){
+                    view.handleRollingDoubles(e);
+                    view.handleUpdateSidePanelDisplay(e);
+                    view.handleNextTurnDisplay(e, currentTurn);
+                    view.buttonEnableCondition(true);
+                    view.updateChoicePanel(gamePlayers.get(currentTurn));
+                }
+            }
         }
     }
 
-    /**
-     * Method that announces when a player has reached GO!.
-     */
-    public void announceReachingGo(){
-        for (BoardView view : this.views){
-            view.announceReachingGo();
-        }
+
+    private void handleRollingDice(BoardEvent e, int choice){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            private int counter = 0;
+            private final Random r = new Random();
+            @Override
+            public void run() {
+                if (counter < ROLLING_DICE_DELAY) {
+                    counter++;
+                    int lastRoll1 = r.nextInt(6) + 1;
+                    int lastRoll2 = r.nextInt(6) + 1;
+                    for (BoardView view : views){
+                        view.buttonEnableCondition(false);
+                        if (counter == ROLLING_DICE_DELAY)
+                            view.handleUpdateRoll(roll1, roll2);
+                        else
+                            view.handleUpdateRoll(lastRoll1, lastRoll2);
+                    }
+                } else {
+                    if (choice == 1){
+                        movePlayerFunctionality(e);
+                    }
+                    else{
+                        rollingOutOfJailFunctionality(e);
+                    }
+                    timer.cancel();
+                }
+            }
+        }, 0, 200);
     }
 
-
-    /**
-     * Message announement method for all views
-     * @param s
-     */
-    public void announcePlayerMessage(String s) {
-        for (BoardView view : this.views){
-            view.handleMessageAnnouncement(s);
-        }
-    }
 
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
      */
     public void playCurrPlayerTurn(int choice){
-        BoardView currView = this.views.get(this.currentTurn);
         boolean doubles = rollDiceOfTwo();
-        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2);
+        BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2, this.gamePlayers.get(this.currentTurn), this.currentTurn, this.gamePlayers);
 
-        if (choice == 1){
-            currView.buttonEnableCondition(false);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                private int counter = 0;
-                private final Random r = new Random();
-                @Override
-                public void run() {
-                    if (counter < ROLLING_DICE_DELAY) {
-                        counter++;
-                        int lastRoll1 = r.nextInt(6) + 1;
-                        int lastRoll2 = r.nextInt(6) + 1;
-                        for (BoardView view : views){
-                            view.handleUpdateRoll(lastRoll1, lastRoll2);
-                        }
-                    } else {
-                        for (BoardView view : views){
-                            view.handleUpdateRoll(roll1, roll2);
-                        }
-                        Timer timer2 = new Timer();
-                        timer2.schedule(new TimerTask() {
-                            private final Player p = currView.getCurrentPlayer();
-                            private final int turn = currView.getCurrentTurn();
-                            private int pos = p.getPosition();
-                            private final int sum = roll1 + roll2;
-                            @Override
-                            public void run() {
-                                if (p.getPosition()+sum != pos){
-                                    int oldPos = pos;
-                                    pos++;
-                                    movePlayerPieces(turn, oldPos, pos);
-                                }
-                                else{
-                                    currView.handleGameplayRoll(e);
-                                    if (!doubles){
-                                        for (BoardView view : views){
-                                            view.updateGamePlayers(e);
-                                            view.handleNextTurn(e);
-                                            view.handleUpdateSidePanelDisplay(e);
-                                            view.handleNextTurnDisplay(e);
-                                            view.handleAnnounceWinner();
-                                        }
-                                        incrementCurrentTurn();
-                                    }
-                                    else{
-                                        for (BoardView view : views){
-                                            view.updateGamePlayers(e);
-                                            view.handleUpdateSidePanelDisplay(e);
-                                            view.handleAnnounceRollingAgain();
-                                        }
-                                    }
-                                    currView.buttonEnableCondition(true);
-                                    views.get(currentTurn).updateChoicePanel();
-                                    timer2.cancel();
-                                }
-                            }
-                        }, 0, 200);
-                        timer.cancel();
-                    }
-                }
-            }, 0, 200);
+        if (choice == 1){ // roll
+            handleRollingDice(e, choice);
         }
         else if (choice == 2){ // quit
+            removePlayer();
             for (BoardView view : this.views){
                 view.handlePlayerQuit(e);
-                view.handleNextTurn(e);
+                if (status != Status.UNFINISHED){
+                    view.handleAnnounceWinner(e);
+                }
                 view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e);
-                view.handleAnnounceWinner();
+                view.handleNextTurnDisplay(e, currentTurn);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
-            this.incrementCurrentTurn();
-            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 3){ // pass
+            nextTurn();
             for (BoardView view : this.views){
                 view.announcePlayerPass(e);
-                view.handleNextTurn(e);
                 view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e);
-                view.handleAnnounceWinner();
+                view.handleNextTurnDisplay(e, currentTurn);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
-            this.incrementCurrentTurn();
-            this.views.get(this.currentTurn).updateChoicePanel();
         }
         else if (choice == 4){ // pay out of jail
-            if (currView.payJail(e)){
-                for (BoardView view : this.views){
-                    view.updateGamePlayers(e);
-                    view.handleNextTurn(e);
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleNextTurnDisplay(e);
-                    view.handleAnnounceWinner();
-                }
-                this.incrementCurrentTurn();
-                this.views.get(this.currentTurn).updateChoicePanel();
+            Player p = this.gamePlayers.get(this.currentTurn);
+            Location place = this.board.get(p.getPosition());
+            boolean payed = false;
+            if (p.payJail()){
+                p.setCurrLocation(place.getName() + " - Just Visiting"); // fix with enum
+                p.setInJail(false);
+                payed = true;
+            }
+            nextTurn();
+            for (BoardView view : this.views){
+                view.payJail(payed, e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.handleNextTurnDisplay(e, currentTurn);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
         }
         else if (choice == 5){ // roll double out of jail
-            currView.buttonEnableCondition(false);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                private int counter = 0;
-                private final Random r = new Random();
-                @Override
-                public void run() {
-                    if (counter < ROLLING_DICE_DELAY) {
-                        counter++;
-                        int lastRoll1 = r.nextInt(6) + 1;
-                        int lastRoll2 = r.nextInt(6) + 1;
-                        for (BoardView view : views){
-                            view.handleUpdateRoll(lastRoll1, lastRoll2);
-                        }
-                    } else {
-                        for (BoardView view : views) {
-                            view.handleUpdateRoll(roll1, roll2);
-                        }
-                        currView.handleRollingDoubles(e);
-                        for (BoardView view : views){
-                            view.updateGamePlayers(e);
-                            view.handleNextTurn(e);
-                            view.handleUpdateSidePanelDisplay(e);
-                            view.handleNextTurnDisplay(e);
-                            view.handleAnnounceWinner();
-                        }
-                        incrementCurrentTurn();
-                        currView.buttonEnableCondition(true);
-                        views.get(currentTurn).updateChoicePanel();
-                        timer.cancel();
-                    }
-                }
-            }, 0, 200);
+            handleRollingDice(e, choice);
         }
         else if (choice == 6){ // purchase house
             /*for (BoardView view : this.views){
@@ -359,6 +421,10 @@ public class BoardModel {
             currView.handlePlayerChoiceToPurchaseHouses(e);*/
         }
         else if (choice == 7){ // sell house
+            // prompt user
+            // check if they cancel
+            // if sell
+
             /*for (BoardView view : this.views){
                 view.announceDecisionToSellHouses(e);
             }

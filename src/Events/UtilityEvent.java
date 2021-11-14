@@ -11,16 +11,18 @@ public class UtilityEvent extends EventObject {
 
     private final Player player;
     private final int totalDiceRoll;
+    private final int payment;
     /**
      * Constructs a prototypical Event.
      *
      * @param utility the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public UtilityEvent(Utility utility, Player p, int totalDiceRoll) {
+    public UtilityEvent(Utility utility, Player p, int totalDiceRoll, int payment) {
         super(utility);
         this.player = p;
         this.totalDiceRoll = totalDiceRoll;
+        this.payment = payment;
     }
 
     /**
@@ -53,5 +55,9 @@ public class UtilityEvent extends EventObject {
     @Override
     public Object getSource() {
         return super.getSource();
+    }
+
+    public int getPayment() {
+        return this.payment;
     }
 }

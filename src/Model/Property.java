@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.PropertyEvent;
 import Listener.BoardView;
 import Listener.PropertyListener;
@@ -72,7 +71,7 @@ public class Property extends Location{
      */
     @Override
     public boolean buy(Player p){
-        if (p.getMoneyAmount() < this.getCost()){
+        if (p.getMoneyAmount() <= this.getCost()){
             return true;
         }
         this.owner = p;
@@ -130,22 +129,43 @@ public class Property extends Location{
      * @return A boolean
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null){
             for (PropertyListener listener : this.propertyListeners){
-                listener.propertyNoOwner(new PropertyEvent(this, p));
+                if (listener.propertyNoOwner(new PropertyEvent(this, p, 0))){
+                    if (this.buy(p)) {
+                        listener.announceCannotBuy(new PropertyEvent(this, p, 0));
+                    }
+                    else{
+                        listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
+                    }
+                }
             }
             return true;
         }
         else {
             if (this.owner.equals(p)) {
                 for (PropertyListener listener : this.propertyListeners){
-                    listener.propertyOwned(new PropertyEvent(this, p));
+                    listener.propertyOwned(new PropertyEvent(this, p, 0));
                 }
                 return true;
             }
+
+            int doubleAmount = 1;
+            if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
+                doubleAmount = 2;
+            int landedPlayerMoney = p.getMoneyAmount();
+            int rentCost = this.getRentCost(this.numOfHouses)*doubleAmount;
+            if (landedPlayerMoney <= rentCost){
+                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+            }
+            else{
+                p.setMoneyAmount(p.getMoneyAmount() - rentCost);
+                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
+            }
+
             for (PropertyListener listener : this.propertyListeners){
-                listener.propertyRent(new PropertyEvent(this, p));
+                listener.propertyRent(new PropertyEvent(this, p, rentCost));
             }
         }
         return false;

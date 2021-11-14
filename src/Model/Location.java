@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Listener.BoardView;
 
 /**
@@ -43,9 +42,10 @@ public abstract class Location {
      * Abstract boolean method for any functionality of a location on the board.
      * @param p A MVC.Player p.
      * @param totalDiceRoll An Integer sum of the dice.
+     * @param currentTurn
      * @return A boolean, value depends on the subclass.
      */
-    public abstract boolean locationElementFunctionality(Player p, int totalDiceRoll);
+    public abstract boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn);
 
     /**
      * Overriden Java method for converting to a String.

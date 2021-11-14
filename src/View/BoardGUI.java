@@ -2,7 +2,6 @@ package View;
 import Events.*;
 import Listener.BoardView;
 import Model.BoardModel;
-import Model.Location;
 import Model.Player;
 import View.Components.GameDisplayPanel;
 import View.Components.PlayerDisplayPanel;
@@ -25,21 +24,15 @@ public class BoardGUI extends JFrame implements BoardView{
     private final PlayerDisplayPanel sidePanel;
     private final JPanel gameControlPanel;
 
-    protected BoardModel model;
-    private final ArrayList<Player> gamePlayers;
-    private int currentTurn;
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
     private final ArrayList<Image> diceImages;
     private final JLabel dice1, dice2;
-    private int numberOfPlayers;
 
     public BoardGUI(){
         super("Monopoly");
         this.gamePanel = new GameDisplayPanel();
         this.sidePanel = new PlayerDisplayPanel();
-        this.currentTurn = 0;
-        this.gamePlayers = new ArrayList<>();
-        this.model = new BoardModel();
+        BoardModel model = new BoardModel();
         this.turnPass = new JButton("Pass");
         this.quit = new JButton("Quit");
         this.roll = new JButton("Roll");
@@ -48,7 +41,7 @@ public class BoardGUI extends JFrame implements BoardView{
         this.purchaseEstateHouses = new JButton("Purchase Houses");
         this.sellHouses = new JButton("Sell Houses");
 
-        BoardController controller = new BoardController(this.model);
+        BoardController controller = new BoardController(model);
         this.roll.setActionCommand(1 + " ");
         this.roll.addActionListener(controller);
         this.quit.setActionCommand(2 + " ");
@@ -90,22 +83,23 @@ public class BoardGUI extends JFrame implements BoardView{
         JScrollPane scroll = new JScrollPane(this.sidePanel);
         scroll.setBounds(0,0,200, GAME_HEIGHT);
         this.add(scroll);
-        this.model.addView(this);
-        this.model.addViewToListener(this);
+        model.addView(this);
+        model.addViewToListener(this);
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setVisible(true);
 
         StartGameController start = new StartGameController();
-        this.numberOfPlayers = start.getNumOfPlayers(this);
-        ArrayList<String> names = start.getNameOfPlayers(this.numberOfPlayers, this);
-        for (int i = 0; i < this.numberOfPlayers; i++){
-            this.gamePlayers.add(new Player(names.get(i)));
-            this.sidePanel.addNewPlayerViewButton(this.gamePlayers.get(i), i);
+        int numberOfPlayers = start.getNumOfPlayers(this);
+        model.setNumberOfPlayers(numberOfPlayers);
+        ArrayList<String> names = start.getNameOfPlayers(numberOfPlayers, this);
+        for (int i = 0; i < numberOfPlayers; i++){
+            model.addGamePlayers(new Player(names.get(i)));
+            this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
             this.gamePanel.addInitialPlayers(i);
         }
-        this.updateChoicePanel();
+        this.updateChoicePanel(model.getPlayersByIndex(0));
     }
 
     //****BEGINNING OF PROPERTY FUNCTIONS**//
@@ -116,17 +110,10 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e A Events.PropertyEvent e.
      */
     @Override
-    public void propertyNoOwner(PropertyEvent e) {
+    public boolean propertyNoOwner(PropertyEvent e) {
         LocationController control = new LocationController();
-        ConfirmMessageController messageController = new ConfirmMessageController();
         int result = control.LocationNoOwnerController(this, e.getProperty().getName(), e.getProperty().getCost());
-        if (result == JOptionPane.YES_OPTION) {
-            if (e.getProperty().buy(e.getPlayer())) { // not enough
-                messageController.sendMessage(this, "Not enough Money, moving to the next player");
-                return;
-            }
-            this.model.announcePurchasingProperty(e.getProperty());
-        }
+        return result == JOptionPane.YES_OPTION;
     }
 
     /**
@@ -137,9 +124,8 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void propertyOwned(PropertyEvent e) {
         ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "You landed on " + e.getProperty().getName() + ", Property you own");
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " landed on " + e.getProperty().getName() + ", Property they own. Moving to the next player");
     }
-
 
     /**
      * Overridden method to handle a property owned by a player not currently on their turn.
@@ -148,21 +134,28 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void propertyRent(PropertyEvent e) {
-        Player owner = e.getProperty().getOwner();
-        Player landedPlayer = e.getPlayer();
-        int doubleAmount = 1;
-        if (owner.numberOfColoredPropertiesOwned(e.getProperty().getColor(), e.getProperty().getNumberOfColor()))
-            doubleAmount = 2;
-        this.model.announcePlayerMessage("You landed on " + e.getProperty().getName() + " Owned by " + owner.getPlayerName() + " and rent is $" + e.getProperty().getRent()*doubleAmount);
-        int landedPlayerMoney = landedPlayer.getMoneyAmount();
-        int rentCost = e.getProperty().getRentCost(e.getProperty().getNumOfHouses());
-        if (landedPlayerMoney <= rentCost){
-            owner.setMoneyAmount(owner.getMoneyAmount() + landedPlayerMoney);
-            this.model.announceBankruptedPlayer(landedPlayer);
-            return;
-        }
-        landedPlayer.setMoneyAmount(landedPlayer.getMoneyAmount() - rentCost);
-        owner.setMoneyAmount(owner.getMoneyAmount() + (rentCost * doubleAmount));
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " landed on " + e.getProperty().getName() + " Owned by " + e.getProperty().getOwner().getPlayerName()
+                + " and rent is $" + e.getCost() + "\nThey pay now");
+    }
+
+    /**
+     * announcement that the player cannot buy a property
+     */
+    @Override
+    public void announceCannotBuy(PropertyEvent e){
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " tried to buy " + e.getProperty().getName() + " but does not have enough Money, moving to the next player");
+    }
+
+    /**
+     * announcement that the player purchased the property
+     * @param e PropertyEvent, the property event
+     */
+    @Override
+    public void announcePurchaseProperty(PropertyEvent e){
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " has purchased " + e.getProperty().getName());
     }
 
 
@@ -176,17 +169,10 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e A Events.RailRoadEvent e.
      */
     @Override
-    public void railRoadNoOwner(RailRoadEvent e) {
-        ConfirmMessageController messageController = new ConfirmMessageController();
+    public boolean railRoadNoOwner(RailRoadEvent e) {
         LocationController control = new LocationController();
         int result = control.LocationNoOwnerController(this, e.getRailRoad().getName(), e.getRailRoad().getCost());
-        if (result == JOptionPane.YES_OPTION) {
-            if (e.getRailRoad().buy(e.getPlayer())) {
-                messageController.sendMessage(this, "Not enough Money, moving to the next player");
-                return;
-            }
-            this.model.announcePurchasingProperty(e.getRailRoad());
-        }
+        return result == JOptionPane.YES_OPTION;
     }
 
     /**
@@ -196,7 +182,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void railRoadOwned(RailRoadEvent e) {
         ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "You landed on " + e.getRailRoad().getName() + ", Property you own");
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " landed on " + e.getRailRoad().getName() + ", Property they own. Moving to the next player");
     }
 
     /**
@@ -206,17 +192,23 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void railRoadRent(RailRoadEvent e) {
-        Player owner = e.getRailRoad().getOwner();
-        this.model.announcePlayerMessage("You landed on " + e.getRailRoad().getName() + " Owned by " + owner.getPlayerName() + " and payment is $" + e.getRailRoad().getPayment());
-        int landedPlayerMoney = e.getPlayer().getMoneyAmount();
-        int payment = e.getRailRoad().getPayment(owner.getNumOfRailroads());
-        if (landedPlayerMoney <= payment){
-            owner.setMoneyAmount(owner.getMoneyAmount() + landedPlayerMoney);
-            this.model.announceBankruptedPlayer((e.getPlayer()));
-            return;
-        }
-        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - payment);
-        owner.setMoneyAmount(owner.getMoneyAmount() + payment);
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " landed on " + e.getRailRoad().getName() + " Owned by " + e.getRailRoad().getOwner().getPlayerName()
+                + " and rent is $" + e.getRentCost() + "\nThey pay now");
+    }
+
+
+    @Override
+    public void announceCannotBuyRailRoad(RailRoadEvent e){
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " tried to buy " + e.getRailRoad().getName() + " but does not have enough Money, moving to the next player");
+    }
+
+
+    @Override
+    public void announcePurchaseRailRoad(RailRoadEvent e){
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " has purchased " + e.getRailRoad().getName());
     }
 
     // **END OF RAIL ROAD IMPLEMENTATION** //
@@ -228,17 +220,10 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e A Events.UtilityEvent e.
      */
     @Override
-    public void UtilityNoOwner(UtilityEvent e) {
-        ConfirmMessageController messageController = new ConfirmMessageController();
+    public boolean UtilityNoOwner(UtilityEvent e) {
         LocationController control = new LocationController();
         int result = control.LocationNoOwnerController(this, e.getUtility().getName(), e.getUtility().getCost());
-        if (result == JOptionPane.YES_OPTION) {
-            if (e.getUtility().buy(e.getPlayer())) {
-                messageController.sendMessage(this, "Not enough Money, moving to the next player");
-                return;
-            }
-            this.model.announcePurchasingProperty(e.getUtility());
-        }
+        return result == JOptionPane.YES_OPTION;
     }
 
     /**
@@ -248,7 +233,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void UtilityOwned(UtilityEvent e) {
         ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "You landed on " + e.getUtility().getName() + ", Property you own");
+        messageController.sendMessage(this, "player:  " + e.getPlayer().getPlayerName() + " landed on " + e.getUtility().getName() + " a Utility they own. Moving to the next player");
     }
 
     /**
@@ -258,19 +243,23 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void UtilityPay(UtilityEvent e) {
-        Player owner = e.getUtility().getOwner();
-        this.model.announcePlayerMessage("You landed on " + e.getUtility().getName() + " Owned by " + owner.getPlayerName() + ".\n" +
-                "Number of utilities owned is " + owner.getNumOfUtilities() + "Payment (dice roll * (10 if 2 utilities else 4)) is $" + e.getUtility().payment(e.getTotalDiceRoll()));
-        int landedPlayerMoney = e.getPlayer().getMoneyAmount();
-        int payment = e.getUtility().payment(e.getTotalDiceRoll());
-        if (landedPlayerMoney <= payment){
-            owner.setMoneyAmount(owner.getMoneyAmount() + landedPlayerMoney);
-            this.model.announceBankruptedPlayer(e.getPlayer());
-            return;
-        }
-        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - payment);
-        owner.setMoneyAmount(owner.getMoneyAmount() + payment);
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " landed on " + e.getUtility().getName() + " Owned by " + e.getUtility().getOwner().getPlayerName() + ".\n" +
+                "Number of utilities owned by owner is " + e.getUtility().getOwner().getNumOfUtilities() + ". so payment (dice roll * (10 if 2 utilities else 4)) is $" + e.getPayment());
     }
+
+    @Override
+    public void announceCannotBuyUtility(UtilityEvent e){
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " tried to buy " + e.getUtility().getName() + " but does not have enough Money, moving to the next player");
+    }
+
+    @Override
+    public void announcePurchaseOfUtility(UtilityEvent e) {
+        ConfirmMessageController messageController = new ConfirmMessageController();
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " has purchased " + e.getUtility().getName());
+    }
+
 
     // ** END OF UTILITY IMPLEMENTATION **
 
@@ -280,12 +269,9 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e A Events.Tax_FreeParkingEvent event.
      */
     @Override
-    public void FreeParking(Tax_FreeParkingEvent e) {
-        if (this.model.getCenterMoney() == 0)
-            this.model.setCenterMoney(100);
-        this.model.announcePlayerMessage(e.getPlayer().getPlayerName() + " landed on free parking, they receive $" + this.model.getCenterMoney());
-        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() + this.model.getCenterMoney());
-        this.model.setCenterMoney(0);
+    public void FreeParking(FreeParkingEvent e) {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed on free parking, they receive $" + e.getCenterMoney());
     }
 
     /**
@@ -294,17 +280,10 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e A Events.Tax_FreeParkingEvent event.
      */
     @Override
-    public void payTax(Tax_FreeParkingEvent e) {
-        this.model.announcePlayerMessage(e.getPlayer().getPlayerName() + " landed on " + e.getLocation().getName() + ", they lose $" + e.getLocation().getCost());
-        if (e.getPlayer().getMoneyAmount() <= e.getLocation().getCost()){
-            this.model.addToCenterMoney(e.getPlayer().getMoneyAmount());
-            this.model.announceBankruptedPlayer(e.getPlayer());
-            return;
-        }
-        this.model.addToCenterMoney(e.getLocation().getCost());
-        e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - e.getLocation().getCost());
+    public void payTax(TaxEvent e) {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed on " + e.getLocation().getName() + ", they lose $" + e.getLocation().getCost() + " which goes into the center money");
     }
-
 
     /**
      * Overridden method for handling "Just Visiting".
@@ -312,9 +291,8 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void visiting(LandOnJailEvent e) {
-        Player p = this.gamePlayers.get(this.currentTurn);
-        this.model.announcePlayerMessage(p.getPlayerName() + " landed " + e.getLandOnJail().getName() + " - Just Visiting");
-        p.setCurrLocation(e.getLandOnJail().getName() + "- Just Visiting");
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed " + e.getLandOnJail().getName() + " - Just Visiting");
     }
 
 
@@ -324,11 +302,9 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void SendPlayerToJail(GoToJailEvent e) {
-        Player p = this.gamePlayers.get(this.currentTurn);
-        this.model.announcePlayerMessage(p.getPlayerName() + " landed on " + e.getGoToJail().getName() + ", they go to jail.");
-        e.getPlayer().setPosition(BoardModel.JAIL_POSITION);
-        p.setCurrLocation("In Jail");
-        e.getPlayer().setInJail(true);
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed on " + e.getGoToJail().getName() + ", they go to jail.\nMoving to the next player");
+        this.handlePlayerPieceMovement(e.getCurrentTurn(), e.getOldPos(), e.getNewPos());
     }
 
 
@@ -339,7 +315,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void FreePass(FreePassEvent e) {
         ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "Player: " + this.gamePlayers.get(this.currentTurn).getPlayerName() + " Landed on a free pass, moving to the next player");
+        messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " Landed on a free pass, moving to the next player");
     }
 
 
@@ -349,47 +325,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleAnnounceBankruptedPlayer(Player p){
         ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "Player: " + p.getPlayerName() + " has no more money. Removing player from game.");
-        messageController.sendMessage(this, "Player properties are now back in estate!");
-        this.removePlayer();
-    }
-
-
-
-    /**
-     * Announce property purchasing to every player
-     * @param place Location, the current place
-     */
-    @Override
-    public void handleAnnounceLocationPurchasing(Location place){
-        Player player = this.gamePlayers.get(this.currentTurn);
-        ConfirmMessageController messageController = new ConfirmMessageController();
-        messageController.sendMessage(this, "Player: " + player.getPlayerName() + " has purchased " + place.getName());
-    }
-
-    /**
-     * Overridden boolean method for updating the game players if one loses the game or quits.
-     * @param e A Events.BoardEvent e.
-     * @return True if the game players is updated, false otherwise.
-     */
-    @Override
-    public boolean updateGamePlayers(BoardEvent e) {
-        Player p = this.gamePlayers.get(this.currentTurn);
-        if (p.getMoneyAmount() == 0){
-            this.model.announcePlayerMessage("Player: " + p.getPlayerName() + " is out of money and is now removed from the game!");
-            this.removePlayer();
-            return true;
-        }
-        return false;
-    }
-
-    private void removePlayer(){
-        Player p = this.gamePlayers.get(this.currentTurn);
-        p.setOut(true);
-        p.bankrupted();
-        this.gamePanel.removePieceFromBoard(this.currentTurn,p.getPosition());
-        this.sidePanel.removePlayerView(this.currentTurn, p);
-        this.numberOfPlayers -= 1;
+        messageController.sendMessage(this, "Player: " + p.getPlayerName() + " has no more money. Removing player from game\nTheir properties are now back in estate!");
     }
 
 
@@ -399,9 +335,8 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void handlePlayerQuit(BoardEvent e) {
-        Player quittingPlayer = this.gamePlayers.get(currentTurn);
-        this.model.announcePlayerMessage("Player: " + quittingPlayer.getPlayerName() + " has quit the game");
-        this.removePlayer();
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " has quit the game. Removing player from game\nTheir properties are now back in estate!");
     }
 
     /**
@@ -410,48 +345,23 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void announcePlayerPass(BoardEvent e) {
-        Player p = this.gamePlayers.get(currentTurn);
-        this.model.announcePlayerMessage("Player " + p.getPlayerName() + " passed the turn. Moving to the next player.");
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " passed the turn. Moving to the next player.");
     }
-
-    /**
-     * Overridden method for handling the next turn of the player.
-     * @param e A Events.BoardEvent e.
-     */
-    @Override
-    public void handleNextTurn(BoardEvent e) {
-        this.currentTurn++;
-        while (true){
-            if (this.currentTurn == this.gamePlayers.size())
-                this.currentTurn = 0;
-
-            if (this.gamePlayers.get(this.currentTurn).getOut()){
-                this.currentTurn++;
-                continue;
-            }
-            break;
-        }
-    }
-
 
     /**
      * Overridden boolean method for handling the payment in jail.
      * @param e A Events.BoardEvent e.
-     * @return True if player has paid the jail fee, false otherwise.
      */
     @Override
-    public boolean payJail(BoardEvent e){
-        Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
-        Player p = this.gamePlayers.get(this.currentTurn);
-        ConfirmMessageController messageController = new ConfirmMessageController();
-        if (this.gamePlayers.get(this.currentTurn).payJail()){
-            this.model.announcePlayerMessage(p.getPlayerName() + " payed are out of jail and now just visiting");
-            p.setCurrLocation(place.getName() + " - Just Visiting");
-            p.setInJail(false);
-            return true;
+    public void payJail(boolean payed, BoardEvent e){
+        ConfirmMessageController controller = new ConfirmMessageController();
+        if (payed){
+            controller.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " payed out of jail.");
         }
-        messageController.sendMessage(this, "Not enough money to get out of jail");
-        return false;
+        else{
+            controller.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " attempted to pay out of jail but could not due to financial issues.");
+        }
     }
 
     /**
@@ -460,49 +370,23 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void handleRollingDoubles(BoardEvent e){
-        Player p = this.gamePlayers.get(this.currentTurn);
-        Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
-        this.handleUpdateRoll(e.getRoll1(), e.getRoll2());
+        ConfirmMessageController controller = new ConfirmMessageController();
         if (e.getDoubles()){
-            this.model.announcePlayerMessage(p.getPlayerName() + " rolled a double! they are now Just Visiting Jail");
-            p.setInJail(false);
-            p.setCurrLocation(place.getName() + "- Just visiting");
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " rolled a double! they are now Just Visiting Jail");
             return;
         }
-        p.setTurnsInJail(p.getTurnsInJail() - 1);
-        if (p.getTurnsInJail() != 0){
-            this.model.announcePlayerMessage(p.getPlayerName() + " attempted to roll out of jail. They failed and now have " + p.getTurnsInJail() + " left");
+        if (e.getPlayer().getTurnsInJail() != 0){
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " attempted to roll out of jail. They failed and now have " + e.getPlayer().getTurnsInJail() + " left in jail");
         }
         else{
-            this.model.announcePlayerMessage(p.getPlayerName() + " are now out of turns in jail, they have to pay the $50");
-            p.setMoneyAmount(p.getMoneyAmount() - 50);
-            if (p.getMoneyAmount() == 0){
-                this.model.announceBankruptedPlayer(p);
-            }
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " are now out of turns in jail, they have to pay the $50");
         }
     }
 
     /**
-     * Handle event for when the player presses roll
-     * Handle event for when the player presses roll
-     * @param e BoardEvent, the BoardEvent
+     *
+     * @param b boolean, true to enable otherwise false
      */
-    @Override
-    public void handleGameplayRoll(BoardEvent e){
-        Location place = e.boardElement(this.gamePlayers.get(this.currentTurn).getPosition());
-        Player p = this.gamePlayers.get(this.currentTurn);
-        if (this.gamePlayers.get(this.currentTurn).movePlayer(e.diceSum())){
-            e.getModel().announceReachingGo();
-        }
-        if (place.getName().equals("In Jail") && !p.getInJail()){
-            p.setCurrLocation(place.getName() + ", Just visiting");
-            e.boardElement(gamePlayers.get(this.currentTurn).getPosition()).locationElementFunctionality(this.gamePlayers.get(this.currentTurn), e.diceSum());
-            return;
-        }
-        this.gamePlayers.get(this.currentTurn).setCurrLocation(e.boardElement(p.getPosition()).getName());
-        e.boardElement(p.getPosition()).locationElementFunctionality(p, e.diceSum());
-    }
-
     @Override
     public void buttonEnableCondition(boolean b){
         this.turnPass.setEnabled(b);
@@ -519,19 +403,9 @@ public class BoardGUI extends JFrame implements BoardView{
      * Overridden method that announces when a player has reached GO!.
      */
     @Override
-    public void announceReachingGo() {
-        Player p = this.gamePlayers.get(this.currentTurn);
-        this.model.announcePlayerMessage(p.getPlayerName() + " received $" + BoardModel.GO_MONEY + " for reaching GO");
-    }
-
-    /**
-     * method to handle message announcement for each player
-     * @param s String method
-     */
-    @Override
-    public void handleMessageAnnouncement(String s){
+    public void announceReachingGo(BoardEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
-        controller.sendMessage(this, s);
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " received $" + BoardModel.GO_MONEY + " for reaching GO");
     }
 
 
@@ -540,11 +414,11 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e BoardEvent, the BoardEvent
      */
     @Override
-    public void handleNextTurnDisplay(BoardEvent e){
-        for (int i = 0; i<this.gamePlayers.size(); i++){
-            if (this.gamePlayers.get(i).getOut())
+    public void handleNextTurnDisplay(BoardEvent e, int updatedTurn){
+        for (int i = 0; i<e.getNumOfPlayers(); i++){
+            if (e.getPlayerByIndex(i).getOut())
                 continue;
-            this.sidePanel.updateCurrentTurn(this.currentTurn, i, this.gamePlayers.get(i));
+            this.sidePanel.updateCurrentTurn(updatedTurn, i, e.getPlayerByIndex(i));
         }
     }
 
@@ -554,10 +428,10 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void handleUpdateSidePanelDisplay(BoardEvent e){
-        for (int i = 0; i<this.gamePlayers.size(); i++) {
-            if (this.gamePlayers.get(i).getOut())
+        for (int i = 0; i<e.getNumOfPlayers(); i++) {
+            if (e.getPlayerByIndex(i).getOut())
                 continue;
-            this.sidePanel.updatePlayerDisplay(i, this.gamePlayers.get(i));
+            this.sidePanel.updatePlayerDisplay(i, e.getPlayerByIndex(i));
         }
     }
 
@@ -569,12 +443,8 @@ public class BoardGUI extends JFrame implements BoardView{
      */
     @Override
     public void handlePlayerPieceMovement(int currentTurn, int oldPos, int position) {
-        if (this.gamePlayers.get(this.currentTurn).getPosition() == BoardModel.JAIL_POSITION){
-            this.gamePanel.movePieceImage(currentTurn, oldPos, BoardModel.JAIL_POSITION);
-        }
-        else{
-            this.gamePanel.movePieceImage(currentTurn, oldPos, position);
-        }
+        this.gamePanel.movePieceImage(currentTurn, oldPos, position);
+
     }
 
     /**
@@ -582,23 +452,19 @@ public class BoardGUI extends JFrame implements BoardView{
      * if winner, send message and end game.
      */
     @Override
-    public void handleAnnounceWinner() {
+    public void handleAnnounceWinner(BoardEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
-        Player p = this.gamePlayers.get(this.currentTurn);
-        if (this.numberOfPlayers == 1){
-            controller.sendMessage(this, p.getPlayerName() + " wins the game\nThank you Playing\nExiting Program");
-            System.exit(0);
-        }
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " wins the game\nThank you Playing\nExiting Program");
+        System.exit(0);
     }
 
     /**
      * announce that the current player rolled a double to every view
      */
     @Override
-    public void handleAnnounceRollingAgain() {
+    public void handleAnnounceRollingAgain(BoardEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
-        Player p = this.gamePlayers.get(this.currentTurn);
-        controller.sendMessage(this, p.getPlayerName() + " Rolled a double. They get to roll again!");
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " Rolled a double. They get to roll again!");
     }
 
     /**
@@ -613,55 +479,57 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     @Override
-    public Player getCurrentPlayer() {
-        return this.gamePlayers.get(this.currentTurn);
+    public void handleRemoveOfPlayerPiece(BoardEvent e){
+        this.gamePanel.removePieceFromBoard(e.getTurn(),e.getPlayer().getPosition());
     }
 
+
     @Override
-    public int getCurrentTurn() {
-        return this.currentTurn;
+    public void handleRemoveOfPlayerView(BoardEvent e){
+        this.sidePanel.removePlayerView(e.getTurn(), e.getPlayer());
     }
+
 
     /**
      * Update panel according to the views
+     * @param player
      */
     @Override
-    public void updateChoicePanel() {
-        for (Player p : this.gamePlayers) {
-            this.gameControlPanel.removeAll();
-            boolean inJail = p.getInJail();
-            //boolean canPurchase = p.numberOfEstateProperties() != 0;
-            //boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
-            boolean canPurchase = false;
-            boolean canSell = false;
+    public void updateChoicePanel(Player player) {
+        this.gameControlPanel.removeAll();
+        boolean inJail = player.getInJail();
+        //boolean canPurchase = p.numberOfEstateProperties() != 0;
+        //boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
+        boolean canPurchase = false;
+        boolean canSell = false;
 
-            if (!inJail) {
-                if (canPurchase && canSell) {
-                    this.gameControlPanel.add(this.roll);
-                    this.gameControlPanel.add(this.purchaseEstateHouses);
-                    this.gameControlPanel.add(this.sellHouses);
-                    this.gameControlPanel.add(this.turnPass);
-                    this.gameControlPanel.add(this.quit);
-                }
-                else if (canPurchase){
-                    this.gameControlPanel.add(this.roll);
-                    this.gameControlPanel.add(this.purchaseEstateHouses);
-                    this.gameControlPanel.add(this.turnPass);
-                    this.gameControlPanel.add(this.quit);
-                }
-                else {
-                    this.gameControlPanel.add(this.roll);
-                    this.gameControlPanel.add(this.turnPass);
-                    this.gameControlPanel.add(this.quit);
-                }
-            } else {
-                this.gameControlPanel.add(this.payOutOfJail);
-                this.gameControlPanel.add(this.rollDouble);
+        if (!inJail) {
+            if (canPurchase && canSell) {
+                this.gameControlPanel.add(this.roll);
+                this.gameControlPanel.add(this.purchaseEstateHouses);
+                this.gameControlPanel.add(this.sellHouses);
+                this.gameControlPanel.add(this.turnPass);
                 this.gameControlPanel.add(this.quit);
             }
-            this.gameControlPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            this.gameControlPanel.revalidate();
+            else if (canPurchase){
+                this.gameControlPanel.add(this.roll);
+                this.gameControlPanel.add(this.purchaseEstateHouses);
+                this.gameControlPanel.add(this.turnPass);
+                this.gameControlPanel.add(this.quit);
+            }
+            else {
+                this.gameControlPanel.add(this.roll);
+                this.gameControlPanel.add(this.turnPass);
+                this.gameControlPanel.add(this.quit);
+            }
+        } else {
+            this.gameControlPanel.add(this.payOutOfJail);
+            this.gameControlPanel.add(this.rollDouble);
+            this.gameControlPanel.add(this.quit);
         }
+        this.gameControlPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.gameControlPanel.revalidate();
+
     }
 
     public static void main(String[] args) {

@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.RailRoadEvent;
 import Listener.RailRoadListener;
 import Listener.BoardView;
@@ -39,25 +38,45 @@ public class RailRoad extends Location{
      * element functionality
      * @param p MVC.Player
      * @param totalDiceRoll Integer sum of dice roll
+     * @param currentTurn
      * @return true or false
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null){
             for (RailRoadListener listener : this.railRoadListener){
-                listener.railRoadNoOwner(new RailRoadEvent(this, p));
+                if (listener.railRoadNoOwner(new RailRoadEvent(this, p, 0))){
+                    if (this.buy(p)) {
+                        listener.announceCannotBuyRailRoad(new RailRoadEvent(this, p, 0));
+                    }
+                    else{
+                        listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
+                    }
+                }
             }
             return true;
         }
         else {
             if (!this.owner.equals(p)) {
+
+                int landedPlayerMoney = p.getMoneyAmount();
+                int payment = this.payments.get(this.owner.getNumOfRailroads());
+                if (landedPlayerMoney <= payment){
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                }
+                else{
+                    p.setMoneyAmount(p.getMoneyAmount() - payment);
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
+                }
+
                 for (RailRoadListener listener : this.railRoadListener){
-                    listener.railRoadRent(new RailRoadEvent(this, p));
+                    listener.railRoadRent(new RailRoadEvent(this, p, payment));
                 }
                 return false;
             }
+
             for (RailRoadListener listener : this.railRoadListener){
-                listener.railRoadOwned(new RailRoadEvent(this, p));
+                listener.railRoadOwned(new RailRoadEvent(this, p, 0));
             }
             return false;
         }
@@ -70,7 +89,7 @@ public class RailRoad extends Location{
      */
     @Override
     public boolean buy(Player p){
-        if (p.getMoneyAmount() < this.getCost()){
+        if (p.getMoneyAmount() <= this.getCost()){
             return true;
         }
         this.owner = p;

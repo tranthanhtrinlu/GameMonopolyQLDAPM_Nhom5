@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.FreePassEvent;
 import Listener.BoardView;
 import Listener.FreePassListener;
@@ -30,12 +29,13 @@ public class FreePass extends Location {
      * Boolean method for listening to the Free Pass element.
      * @param p A MVC.Player object p.
      * @param totalDiceRoll An integer totalDiceRoll.
+     * @param currentTurn
      * @return Will always return false.
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         for (FreePassListener listener : this.listeners) {
-            listener.FreePass(new FreePassEvent(this));
+            listener.FreePass(new FreePassEvent(this, p));
         }
         return false;
     }

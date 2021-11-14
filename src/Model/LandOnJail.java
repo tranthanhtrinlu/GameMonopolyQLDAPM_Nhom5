@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.LandOnJailEvent;
 import Listener.BoardView;
 import Listener.LandOnJailListener;
@@ -30,12 +29,14 @@ public class LandOnJail extends Location {
      *  location functionality
      * @param p MVC.Player
      * @param totalDiceRoll Integer sum of dice roll
+     * @param currentTurn
      * @return land on jail listener
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        p.setCurrLocation(this.getName() + "- Just Visiting");
         for (LandOnJailListener listener : this.landOnJailListenerList){
-            listener.visiting(new LandOnJailEvent(this));
+            listener.visiting(new LandOnJailEvent(this, p));
         }
         return false;
     }

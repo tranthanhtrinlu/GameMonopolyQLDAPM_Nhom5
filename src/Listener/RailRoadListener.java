@@ -12,7 +12,7 @@ public interface RailRoadListener {
      * Provides the option to purchase the property
      * @param e Events.RailRoadEvent that takes the MVC.RailRoad and player
      */
-    void railRoadNoOwner(RailRoadEvent e);
+    boolean railRoadNoOwner(RailRoadEvent e);
 
     /**
      * Listener for when the player lands on a Railroad they own themselves
@@ -26,5 +26,10 @@ public interface RailRoadListener {
      * @param e Events.RailRoadEvent that takes the RailRoadand player
      */
     void railRoadRent(RailRoadEvent e);
+
+
+    void announceCannotBuyRailRoad(RailRoadEvent e);
+
+    void announcePurchaseRailRoad(RailRoadEvent e);
 
 }

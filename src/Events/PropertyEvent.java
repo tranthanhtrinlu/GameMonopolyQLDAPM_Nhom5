@@ -10,15 +10,18 @@ import java.util.EventObject;
 public class PropertyEvent extends EventObject {
 
     private final Player player;
+    private final int cost;
 
     /**
      * constructor for property event
      * @param property MVC.Property
      * @param p MVC.Player
+     * @param rentCost Integer, the rent
      */
-    public PropertyEvent(Property property, Player p) {
+    public PropertyEvent(Property property, Player p, int rentCost) {
         super(property);
         this.player = p;
+        this.cost = rentCost;
     }
 
     /**
@@ -44,5 +47,13 @@ public class PropertyEvent extends EventObject {
     @Override
     public Object getSource() {
         return super.getSource();
+    }
+
+    /**
+     * Get the cost
+     * @return Integer, the cost
+     */
+    public int getCost() {
+        return this.cost;
     }
 }

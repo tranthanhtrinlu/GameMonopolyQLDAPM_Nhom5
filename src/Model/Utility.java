@@ -1,6 +1,5 @@
 package Model;
 
-import Events.BoardEvent;
 import Events.UtilityEvent;
 import Listener.UtilityListener;
 import Listener.BoardView;
@@ -75,25 +74,43 @@ public class Utility extends Location{
      * location for player on the board and element functionality
      * @param p MVC.Player
      * @param totalDiceRoll integer of amount rolled on the dice
+     * @param currentTurn
      * @return Boolean, true if no owner, otherwise false
      */
     @Override
-    public boolean locationElementFunctionality(Player p, int totalDiceRoll) {
+    public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null){
             for (UtilityListener listener : this.utilityListenerList){
-                listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll));
+                if (listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll, 0))){
+                    if (this.buy(p)) {
+                        listener.announceCannotBuyUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                    }
+                    else{
+                        listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                    }
+                }
             }
             return true;
         }
         else {
             if (!this.owner.equals(p)) { // if owned
+                int landedPlayerMoney = p.getMoneyAmount();
+                int payment = this.payment(totalDiceRoll);
+                if (landedPlayerMoney <= payment){
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                }
+                else{
+                    p.setMoneyAmount(p.getMoneyAmount() - payment);
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
+                }
+
                 for (UtilityListener listener : this.utilityListenerList){
-                    listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll));
+                    listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
                 }
                 return false;
             }
             for (UtilityListener listener : this.utilityListenerList){
-                listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll));
+                listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll, 0));
             }
             return false;
         }

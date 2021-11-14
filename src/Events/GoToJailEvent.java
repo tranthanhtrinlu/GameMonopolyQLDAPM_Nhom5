@@ -10,6 +10,9 @@ import java.util.EventObject;
 public class GoToJailEvent extends EventObject {
 
     private final Player player;
+    private final int currentTurn;
+    private final int oldPos;
+    private final int newPos;
 
     /**
      * Constructs a prototypical Event.
@@ -17,9 +20,12 @@ public class GoToJailEvent extends EventObject {
      * @param goToJail the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
      */
-    public GoToJailEvent(GoToJail goToJail, Player p) {
+    public GoToJailEvent(GoToJail goToJail, Player p, int currentTurn, int oldPos, int newPos) {
         super(goToJail);
         this.player = p;
+        this.currentTurn = currentTurn;
+        this.oldPos = oldPos;
+        this.newPos = newPos;
     }
 
     /**
@@ -46,4 +52,18 @@ public class GoToJailEvent extends EventObject {
     public Object getSource() {
         return super.getSource();
     }
+
+    public int getCurrentTurn(){
+        return this.currentTurn;
+    }
+
+    public int getOldPos(){
+        return this.oldPos;
+    }
+
+    public int getNewPos(){
+        return this.newPos;
+    }
+
+
 }

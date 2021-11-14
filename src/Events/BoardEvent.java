@@ -1,6 +1,7 @@
 package Events;
 import Model.*;
 
+import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
@@ -14,21 +15,47 @@ public class BoardEvent extends EventObject {
     private final boolean doubles;
     private final int roll1;
     private final int roll2;
+    private final Player player;
+    private final int turn;
+    private final int numOfPlayers;
+    private final ArrayList<Player> players;
 
     /**
      * Default constructor for Events.BoardEvent.
      * @param boardModel A MVC.BoardModel object boardModel.
      * @param board A list of locations board.
      * @param doubles A boolean doubles.
+     * @param i
      * @param roll1 An integer roll1.
+     * @param player
      * @param roll2 An integer roll2.
      */
-    public BoardEvent(BoardModel boardModel, List<Location> board, boolean doubles, int roll1, int roll2) {
+    public BoardEvent(BoardModel boardModel, List<Location> board, boolean doubles, int roll1, int roll2, Player p, int turn, ArrayList<Player> players) {
         super(boardModel);
         this.board = board;
         this.doubles = doubles;
         this.roll1 = roll1;
         this.roll2 = roll2;
+        this.player = p;
+        this.turn = turn;
+        this.players = players;
+        this.numOfPlayers = players.size();
+    }
+
+    public int getNumOfPlayers() {
+        return this.numOfPlayers;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public Player getPlayerByIndex(int i){
+        return this.players.get(i);
     }
 
     /**

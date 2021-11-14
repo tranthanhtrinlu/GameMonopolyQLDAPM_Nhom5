@@ -9,14 +9,17 @@ import java.util.EventObject;
  */
 public class LandOnJailEvent extends EventObject {
 
+    private final Player player;
     /**
      * Constructs a prototypical Event.
      *
      * @param landOnJail the object on which the Event initially occurred
+     * @param p Player, the player
      * @throws IllegalArgumentException if source is null
      */
-    public LandOnJailEvent(LandOnJail landOnJail) {
+    public LandOnJailEvent(LandOnJail landOnJail, Player p) {
         super(landOnJail);
+        this.player = p;
     }
 
     /**
@@ -34,5 +37,9 @@ public class LandOnJailEvent extends EventObject {
     @Override
     public Object getSource() {
         return super.getSource();
+    }
+
+    public Player getPlayer() {
+        return this.player;
     }
 }
