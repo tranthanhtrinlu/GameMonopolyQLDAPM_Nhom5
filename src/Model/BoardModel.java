@@ -415,20 +415,20 @@ public class BoardModel {
             handleRollingDice(e, choice);
         }
         else if (choice == 6){ // purchase house
-            /*for (BoardView view : this.views){
+            for (BoardView view : this.views){
                 view.announceDecisionToPurchaseHouses(e);
+                view.handlePlayerChoiceToPurchaseHouses(e);
             }
-            currView.handlePlayerChoiceToPurchaseHouses(e);*/
         }
         else if (choice == 7){ // sell house
             // prompt user
             // check if they cancel
             // if sell
 
-            /*for (BoardView view : this.views){
+            for (BoardView view : this.views){
                 view.announceDecisionToSellHouses(e);
+                view.handlePlayerChoiceToSellHouses(e);
             }
-            currView.handlePlayerChoiceToSellHouses(e);*/
         }
     }
 }

@@ -76,8 +76,4 @@ public class FreePass extends Location {
     public void addListener(BoardView view) {
         this.listeners.add(view);
     }
-
-    public List<FreePassListener> getListeners() {
-        return listeners;
-    }
 }

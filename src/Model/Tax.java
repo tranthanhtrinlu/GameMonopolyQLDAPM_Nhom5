@@ -13,7 +13,7 @@ public class Tax extends Location{
 
     public Tax(int cost, String name){
         super(cost, name);
-        this.listeners = new ArrayList<TaxListener>();
+        this.listeners = new ArrayList<>();
     }
 
 

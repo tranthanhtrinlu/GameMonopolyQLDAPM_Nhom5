@@ -383,6 +383,28 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    @Override
+    public void announceDecisionToPurchaseHouses(BoardEvent e) {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " has decided to purchase houses.");
+    }
+
+    @Override
+    public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
+
+    }
+
+    @Override
+    public void announceDecisionToSellHouses(BoardEvent e) {
+        ConfirmMessageController controller = new ConfirmMessageController();
+        controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " has decided to sell houses.");
+    }
+
+    @Override
+    public void handlePlayerChoiceToSellHouses(BoardEvent e) {
+
+    }
+
     /**
      *
      * @param b boolean, true to enable otherwise false
@@ -498,10 +520,8 @@ public class BoardGUI extends JFrame implements BoardView{
     public void updateChoicePanel(Player player) {
         this.gameControlPanel.removeAll();
         boolean inJail = player.getInJail();
-        //boolean canPurchase = p.numberOfEstateProperties() != 0;
-        //boolean canSell = p.numberOfEstatePropertiesWithHouses() != 0;
-        boolean canPurchase = false;
-        boolean canSell = false;
+        boolean canPurchase = player.numberOfEstateProperties() != 0;
+        boolean canSell = player.numberOfEstatePropertiesWithHouses() != 0;
 
         if (!inJail) {
             if (canPurchase && canSell) {
