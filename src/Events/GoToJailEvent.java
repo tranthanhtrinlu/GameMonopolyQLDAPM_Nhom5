@@ -15,7 +15,7 @@ public class GoToJailEvent extends EventObject {
     private final int newPos;
 
     /**
-     * Constructs a prototypical Event.
+     * Constructor for jail event
      *
      * @param goToJail the object on which the Event initially occurred
      * @throws IllegalArgumentException if source is null
