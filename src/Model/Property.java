@@ -23,37 +23,27 @@ public class Property extends Location{
     private int oldNumOfHouses;
 
     /**
-     * property constructor
-     * @param name String name of property
-     * @param cost Integer cost of the property to buy
-     * @param costPerHouse Integer cost to buy one house
-     * @param initialRent Integer starting rent
-     * @param house1Rent Integer rent with one house
-     * @param house2Rent Integer rent with two houses
-     * @param house3Rent Integer rent with three houses
-     * @param house4Rent Integer rent with four houses
-     * @param hotelRent Integer rent with a hotel
-     * @param color Color of property
-     * @param numOfColor Integer number of the color
+     *
+     * @param element
      */
-    public Property(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, BoardModel.Color color, int numOfColor){
-        super(cost, name);
+    public Property(BoardModel.BoardElements element){
+        super(element.getCost(), element.getName());
         this.rentCosts = new ArrayList<>(){{
-           add(initialRent);
-           add(house1Rent);
-           add(house2Rent);
-           add(house3Rent);
-           add(house4Rent);
-           add(hotelRent);
+           add(element.getInitalRent());
+           add(element.getHouse1Rent());
+           add(element.getHouse2Rent());
+           add(element.getHouse3Rent());
+           add(element.getHouse4Rent());
+           add(element.getHotelRent());
         }};
         this.propertyListeners = new ArrayList<>();
         this.numOfHouses = 0;
         this.oldNumOfHouses = 0;
         this.maxNumberOfHouses = 5;
-        this.color = color;
+        this.color = element.getColor();
         this.owner = null;
-        this.numberOfColor = numOfColor;
-        this.costPerHouse = costPerHouse;
+        this.numberOfColor = element.getNumOfColors();
+        this.costPerHouse = element.getCostPerHouse();
     }
 
     /**

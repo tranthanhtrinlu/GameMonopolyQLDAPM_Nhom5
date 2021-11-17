@@ -37,6 +37,71 @@ public class BoardModel {
         FINISHED, UNFINISHED;
     }
 
+    public enum BoardElements{
+        MEDITERRANEAN("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2) ;
+
+        private final String name;
+        private final int cost, costPerHouse, initalRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
+        private final Color color;
+        BoardElements(String name, int cost, int costPerHouse, int initalRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, Color color, int numOfColors){
+            this.name = name;
+            this.cost = cost;
+            this.costPerHouse = costPerHouse;
+            this.initalRent = initalRent;
+            this.house1Rent = house1Rent;
+            this.house2Rent = house2Rent;
+            this.house3Rent = house3Rent;
+            this.house4Rent = house4Rent;
+            this.hotelRent = hotelRent;
+            this.color = color;
+            this.numOfColors = numOfColors;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getCost() {
+            return cost;
+        }
+
+        public int getInitalRent() {
+            return initalRent;
+        }
+
+        public Color getColor() {
+            return this.color;
+        }
+
+        public int getHotelRent() {
+            return this.hotelRent;
+        }
+
+        public int getCostPerHouse() {
+            return this.costPerHouse;
+        }
+
+        public int getHouse1Rent() {
+            return this.house1Rent;
+        }
+
+        public int getHouse2Rent() {
+            return this.house2Rent;
+        }
+
+        public int getHouse3Rent() {
+            return this.house3Rent;
+        }
+
+        public int getHouse4Rent() {
+            return this.house4Rent;
+        }
+
+        public int getNumOfColors() {
+            return this.numOfColors;
+        }
+    }
+
     /**
      * Default constructor for the MVC.BoardModel.
      */
@@ -120,7 +185,7 @@ public class BoardModel {
      */
     private void initializeBoard(){
         this.board.add(new FreePass(0, "Go"));
-        this.board.add(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2));
+        this.board.add(new Property(BoardElements.MEDITERRANEAN));
         this.board.add(new FreePass(0, "Free Pass"));
         this.board.add(new Property("BALTIC AVENUE", 60,50,4,20,60,180,320,450, Color.BROWN, 2));
         this.board.add(new Tax(200, "INCOME TAX"));
