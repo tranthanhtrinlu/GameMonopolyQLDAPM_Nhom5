@@ -66,6 +66,15 @@ public class BoardModel {
         PENNSYLVANIA_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
         BO_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
         SHORT_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        INCOME("INCOME TAX", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        LUXURY("LUXURY TAX", 100,0,0,0,0,0,0,0, Color.NONE,0),
+        ELECTRIC("Electric Company", 150,0,0,0,0,0,0,0, Color.NONE, 0),
+        WATER("Water Works", 150,0,0,0,0,0,0,0, Color.NONE, 0),
+        LAND_ON_JAIL("In Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
+        GO_TO_JAIL("Go To Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
+        FREE_PARKING("Free Parking", 0,0,0,0,0,0,0,0, Color.NONE, 0);
+
+
 
         private final String name;
         private final int cost, costPerHouse, initalRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
@@ -126,6 +135,25 @@ public class BoardModel {
 
         public int getNumOfColors() {
             return this.numOfColors;
+        }
+    }
+
+    public enum PlayerChoice{
+        ROLL(1),
+        QUIT(2),
+        PASS(3),
+        PAY_OUT(4),
+        ROLL_OUT(5),
+        BUY_HOUSE(6),
+        SELL_HOUSE(7);
+
+        private final int choice;
+        PlayerChoice(int choice){
+            this.choice = choice;
+        }
+
+        public int getChoice() {
+            return choice;
         }
     }
 
@@ -215,15 +243,15 @@ public class BoardModel {
         this.board.add(new Property(BoardElements.MEDITERRANEAN));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.BALTIC));
-        this.board.add(new Tax(200, "INCOME TAX"));
+        this.board.add(new Tax(BoardElements.INCOME));
         this.board.add(new RailRoad(BoardElements.READING_R));
         this.board.add(new Property(BoardElements.ORIENTAL));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.VERMOUNT));
         this.board.add(new Property(BoardElements.CONNECTICUT));
-        this.board.add(new LandOnJail(0, "In Jail"));
+        this.board.add(new LandOnJail(BoardElements.LAND_ON_JAIL));
         this.board.add(new Property(BoardElements.CHARLES));
-        this.board.add(new Utility("Electric Company", 150));
+        this.board.add(new Utility(BoardElements.ELECTRIC));
         this.board.add(new Property(BoardElements.STATES));
         this.board.add(new Property(BoardElements.VIRGINIA));
         this.board.add(new RailRoad(BoardElements.PENNSYLVANIA_R));
@@ -231,7 +259,7 @@ public class BoardModel {
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.TENNESSE));
         this.board.add(new Property(BoardElements.NEWYORK));
-        this.board.add(new FreeParking(0, "FREE PARKING"));
+        this.board.add(new FreeParking(BoardElements.FREE_PARKING));
         this.board.add(new Property(BoardElements.KENTUCKY));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.INDIANA));
@@ -239,9 +267,9 @@ public class BoardModel {
         this.board.add(new RailRoad(BoardElements.BO_R));
         this.board.add(new Property(BoardElements.ATLANTIC));
         this.board.add(new Property(BoardElements.VENTNOR));
-        this.board.add(new Utility("Water Works", 150));
+        this.board.add(new Utility(BoardElements.WATER));
         this.board.add(new Property(BoardElements.MARVIN));
-        this.board.add(new GoToJail(0, "GO TO JAIL"));
+        this.board.add(new GoToJail(BoardElements.GO_TO_JAIL));
         this.board.add(new Property(BoardElements.PACIFIC));
         this.board.add(new Property(BoardElements.CAROLINA));
         this.board.add(new FreePass(BoardElements.FREEPASS));
@@ -249,7 +277,7 @@ public class BoardModel {
         this.board.add(new RailRoad(BoardElements.SHORT_R));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.PARK));
-        this.board.add(new Tax(100, "LUXURY TAX"));
+        this.board.add(new Tax(BoardElements.LUXURY));
         this.board.add(new Property(BoardElements.BOARDWALK));
     }
 
@@ -462,10 +490,10 @@ public class BoardModel {
         boolean doubles = rollDiceOfTwo();
         BoardEvent e = new BoardEvent(this, this.board, doubles, this.roll1, this.roll2, this.gamePlayers.get(this.currentTurn), this.currentTurn, this.gamePlayers);
 
-        if (choice == 1){ // roll
+        if (choice == PlayerChoice.ROLL.getChoice()){ // roll
             handleRollingDice(e, choice);
         }
-        else if (choice == 2){ // quit
+        else if (choice == PlayerChoice.QUIT.getChoice()){ // quit
             removePlayer();
             for (BoardView view : this.views){
                 view.handlePlayerQuit(e);
@@ -477,7 +505,7 @@ public class BoardModel {
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
         }
-        else if (choice == 3){ // pass
+        else if (choice == PlayerChoice.PASS.getChoice()){ // pass
             nextTurn();
             for (BoardView view : this.views){
                 view.announcePlayerPass(e);
@@ -486,7 +514,7 @@ public class BoardModel {
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
         }
-        else if (choice == 4){ // pay out of jail
+        else if (choice == PlayerChoice.PAY_OUT.getChoice()){ // pay out of jail
             Player p = this.gamePlayers.get(this.currentTurn);
             Location place = this.board.get(p.getPosition());
             boolean payed = false;
@@ -503,16 +531,16 @@ public class BoardModel {
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
         }
-        else if (choice == 5){ // roll double out of jail
+        else if (choice == PlayerChoice.ROLL_OUT.getChoice()){ // roll double out of jail
             handleRollingDice(e, choice);
         }
-        else if (choice == 6){ // purchase house
+        else if (choice == PlayerChoice.BUY_HOUSE.getChoice()){ // purchase house
             for (BoardView view : this.views){
                 view.announceDecisionToPurchaseHouses(e);
                 view.handlePlayerChoiceToPurchaseHouses(e);
             }
         }
-        else if (choice == 7){ // sell house
+        else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             // prompt user
             // check if they cancel
             // if sell

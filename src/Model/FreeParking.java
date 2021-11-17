@@ -16,12 +16,11 @@ public class FreeParking extends Location{
     ArrayList<FreeParkingListener> listeners;
 
     /**
-     * Default constructor for MVC.FreeParking.
-     * @param cost An integer cost.
-     * @param name A String name.
+     * Constructor for freeParking Boardmodel
+     * @param element enum of elements
      */
-    public FreeParking(int cost, String name){
-        super(cost, name);
+    public FreeParking(BoardModel.BoardElements element){
+        super(element.getCost(), element.getName());
         this.listeners = new ArrayList<>();
 
     }

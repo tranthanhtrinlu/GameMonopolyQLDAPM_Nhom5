@@ -16,12 +16,11 @@ public class LandOnJail extends Location {
     private List<LandOnJailListener> landOnJailListenerList;
 
     /**
-     * constructor for MVC.LandOnJail
-     * @param cost Integer cost to get out of jail
-     * @param name String
+     * Constructor for LandOnJail for the boardmodel
+     * @param element enum of elements
      */
-    public LandOnJail(int cost, String name) {
-        super(cost, name);
+    public LandOnJail(BoardModel.BoardElements element) {
+        super(element.getCost(), element.getName());
         this.landOnJailListenerList = new ArrayList<>();
     }
 

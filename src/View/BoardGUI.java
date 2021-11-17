@@ -42,19 +42,19 @@ public class BoardGUI extends JFrame implements BoardView{
         this.sellHouses = new JButton("Sell Houses");
 
         BoardController controller = new BoardController(model);
-        this.roll.setActionCommand(1 + " ");
+        this.roll.setActionCommand(BoardModel.PlayerChoice.ROLL.getChoice() + " ");
         this.roll.addActionListener(controller);
-        this.quit.setActionCommand(2 + " ");
+        this.quit.setActionCommand(BoardModel.PlayerChoice.QUIT.getChoice() + " ");
         this.quit.addActionListener(controller);
-        this.turnPass.setActionCommand(3 + " ");
+        this.turnPass.setActionCommand(BoardModel.PlayerChoice.PASS.getChoice() + " ");
         this.turnPass.addActionListener(controller);
-        this.payOutOfJail.setActionCommand(4 + " ");
+        this.payOutOfJail.setActionCommand(BoardModel.PlayerChoice.PAY_OUT.getChoice() + " ");
         this.payOutOfJail.addActionListener(controller);
-        this.rollDouble.setActionCommand(5 + " ");
+        this.rollDouble.setActionCommand(BoardModel.PlayerChoice.ROLL_OUT.getChoice() + " ");
         this.rollDouble.addActionListener(controller);
-        this.purchaseEstateHouses.setActionCommand(6 + " ");
+        this.purchaseEstateHouses.setActionCommand(BoardModel.PlayerChoice.BUY_HOUSE.getChoice() + " ");
         this.purchaseEstateHouses.addActionListener(controller);
-        this.sellHouses.setActionCommand(7 + " ");
+        this.sellHouses.setActionCommand(BoardModel.PlayerChoice.SELL_HOUSE.getChoice() + " ");
         this.sellHouses.addActionListener(controller);
 
         this.gameControlPanel = new JPanel();
