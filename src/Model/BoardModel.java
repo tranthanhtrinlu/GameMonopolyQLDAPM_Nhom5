@@ -30,7 +30,7 @@ public class BoardModel {
      * Sets up the colours for element of the board.
      */
     public enum Color{
-        BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE
+        BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE, NONE
     }
 
     public enum Status{
@@ -38,7 +38,30 @@ public class BoardModel {
     }
 
     public enum BoardElements{
-        MEDITERRANEAN("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2) ;
+        MEDITERRANEAN("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2),
+        GO("Go", 0, 0,0,0,0,0,0,0,Color.NONE, 0),
+        BALTIC("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2),
+        ORIENTAL("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
+        VERMOUNT("Vermount Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
+        CONNECTICUT("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3),
+        CHARLES("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3),
+        STATES("STATES AVENUE",140,100,10,50,150,450,625,750,Color.PURPLE, 3),
+        VIRGINIA("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3),
+        JAMES("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3),
+        TENNESSE("Tennesse Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3),
+        NEWYORK("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3),
+        KENTUCKY("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3),
+        INDIANA("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3),
+        ILLINOIS("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3),
+        ATLANTIC("Atlantic Avenue", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3),
+        VENTNOR("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3),
+        MARVIN("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3),
+        PACIFIC("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
+        CAROLINA("NORTH CAROLINA AVENUE", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
+        PENNYSYLVANIA("PENNYSYLVANIA AVENUE", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
+        PARK("PARK PLACE", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2),
+        BOARDWALK("BOARDWALK", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2),
+        FREEPASS( "Free Pass",0, 0, 0, 0, 0, 0, 0, 0, Color.NONE,0),
 
         private final String name;
         private final int cost, costPerHouse, initalRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
@@ -184,46 +207,46 @@ public class BoardModel {
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      */
     private void initializeBoard(){
-        this.board.add(new FreePass(0, "Go"));
+        this.board.add(new FreePass(BoardElements.GO));
         this.board.add(new Property(BoardElements.MEDITERRANEAN));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("BALTIC AVENUE", 60,50,4,20,60,180,320,450, Color.BROWN, 2));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.BALTIC));
         this.board.add(new Tax(200, "INCOME TAX"));
         this.board.add(new RailRoad("Reading Railroad", 200));
-        this.board.add(new Property("ORIENTAL AVENUE", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("VERMOUNT AVENUE", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3));
-        this.board.add(new Property("CONNECTICUT AVENUE", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3));
+        this.board.add(new Property(BoardElements.ORIENTAL));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.VERMOUNT));
+        this.board.add(new Property(BoardElements.CONNECTICUT));
         this.board.add(new LandOnJail(0, "In Jail"));
-        this.board.add(new Property("ST.CHARLES PLACE", 140,100,10,50,150,450,625,750, Color.PURPLE, 3));
+        this.board.add(new Property(BoardElements.CHARLES));
         this.board.add(new Utility("Electric Company", 150));
-        this.board.add(new Property("STATES AVENUE",140,100,10,50,150,450,625,750,Color.PURPLE, 3));
-        this.board.add(new Property("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3));
+        this.board.add(new Property(BoardElements.STATES));
+        this.board.add(new Property(BoardElements.VIRGINIA));
         this.board.add(new RailRoad("PENNSYLVANIA RAILROAD", 200));
-        this.board.add(new Property("ST. JAMES PLACE", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("TENNESSEE AVENUE", 180,100,14,70,200,550,750,950, Color.ORANGE, 3));
-        this.board.add(new Property("NEW YORK AVENUE", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3));
+        this.board.add(new Property(BoardElements.JAMES));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.TENNESSE));
+        this.board.add(new Property(BoardElements.NEWYORK));
         this.board.add(new FreeParking(0, "FREE PARKING"));
-        this.board.add(new Property("KENTUCKY AVENUE",220,150,18,90,250,700,875,1050, Color.RED,3));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("INDIANA AVENUE", 220,150,18,90,250,700,875,1050, Color.RED, 3));
-        this.board.add(new Property("ILLINOIS AVENUE", 240,150,20,100,300,750,925,1110, Color.RED, 3));
+        this.board.add(new Property(BoardElements.KENTUCKY));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.INDIANA));
+        this.board.add(new Property(BoardElements.ILLINOIS));
         this.board.add(new RailRoad("B&O Railroad", 200));
-        this.board.add(new Property("ATLANTIC AVENUE", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3));
-        this.board.add(new Property("VENTNOR AVENUE", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3));
+        this.board.add(new Property(BoardElements.ATLANTIC));
+        this.board.add(new Property(BoardElements.VENTNOR));
         this.board.add(new Utility("Water Works", 150));
-        this.board.add(new Property("MARVIN GARDENS", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3));
+        this.board.add(new Property(BoardElements.MARVIN));
         this.board.add(new GoToJail(0, "GO TO JAIL"));
-        this.board.add(new Property("PACIFIC AVENUE", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3));
-        this.board.add(new Property("NORTH CAROLINA AVENUE", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("PENNYSYLVANIA AVENUE", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3));
+        this.board.add(new Property(BoardElements.PACIFIC));
+        this.board.add(new Property(BoardElements.CAROLINA));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.PENNYSYLVANIA));
         this.board.add(new RailRoad("Short Line", 200));
-        this.board.add(new FreePass(0, "Free Pass"));
-        this.board.add(new Property("PARK PLACE", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2));
+        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new Property(BoardElements.PARK));
         this.board.add(new Tax(100, "LUXURY TAX"));
-        this.board.add(new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2));
+        this.board.add(new Property(BoardElements.BOARDWALK));
     }
 
     /**

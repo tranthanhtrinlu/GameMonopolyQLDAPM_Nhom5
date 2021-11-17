@@ -20,8 +20,8 @@ public class FreePass extends Location {
      * @param cost An integer cost.
      * @param name A String name.
      */
-    public FreePass(int cost, String name) {
-        super(cost, name);
+    public FreePass(BoardModel.BoardElements element) {
+        super(element.getCost(), element.getName());
         this.listeners = new ArrayList<>();
     }
 
