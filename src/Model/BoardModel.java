@@ -45,7 +45,7 @@ public class BoardModel {
         VERMOUNT("Vermount Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
         CONNECTICUT("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3),
         CHARLES("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3),
-        STATES("STATES AVENUE",140,100,10,50,150,450,625,750,Color.PURPLE, 3),
+        STATES("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3),
         VIRGINIA("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3),
         JAMES("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3),
         TENNESSE("Tennesse Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3),
@@ -57,11 +57,15 @@ public class BoardModel {
         VENTNOR("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3),
         MARVIN("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3),
         PACIFIC("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
-        CAROLINA("NORTH CAROLINA AVENUE", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
-        PENNYSYLVANIA("PENNYSYLVANIA AVENUE", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
-        PARK("PARK PLACE", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2),
-        BOARDWALK("BOARDWALK", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2),
+        CAROLINA("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
+        PENNYSYLVANIA("Pennysylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
+        PARK("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2),
+        BOARDWALK("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2),
         FREEPASS( "Free Pass",0, 0, 0, 0, 0, 0, 0, 0, Color.NONE,0),
+        READING_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        PENNSYLVANIA_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        BO_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        SHORT_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
 
         private final String name;
         private final int cost, costPerHouse, initalRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
@@ -212,7 +216,7 @@ public class BoardModel {
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.BALTIC));
         this.board.add(new Tax(200, "INCOME TAX"));
-        this.board.add(new RailRoad("Reading Railroad", 200));
+        this.board.add(new RailRoad(BoardElements.READING_R));
         this.board.add(new Property(BoardElements.ORIENTAL));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.VERMOUNT));
@@ -222,7 +226,7 @@ public class BoardModel {
         this.board.add(new Utility("Electric Company", 150));
         this.board.add(new Property(BoardElements.STATES));
         this.board.add(new Property(BoardElements.VIRGINIA));
-        this.board.add(new RailRoad("PENNSYLVANIA RAILROAD", 200));
+        this.board.add(new RailRoad(BoardElements.PENNSYLVANIA_R));
         this.board.add(new Property(BoardElements.JAMES));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.TENNESSE));
@@ -232,7 +236,7 @@ public class BoardModel {
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.INDIANA));
         this.board.add(new Property(BoardElements.ILLINOIS));
-        this.board.add(new RailRoad("B&O Railroad", 200));
+        this.board.add(new RailRoad(BoardElements.BO_R));
         this.board.add(new Property(BoardElements.ATLANTIC));
         this.board.add(new Property(BoardElements.VENTNOR));
         this.board.add(new Utility("Water Works", 150));
@@ -242,7 +246,7 @@ public class BoardModel {
         this.board.add(new Property(BoardElements.CAROLINA));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.PENNYSYLVANIA));
-        this.board.add(new RailRoad("Short Line", 200));
+        this.board.add(new RailRoad(BoardElements.SHORT_R));
         this.board.add(new FreePass(BoardElements.FREEPASS));
         this.board.add(new Property(BoardElements.PARK));
         this.board.add(new Tax(100, "LUXURY TAX"));
