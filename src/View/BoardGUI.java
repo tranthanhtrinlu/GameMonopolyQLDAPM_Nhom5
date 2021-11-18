@@ -405,7 +405,9 @@ public class BoardGUI extends JFrame implements BoardView{
 
     @Override
     public void handlePlayerChoiceToSellHouses(BoardEvent e) {
-
+        SellHouseController controller = new SellHouseController();
+        controller.numberHouses(this);
+        controller.propertiesHouses(this, e.getPlayer());
     }
 
     /**

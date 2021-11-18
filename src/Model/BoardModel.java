@@ -545,10 +545,6 @@ public class BoardModel {
             }
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
-            // prompt user
-            // check if they cancel
-            // if sell
-
             for (BoardView view : this.views){
                 view.announceDecisionToSellHouses(e);
                 view.handlePlayerChoiceToSellHouses(e);

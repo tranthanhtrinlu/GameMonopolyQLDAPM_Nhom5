@@ -90,6 +90,14 @@ public class Property extends Location{
     }
 
     /**
+     * Setter for houses.
+     * @param numOfHouses An integer number of houses
+     */
+    public void setNumOfHouses(int numOfHouses) {
+        this.numOfHouses = numOfHouses;
+    }
+
+    /**
      * adds house to a property based on how many the player wants
      * @param add Integer number of houses added
      * @return boolean, true if house added otherwise false
