@@ -549,7 +549,6 @@ public class BoardModel {
         }
         else if (choice == PlayerChoice.BUY_HOUSE.getChoice()){ // purchase house
             for (BoardView view : this.views){
-                view.announceDecisionToPurchaseHouses(e);
                 view.handlePlayerChoiceToPurchaseHouses(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
@@ -558,7 +557,6 @@ public class BoardModel {
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             for (BoardView view : this.views){
-                view.announceDecisionToSellHouses(e);
                 view.handlePlayerChoiceToSellHouses(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));

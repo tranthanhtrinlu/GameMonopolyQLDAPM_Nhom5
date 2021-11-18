@@ -112,6 +112,11 @@ public class Property extends Location{
         return false;
     }
 
+    public void sellHouse(int val){
+        this.numOfHouses -= val;
+        this.owner.setMoneyAmount(this.owner.getMoneyAmount() + val*this.costPerHouse);
+    }
+
     /**
      * find the rent of the current property based off houses and hotels
      * @return the rent of a property

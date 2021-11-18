@@ -406,9 +406,8 @@ public class BoardGUI extends JFrame implements BoardView{
 
     @Override
     public void handlePlayerChoiceToSellHouses(BoardEvent e) {
-        SellHouseController controller = new SellHouseController();
-        controller.numberHouses(this);
-        controller.propertiesHouses(this, e.getPlayer());
+        HouseController controller = new HouseController();
+        controller.sellHouses(this, e.getPlayer());
     }
 
     /**
@@ -540,6 +539,12 @@ public class BoardGUI extends JFrame implements BoardView{
             else if (canPurchase){
                 this.gameControlPanel.add(this.roll);
                 this.gameControlPanel.add(this.purchaseEstateHouses);
+                this.gameControlPanel.add(this.turnPass);
+                this.gameControlPanel.add(this.quit);
+            }
+            else if (canSell){
+                this.gameControlPanel.add(this.roll);
+                this.gameControlPanel.add(this.sellHouses);
                 this.gameControlPanel.add(this.turnPass);
                 this.gameControlPanel.add(this.quit);
             }
