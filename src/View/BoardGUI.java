@@ -387,11 +387,14 @@ public class BoardGUI extends JFrame implements BoardView{
     public void announceDecisionToPurchaseHouses(BoardEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
         controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " has decided to purchase houses.");
+
     }
 
     @Override
     public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
-
+        BuyHouseController controller = new BuyHouseController();
+        controller.numberHouses(this);
+        controller.propertiesHouses(this, e.getPlayer());
     }
 
     @Override

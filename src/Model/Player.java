@@ -363,4 +363,8 @@ public class Player{
         return this.moneyAmount - 50 > 0;
 
     }
+
+    public boolean buyHouse(int housePrice){
+        return this.moneyAmount - housePrice > 0;
+    }
 }

@@ -34,7 +34,7 @@ public class BoardModel {
     }
 
     public enum Status{
-        FINISHED, UNFINISHED;
+        FINISHED, UNFINISHED
     }
 
     /**
@@ -360,6 +360,10 @@ public class BoardModel {
                 }
             }
         }, 0, 200);
+    }
+
+    private void buyingHouseFunctionality(BoardEvent e){
+
     }
 
 
