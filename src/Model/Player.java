@@ -97,7 +97,8 @@ public class Player{
         int k = 0;
         for (Location ownedProperty : this.ownedProperties) {
             if (ownedProperty instanceof Property) {
-                if (this.ownedPropertiesBasedOnColors.get(((Property) ownedProperty).getColor()) == ((Property) ownedProperty).getNumberOfColor())
+                //if (this.ownedPropertiesBasedOnColors.get(((Property) ownedProperty).getColor()) == ((Property) ownedProperty).getNumberOfColor())
+                if (((Property) ownedProperty).getNumOfHouses() != ((Property) ownedProperty).getMaxNumberOfHouses())
                     k++;
             }
         }
@@ -187,6 +188,14 @@ public class Player{
             return true;
         }
         return false;
+    }
+
+    public int getSumOfMovement(int pos, int sum){
+        pos += sum;
+        if (pos >= BoardModel.SIZE_OF_BOARD){
+            pos -= BoardModel.SIZE_OF_BOARD;
+        }
+        return pos;
     }
 
     /**

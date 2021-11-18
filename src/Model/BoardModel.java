@@ -157,6 +157,7 @@ public class BoardModel {
         }
     }
 
+
     /**
      * Default constructor for the MVC.BoardModel.
      */
@@ -224,6 +225,8 @@ public class BoardModel {
         Random r = new Random();
         this.roll1 = r.nextInt(6) +  1;
         this.roll2 = r.nextInt(6) + 1;
+        //this.roll1 = 6;
+        //this.roll2 = 6;
         return this.roll1 == this.roll2;
     }
 
@@ -347,13 +350,19 @@ public class BoardModel {
             private final int sum = roll1 + roll2;
             @Override
             public void run() {
-                if (p.getPosition()+sum != pos){
+                if (p.getSumOfMovement(p.getPosition(), sum) != pos){
                     int oldPos = pos;
+                    boolean go = false;
                     pos++;
+                    if (pos - SIZE_OF_BOARD+1 == 0){
+                        go = true;
+                        pos = 0;
+                    }
                     for (BoardView view : views){
                         view.handlePlayerPieceMovement(currentTurn, oldPos, pos);
-                        if (pos - SIZE_OF_BOARD+1 == 0)
+                        if (go){
                             view.announceReachingGo(e);
+                        }
                     }
                 }
                 else{
@@ -542,12 +551,17 @@ public class BoardModel {
             for (BoardView view : this.views){
                 view.announceDecisionToPurchaseHouses(e);
                 view.handlePlayerChoiceToPurchaseHouses(e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
+
             }
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             for (BoardView view : this.views){
                 view.announceDecisionToSellHouses(e);
                 view.handlePlayerChoiceToSellHouses(e);
+                view.handleUpdateSidePanelDisplay(e);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
         }
     }
