@@ -18,12 +18,11 @@ public class Utility extends Location{
     private List<UtilityListener> utilityListenerList;
 
     /**
-     * the constructor for MVC.Utility
-     * @param name, String name
-     * @param cost, cost of the utility
+     * Constructor for Utility for the board model
+     * @param element enum of elements
      */
-    public Utility(String name, int cost) {
-        super(cost, name);
+    public Utility(BoardModel.BoardElements element) {
+        super(element.getCost(), element.getName());
         this.owner = null;
         this.utilityListenerList = new ArrayList<>();
     }

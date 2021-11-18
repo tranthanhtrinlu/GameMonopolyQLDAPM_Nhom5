@@ -16,12 +16,11 @@ public class FreePass extends Location {
     private List<FreePassListener> listeners;
 
     /**
-     * Default constructor for MVC.FreePass.
-     * @param cost An integer cost.
-     * @param name A String name.
+     * constructor for freepass board elements
+     * @param element enum of elements
      */
-    public FreePass(int cost, String name) {
-        super(cost, name);
+    public FreePass(BoardModel.BoardElements element) {
+        super(element.getCost(), element.getName());
         this.listeners = new ArrayList<>();
     }
 

@@ -16,12 +16,11 @@ public class GoToJail extends Location{
     private List<GoToJailListener> goToJailListener;
 
     /**
-     * constructor for go to jail
-     * @param cost Integer for cost to get out
-     * @param name String name of jail
+     * Constructor for GoToJail for the board model
+     * @param element enum of elements
      */
-    public GoToJail(int cost, String name) {
-        super(cost, name);
+    public GoToJail(BoardModel.BoardElements element) {
+        super(element.getCost(), element.getName());
         this.goToJailListener= new ArrayList<>();
     }
 

@@ -18,12 +18,11 @@ public class RailRoad extends Location{
     private List<RailRoadListener> railRoadListener;
 
     /**
-     * Constructor for railroad
-     * @param name String railroad property name
-     * @param cost Integer cost of property
+     * Constructor for railroad boardModel
+     * @param element enum of elements
      */
-    public RailRoad(String name, int cost){
-        super(cost, name);
+    public RailRoad(BoardModel.BoardElements element){
+        super(element.getCost(), element.getName());
         this.payments = new ArrayList<>(){{
            add(25);
            add(50);

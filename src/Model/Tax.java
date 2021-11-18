@@ -11,8 +11,12 @@ public class Tax extends Location{
 
     ArrayList<TaxListener> listeners;
 
-    public Tax(int cost, String name){
-        super(cost, name);
+    /**
+     * Constructor for Tax on boardModel
+     * @param element enum of elements
+     */
+    public Tax(BoardModel.BoardElements element){
+        super(element.getCost(), element.getName());
         this.listeners = new ArrayList<>();
     }
 
