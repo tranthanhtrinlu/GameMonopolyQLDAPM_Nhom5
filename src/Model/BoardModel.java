@@ -281,6 +281,14 @@ public class BoardModel {
         }
     }
 
+    private boolean playAI(){
+        if(this.gamePlayers.get(this.currentTurn) instanceof AI){
+            playCurrPlayerTurn(PlayerChoice.ROLL.getChoice());
+            return true;
+        }
+        return false;
+    }
+
 
     private void movePlayerFunctionality(BoardEvent e){
         Timer timer2 = new Timer();
@@ -346,9 +354,11 @@ public class BoardModel {
                                 }
                             }
                         }
-                        for (BoardView view : views){
-                            view.buttonEnableCondition(true);
-                            view.updateChoicePanel(gamePlayers.get(currentTurn));
+                        if(!playAI()){
+                            for (BoardView view : views){
+                                view.buttonEnableCondition(true);
+                                view.updateChoicePanel(gamePlayers.get(currentTurn));
+                            }
                         }
                     }
                     timer2.cancel();
