@@ -132,46 +132,65 @@ public class Property extends Location{
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (this.owner == null){
-            for (PropertyListener listener : this.propertyListeners){
-                if (listener.propertyNoOwner(new PropertyEvent(this, p, 0))){
-                    if (this.buy(p)) {
-                        listener.announceCannotBuy(new PropertyEvent(this, p, 0));
-                    }
-                    else{
-                        listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
-                    }
+        if (p instanceof AI) {
+            if (this.owner != null) {
+                int doubleAmount = 1;
+                if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
+                    doubleAmount = 2;
+                int landedPlayerMoney = p.getMoneyAmount();
+                int rentCost = this.getRentCost(this.numOfHouses) * doubleAmount;
+                if (landedPlayerMoney <= rentCost) {
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                } else {
+                    p.setMoneyAmount(p.getMoneyAmount() - rentCost);
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
+                }
+
+                for (PropertyListener listener : this.propertyListeners) {
+                    listener.propertyRent(new PropertyEvent(this, p, rentCost));
                 }
             }
-            return true;
-        }
-        else {
-            if (this.owner.equals(p)) {
-                for (PropertyListener listener : this.propertyListeners){
-                    listener.propertyOwned(new PropertyEvent(this, p, 0));
+        } else {
+            if (this.owner == null) {
+                for (PropertyListener listener : this.propertyListeners) {
+                    if (listener.propertyNoOwner(new PropertyEvent(this, p, 0))) {
+                        if (this.buy(p)) {
+                            listener.announceCannotBuy(new PropertyEvent(this, p, 0));
+                        } else {
+                            listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
+                        }
+                    }
                 }
                 return true;
-            }
+            } else {
+                if (this.owner.equals(p)) {
+                    for (PropertyListener listener : this.propertyListeners) {
+                        listener.propertyOwned(new PropertyEvent(this, p, 0));
+                    }
+                    return true;
+                }
 
-            int doubleAmount = 1;
-            if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
-                doubleAmount = 2;
-            int landedPlayerMoney = p.getMoneyAmount();
-            int rentCost = this.getRentCost(this.numOfHouses)*doubleAmount;
-            if (landedPlayerMoney <= rentCost){
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-            }
-            else{
-                p.setMoneyAmount(p.getMoneyAmount() - rentCost);
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
-            }
+                int doubleAmount = 1;
+                if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
+                    doubleAmount = 2;
+                int landedPlayerMoney = p.getMoneyAmount();
+                int rentCost = this.getRentCost(this.numOfHouses) * doubleAmount;
+                if (landedPlayerMoney <= rentCost) {
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                } else {
+                    p.setMoneyAmount(p.getMoneyAmount() - rentCost);
+                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
+                }
 
-            for (PropertyListener listener : this.propertyListeners){
-                listener.propertyRent(new PropertyEvent(this, p, rentCost));
+                for (PropertyListener listener : this.propertyListeners) {
+                    listener.propertyRent(new PropertyEvent(this, p, rentCost));
+                }
             }
         }
         return false;
     }
+
+
 
     /**
      * Getter for getting cost per house

@@ -78,41 +78,61 @@ public class Utility extends Location{
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (this.owner == null){
-            for (UtilityListener listener : this.utilityListenerList){
-                if (listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll, 0))){
-                    if (this.buy(p)) {
-                        listener.announceCannotBuyUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
-                    }
-                    else{
-                        listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
-                    }
-                }
+        if(p instanceof AI){
+            int landedPlayerMoney = p.getMoneyAmount();
+            int payment = this.payment(totalDiceRoll);
+            if (landedPlayerMoney <= payment){
+                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
             }
-            return true;
-        }
-        else {
-            if (!this.owner.equals(p)) { // if owned
-                int landedPlayerMoney = p.getMoneyAmount();
-                int payment = this.payment(totalDiceRoll);
-                if (landedPlayerMoney <= payment){
-                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-                }
-                else{
-                    p.setMoneyAmount(p.getMoneyAmount() - payment);
-                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
-                }
+            else{
+                p.setMoneyAmount(p.getMoneyAmount() - payment);
+                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
+            }
 
-                for (UtilityListener listener : this.utilityListenerList){
-                    listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
-                }
-                return false;
-            }
             for (UtilityListener listener : this.utilityListenerList){
-                listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll, 0));
+                listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
             }
             return false;
+
+        }else{
+            if (this.owner == null){
+                for (UtilityListener listener : this.utilityListenerList){
+                    if (listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll, 0))){
+                        if (this.buy(p)) {
+                            listener.announceCannotBuyUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                        }
+                        else{
+                            listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                        }
+                    }
+                }
+                return true;
+            }
+            else {
+                if (!this.owner.equals(p)) { // if owned
+                    int landedPlayerMoney = p.getMoneyAmount();
+                    int payment = this.payment(totalDiceRoll);
+                    if (landedPlayerMoney <= payment){
+                        this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                    }
+                    else{
+                        p.setMoneyAmount(p.getMoneyAmount() - payment);
+                        this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
+                    }
+
+                    for (UtilityListener listener : this.utilityListenerList){
+                        listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
+                    }
+                    return false;
+                }
+                for (UtilityListener listener : this.utilityListenerList){
+                    listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll, 0));
+                }
+
+            }
         }
+        return false;
+
     }
 
     /**

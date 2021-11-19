@@ -41,22 +41,8 @@ public class RailRoad extends Location{
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (this.owner == null){
-            for (RailRoadListener listener : this.railRoadListener){
-                if (listener.railRoadNoOwner(new RailRoadEvent(this, p, 0))){
-                    if (this.buy(p)) {
-                        listener.announceCannotBuyRailRoad(new RailRoadEvent(this, p, 0));
-                    }
-                    else{
-                        listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
-                    }
-                }
-            }
-            return true;
-        }
-        else {
-            if (!this.owner.equals(p)) {
-
+        if(p instanceof AI){
+            if (this.owner != null){
                 int landedPlayerMoney = p.getMoneyAmount();
                 int payment = this.payments.get(this.owner.getNumOfRailroads());
                 if (landedPlayerMoney <= payment){
@@ -73,11 +59,47 @@ public class RailRoad extends Location{
                 return false;
             }
 
-            for (RailRoadListener listener : this.railRoadListener){
-                listener.railRoadOwned(new RailRoadEvent(this, p, 0));
+        }else{
+            if (this.owner == null){
+                for (RailRoadListener listener : this.railRoadListener){
+                    if (listener.railRoadNoOwner(new RailRoadEvent(this, p, 0))){
+                        if (this.buy(p)) {
+                            listener.announceCannotBuyRailRoad(new RailRoadEvent(this, p, 0));
+                        }
+                        else{
+                            listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
+                        }
+                    }
+                }
+                return true;
             }
-            return false;
+            else {
+                if (!this.owner.equals(p)) {
+
+                    int landedPlayerMoney = p.getMoneyAmount();
+                    int payment = this.payments.get(this.owner.getNumOfRailroads());
+                    if (landedPlayerMoney <= payment){
+                        this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+                    }
+                    else{
+                        p.setMoneyAmount(p.getMoneyAmount() - payment);
+                        this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
+                    }
+
+                    for (RailRoadListener listener : this.railRoadListener){
+                        listener.railRoadRent(new RailRoadEvent(this, p, payment));
+                    }
+                    return false;
+                }
+
+                for (RailRoadListener listener : this.railRoadListener){
+                    listener.railRoadOwned(new RailRoadEvent(this, p, 0));
+                }
+
+            }
         }
+        return false;
+
     }
 
     /**
