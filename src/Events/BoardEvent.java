@@ -1,5 +1,7 @@
 package Events;
 import Model.*;
+import Model.BoardElements.Location;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.EventObject;

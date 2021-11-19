@@ -1,10 +1,10 @@
 package View;
 import Events.*;
 import Listener.BoardView;
-import Model.AI;
+import Model.GamePlayer.AI;
 import Model.BoardModel;
-import Model.Player;
-import Model.User;
+import Model.GamePlayer.Player;
+import Model.GamePlayer.User;
 import View.Components.GameDisplayPanel;
 import View.Components.PlayerDisplayPanel;
 import View.Controllers.*;

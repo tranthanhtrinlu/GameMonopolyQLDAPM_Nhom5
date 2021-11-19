@@ -1,6 +1,7 @@
-package Model;
+package Model.BoardElements;
 
 import Listener.BoardView;
+import Model.GamePlayer.Player;
 
 /**
  * @author Max Curkovic

@@ -1,4 +1,8 @@
-package Model;
+package Model.GamePlayer;
+
+import Model.BoardModel;
+import Model.BoardElements.Location;
+import Model.BoardElements.Property;
 
 import java.util.List;
 

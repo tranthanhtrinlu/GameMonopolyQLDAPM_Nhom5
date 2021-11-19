@@ -1,8 +1,11 @@
-package Model;
+package Model.BoardElements;
 
 import Events.PropertyEvent;
 import Listener.BoardView;
 import Listener.PropertyListener;
+import Model.BoardModel;
+import Model.GamePlayer.AI;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;

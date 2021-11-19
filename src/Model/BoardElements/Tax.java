@@ -1,8 +1,10 @@
-package Model;
+package Model.BoardElements;
 
 import Events.TaxEvent;
 import Listener.BoardView;
 import Listener.TaxListener;
+import Model.BoardModel;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 

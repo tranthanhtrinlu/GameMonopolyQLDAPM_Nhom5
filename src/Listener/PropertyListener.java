@@ -1,6 +1,5 @@
 package Listener;
 import Events.*;
-import Model.Property;
 
 
 /**

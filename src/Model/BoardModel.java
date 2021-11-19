@@ -1,6 +1,9 @@
 package Model;
 import Events.BoardEvent;
 import Listener.BoardView;
+import Model.BoardElements.*;
+import Model.GamePlayer.AI;
+import Model.GamePlayer.Player;
 
 import java.util.*;
 
@@ -15,7 +18,7 @@ public class BoardModel {
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
     private static final int ROLLING_DICE_DELAY = 10;
-    protected static int centerMoney = 0;
+    public static int centerMoney = 0;
 
     private final List<Location> board;
     private final List<BoardView> views;
@@ -119,7 +122,7 @@ public class BoardModel {
      * gets how much money is in the center
      * @return Integer centerMoney
      */
-    protected static int getCenterMoney() {
+    public static int getCenterMoney() {
         return BoardModel.centerMoney;
     }
 
@@ -127,7 +130,7 @@ public class BoardModel {
      * will set centerMoney
      * @param centerMoney Integer money in center
      */
-    protected static void setCenterMoney(int centerMoney) {
+    public static void setCenterMoney(int centerMoney) {
         BoardModel.centerMoney = centerMoney;
     }
 
@@ -135,7 +138,7 @@ public class BoardModel {
      * used to add money to the center
      * @param add Integer added
      */
-    protected static void addToCenterMoney(int add){
+    public static void addToCenterMoney(int add){
         BoardModel.centerMoney += add;
     }
 

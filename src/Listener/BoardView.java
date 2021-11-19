@@ -1,6 +1,6 @@
 package Listener;
 import Events.*;
-import Model.Player;
+import Model.GamePlayer.Player;
 
 /**
  * @author Tony Massaad

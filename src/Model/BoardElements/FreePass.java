@@ -1,8 +1,9 @@
-package Model;
+package Model.BoardElements;
 
 import Events.FreePassEvent;
 import Listener.BoardView;
 import Listener.FreePassListener;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package View.Components;
-import Model.Location;
-import Model.Player;
-import Model.Property;
+import Model.BoardElements.Location;
+import Model.GamePlayer.Player;
+import Model.BoardElements.Property;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

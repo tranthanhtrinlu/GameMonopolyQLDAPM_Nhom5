@@ -1,8 +1,10 @@
-package Model;
+package Model.BoardElements;
 
 import Events.GoToJailEvent;
 import Listener.BoardView;
 import Listener.GoToJailListener;
+import Model.BoardModel;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;

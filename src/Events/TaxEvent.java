@@ -1,8 +1,7 @@
 package Events;
 
-import Model.FreeParking;
-import Model.Player;
-import Model.Tax;
+import Model.GamePlayer.Player;
+import Model.BoardElements.Tax;
 
 import java.util.EventObject;
 

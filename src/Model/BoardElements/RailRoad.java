@@ -1,8 +1,10 @@
-package Model;
+package Model.BoardElements;
 
 import Events.RailRoadEvent;
 import Listener.RailRoadListener;
 import Listener.BoardView;
+import Model.GamePlayer.AI;
+import Model.GamePlayer.Player;
 
 
 import java.util.ArrayList;

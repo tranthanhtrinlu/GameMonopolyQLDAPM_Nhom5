@@ -1,5 +1,6 @@
 package Events;
-import Model.*;
+import Model.BoardElements.RailRoad;
+import Model.GamePlayer.Player;
 
 import java.util.EventObject;
 

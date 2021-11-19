@@ -1,8 +1,10 @@
-package Model;
+package Model.BoardElements;
 
 import Events.FreeParkingEvent;
 import Listener.BoardView;
 import Listener.FreeParkingListener;
+import Model.BoardModel;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 

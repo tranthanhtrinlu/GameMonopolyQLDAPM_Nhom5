@@ -1,7 +1,7 @@
 package Events;
 
-import Model.FreeParking;
-import Model.Player;
+import Model.BoardElements.FreeParking;
+import Model.GamePlayer.Player;
 
 import java.util.EventObject;
 

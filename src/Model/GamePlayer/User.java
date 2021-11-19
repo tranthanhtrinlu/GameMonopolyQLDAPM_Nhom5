@@ -1,10 +1,14 @@
-package Model;
+package Model.GamePlayer;
+
+import Model.BoardModel;
+import Model.BoardElements.Location;
+import Model.BoardElements.Property;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class User extends Player{
+public class User extends Player {
 
     private HashMap<BoardModel.Color, Integer> ownedPropertiesBasedOnColors;
     private List<Location> ownedProperties;/**

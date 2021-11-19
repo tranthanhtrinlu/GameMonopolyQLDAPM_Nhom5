@@ -1,8 +1,9 @@
-package Model;
+package Model.BoardElements;
 
 import Events.LandOnJailEvent;
 import Listener.BoardView;
 import Listener.LandOnJailListener;
+import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;
