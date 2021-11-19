@@ -1,4 +1,7 @@
 package View.Controllers;
+import Model.BoardModel;
+import View.BoardGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,6 +23,16 @@ public class StartGameController {
         JPanel panel = new JPanel(new GridLayout(4,1));
         AtomicInteger num = new AtomicInteger(2);
         ButtonGroup group = new ButtonGroup();
+        for (int i = 0; i < BoardModel.MAX_PLAYERS-1; i++){
+            JRadioButton button = new JRadioButton(i+2 + "Players");
+            if (i == 0)
+                button.setSelected(true);
+            int finalI = i;
+            button.addActionListener(e -> num.set(finalI +2));
+            group.add(button);
+            panel.add(button);
+        }
+        /*
         JRadioButton players2 = new JRadioButton("2 players");
         JRadioButton players3 = new JRadioButton("3 players");
         JRadioButton players4 = new JRadioButton("4 players");
@@ -36,9 +49,9 @@ public class StartGameController {
         panel.add(players2);
         panel.add(players3);
         panel.add(players4);
-        panel.add(players5);
+        panel.add(players5);*/
         JOptionPane.showConfirmDialog(frame, panel,
-                "Enter Info", JOptionPane.DEFAULT_OPTION);
+                "number of players", JOptionPane.DEFAULT_OPTION);
         return num.get();
     }
 
@@ -78,5 +91,24 @@ public class StartGameController {
             }
         }
         return nameText;
+    }
+
+    public int getNumOfAIs(JFrame frame, int numberOfPlayers) {
+        int numOfAIs = BoardModel.MAX_PLAYERS - numberOfPlayers;
+        JPanel panel = new JPanel(new GridLayout(numOfAIs,1));
+        AtomicInteger num = new AtomicInteger(0);
+        ButtonGroup group = new ButtonGroup();
+        for (int i = 0; i<numOfAIs+1; i++){
+            JRadioButton button = new JRadioButton(i + "AI");
+            if (i == 0)
+                button.setSelected(true);
+            int finalI = i;
+            button.addActionListener(e -> num.set(finalI));
+            group.add(button);
+            panel.add(button);
+        }
+        JOptionPane.showConfirmDialog(frame, panel,
+                "Enter Number of AIs", JOptionPane.DEFAULT_OPTION);
+        return num.get();
     }
 }

@@ -9,6 +9,7 @@ import java.util.*;
  * Class MVC.BoardModel that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
  */
 public class BoardModel {
+    public static final int MAX_PLAYERS = 5;
     public static final int SIZE_OF_BOARD = 39; // 0-39 inclusive
     public static final int GO_MONEY = 200;
     public static final int JAIL_POSITION = 10; // 11 - 1
@@ -252,7 +253,6 @@ public class BoardModel {
         }
     }
 
-
     /**
      * Overridden boolean method for updating the game players if one loses the game or quits.
      * @return True if the game players is updated, false otherwise.
@@ -281,6 +281,10 @@ public class BoardModel {
         }
     }
 
+    private void playAI(){
+        // if the current turn is an ai
+        // AI play
+    }
 
     private void movePlayerFunctionality(BoardEvent e){
         Timer timer2 = new Timer();
@@ -323,6 +327,7 @@ public class BoardModel {
                                 view.handleAnnounceWinner(e);
                             }
                         }
+                        playAI();
                     }else{
                         if (!e.getDoubles()){
                             nextTurn();
