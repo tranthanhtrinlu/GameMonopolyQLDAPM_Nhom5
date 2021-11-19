@@ -12,8 +12,6 @@ public class Player{
 
     private final String playerName;
     private int moneyAmount;
-    private HashMap<BoardModel.Color, Integer> ownedPropertiesBasedOnColors;
-    private List<Location> ownedProperties;
     private boolean inJail;
     private int turnsInJail;
     private int position;
@@ -30,8 +28,6 @@ public class Player{
         this.playerName = name;
         this.moneyAmount = 1500;
         this.out = false;
-        this.ownedPropertiesBasedOnColors = new HashMap<>();
-        this.ownedProperties = new ArrayList<>();
         this.position = 0;
         this.inJail = false;
         this.turnsInJail = 0;
