@@ -1,8 +1,10 @@
 package View;
 import Events.*;
 import Listener.BoardView;
+import Model.AI;
 import Model.BoardModel;
 import Model.Player;
+import Model.User;
 import View.Components.GameDisplayPanel;
 import View.Components.PlayerDisplayPanel;
 import View.Controllers.*;
@@ -92,10 +94,18 @@ public class BoardGUI extends JFrame implements BoardView{
 
         StartGameController start = new StartGameController();
         int numberOfPlayers = start.getNumOfPlayers(this);
+        int numberOfAIs = 0;
+        if (numberOfPlayers != BoardModel.MAX_PLAYERS)
+            numberOfAIs = start.getNumOfAIs(this, numberOfPlayers);
         model.setNumberOfPlayers(numberOfPlayers);
         ArrayList<String> names = start.getNameOfPlayers(numberOfPlayers, this);
         for (int i = 0; i < numberOfPlayers; i++){
-            model.addGamePlayers(new Player(names.get(i)));
+            model.addGamePlayers(new User(names.get(i)));
+            this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
+            this.gamePanel.addInitialPlayers(i);
+        }
+        for (int i = 0; i<numberOfAIs; i++){
+            model.addGamePlayers(new AI("AI" + (i+1)));
             this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
             this.gamePanel.addInitialPlayers(i);
         }
