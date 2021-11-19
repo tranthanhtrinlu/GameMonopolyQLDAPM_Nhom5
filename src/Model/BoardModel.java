@@ -9,6 +9,7 @@ import java.util.*;
  * Class MVC.BoardModel that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
  */
 public class BoardModel {
+    public static final int MAX_PLAYERS = 5;
     public static final int SIZE_OF_BOARD = 39; // 0-39 inclusive
     public static final int GO_MONEY = 200;
     public static final int JAIL_POSITION = 10; // 11 - 1
