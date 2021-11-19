@@ -29,7 +29,7 @@ public class Property extends Location{
     public Property(BoardModel.BoardElements element){
         super(element.getCost(), element.getName());
         this.rentCosts = new ArrayList<>(){{
-           add(element.getInitalRent());
+           add(element.getInitialRent());
            add(element.getHouse1Rent());
            add(element.getHouse2Rent());
            add(element.getHouse3Rent());

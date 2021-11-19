@@ -25,10 +25,11 @@ public class BoardEvent extends EventObject {
      * @param boardModel A MVC.BoardModel object boardModel.
      * @param board A list of locations board.
      * @param doubles A boolean doubles.
-     * @param i
-     * @param roll1 An integer roll1.
-     * @param player
+     * @param roll1 Integer, dice 1 roll
      * @param roll2 An integer roll2.
+     * @param p Player p
+     * @param turn An integer turn
+     * @param players ArrayList of players
      */
     public BoardEvent(BoardModel boardModel, List<Location> board, boolean doubles, int roll1, int roll2, Player p, int turn, ArrayList<Player> players) {
         super(boardModel);

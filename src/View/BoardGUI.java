@@ -303,7 +303,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void SendPlayerToJail(GoToJailEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
-        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed on " + e.getGoToJail().getName() + ", they go to jail.\nMoving to the next player");
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed on Go To Jail, they go to jail.\nMoving to the next player");
         this.handlePlayerPieceMovement(e.getCurrentTurn(), e.getOldPos(), e.getNewPos());
     }
 
@@ -372,14 +372,14 @@ public class BoardGUI extends JFrame implements BoardView{
     public void handleRollingDoubles(BoardEvent e){
         ConfirmMessageController controller = new ConfirmMessageController();
         if (e.getDoubles()){
-            controller.sendMessage(this, e.getPlayer().getPlayerName() + " rolled a double! they are now Just Visiting Jail");
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " rolled a double! they are now out of jail and on the move!");
             return;
         }
         if (e.getPlayer().getTurnsInJail() != 0){
-            controller.sendMessage(this, e.getPlayer().getPlayerName() + " attempted to roll out of jail. They failed and now have " + e.getPlayer().getTurnsInJail() + " left in jail");
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " attempted to roll out of jail. They failed and now have " + e.getPlayer().getTurnsInJail() + " left in jail.\nMoving tothe next player");
         }
         else{
-            controller.sendMessage(this, e.getPlayer().getPlayerName() + " are now out of turns in jail, they have to pay the $50");
+            controller.sendMessage(this, e.getPlayer().getPlayerName() + " are now out of turns in jail, and now have to pay the $50 fine to get out.\nMoving to the next player");
         }
     }
 
@@ -393,8 +393,6 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
         HouseController controller = new HouseController();
-        //controller.numberHouses(this);
-        //controller.propertiesHouses(this, e.getPlayer());
         controller.buyHouses(this, e.getPlayer());
     }
 
@@ -519,7 +517,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     /**
      * Update panel according to the views
-     * @param player
+     * @param player Player, the current player
      */
     @Override
     public void updateChoicePanel(Player player) {

@@ -16,8 +16,8 @@ public class BoardModel {
     private static final int ROLLING_DICE_DELAY = 10;
     protected static int centerMoney = 0;
 
-    private List<Location> board;
-    private List<BoardView> views;
+    private final List<Location> board;
+    private final List<BoardView> views;
     private int currentTurn;
     private int numberOfPlayers;
     private Status status;
@@ -42,14 +42,14 @@ public class BoardModel {
         GO("Go", 0, 0,0,0,0,0,0,0,Color.NONE, 0),
         BALTIC("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2),
         ORIENTAL("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
-        VERMOUNT("Vermount Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
+        VERMONT("Vermont Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
         CONNECTICUT("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3),
         CHARLES("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3),
         STATES("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3),
         VIRGINIA("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3),
         JAMES("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3),
-        TENNESSE("Tennesse Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3),
-        NEWYORK("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3),
+        TENNESSEE("Tennessee Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3),
+        NEW_YORK("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3),
         KENTUCKY("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3),
         INDIANA("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3),
         ILLINOIS("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3),
@@ -58,32 +58,32 @@ public class BoardModel {
         MARVIN("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3),
         PACIFIC("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
         CAROLINA("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
-        PENNYSYLVANIA("Pennysylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
+        PENNSYLVANIA("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
         PARK("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2),
         BOARDWALK("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2),
-        FREEPASS( "Free Pass",0, 0, 0, 0, 0, 0, 0, 0, Color.NONE,0),
+        FREE_PASS( "Free Pass",0, 0, 0, 0, 0, 0, 0, 0, Color.NONE,0),
         READING_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
         PENNSYLVANIA_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
         BO_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
         SHORT_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        INCOME("INCOME TAX", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        LUXURY("LUXURY TAX", 100,0,0,0,0,0,0,0, Color.NONE,0),
+        INCOME("Income Tax", 200,0,0,0,0,0,0,0, Color.NONE, 0),
+        LUXURY("Luxury Tax", 100,0,0,0,0,0,0,0, Color.NONE,0),
         ELECTRIC("Electric Company", 150,0,0,0,0,0,0,0, Color.NONE, 0),
         WATER("Water Works", 150,0,0,0,0,0,0,0, Color.NONE, 0),
-        LAND_ON_JAIL("In Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
-        GO_TO_JAIL("Go To Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
+        LAND_ON_JAIL("In Jail - Just Visiting", 0,0,0,0,0,0,0,0, Color.NONE, 0),
+        GO_TO_JAIL("In Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
         FREE_PARKING("Free Parking", 0,0,0,0,0,0,0,0, Color.NONE, 0);
 
 
 
         private final String name;
-        private final int cost, costPerHouse, initalRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
+        private final int cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
         private final Color color;
-        BoardElements(String name, int cost, int costPerHouse, int initalRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, Color color, int numOfColors){
+        BoardElements(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, Color color, int numOfColors){
             this.name = name;
             this.cost = cost;
             this.costPerHouse = costPerHouse;
-            this.initalRent = initalRent;
+            this.initialRent = initialRent;
             this.house1Rent = house1Rent;
             this.house2Rent = house2Rent;
             this.house3Rent = house3Rent;
@@ -93,16 +93,14 @@ public class BoardModel {
             this.numOfColors = numOfColors;
         }
 
-        public String getName() {
-            return name;
-        }
+        public String getName() { return this.name; }
 
         public int getCost() {
-            return cost;
+            return this.cost;
         }
 
-        public int getInitalRent() {
-            return initalRent;
+        public int getInitialRent() {
+            return this.initialRent;
         }
 
         public Color getColor() {
@@ -139,13 +137,7 @@ public class BoardModel {
     }
 
     public enum PlayerChoice{
-        ROLL(1),
-        QUIT(2),
-        PASS(3),
-        PAY_OUT(4),
-        ROLL_OUT(5),
-        BUY_HOUSE(6),
-        SELL_HOUSE(7);
+        ROLL(1), QUIT(2), PASS(3), PAY_OUT(4), ROLL_OUT(5), BUY_HOUSE(6), SELL_HOUSE(7);
 
         private final int choice;
         PlayerChoice(int choice){
@@ -225,8 +217,6 @@ public class BoardModel {
         Random r = new Random();
         this.roll1 = r.nextInt(6) +  1;
         this.roll2 = r.nextInt(6) + 1;
-        //this.roll1 = 6;
-        //this.roll2 = 6;
         return this.roll1 == this.roll2;
     }
 
@@ -244,13 +234,13 @@ public class BoardModel {
     private void initializeBoard(){
         this.board.add(new FreePass(BoardElements.GO));
         this.board.add(new Property(BoardElements.MEDITERRANEAN));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
         this.board.add(new Property(BoardElements.BALTIC));
         this.board.add(new Tax(BoardElements.INCOME));
         this.board.add(new RailRoad(BoardElements.READING_R));
         this.board.add(new Property(BoardElements.ORIENTAL));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
-        this.board.add(new Property(BoardElements.VERMOUNT));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
+        this.board.add(new Property(BoardElements.VERMONT));
         this.board.add(new Property(BoardElements.CONNECTICUT));
         this.board.add(new LandOnJail(BoardElements.LAND_ON_JAIL));
         this.board.add(new Property(BoardElements.CHARLES));
@@ -259,12 +249,12 @@ public class BoardModel {
         this.board.add(new Property(BoardElements.VIRGINIA));
         this.board.add(new RailRoad(BoardElements.PENNSYLVANIA_R));
         this.board.add(new Property(BoardElements.JAMES));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
-        this.board.add(new Property(BoardElements.TENNESSE));
-        this.board.add(new Property(BoardElements.NEWYORK));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
+        this.board.add(new Property(BoardElements.TENNESSEE));
+        this.board.add(new Property(BoardElements.NEW_YORK));
         this.board.add(new FreeParking(BoardElements.FREE_PARKING));
         this.board.add(new Property(BoardElements.KENTUCKY));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
         this.board.add(new Property(BoardElements.INDIANA));
         this.board.add(new Property(BoardElements.ILLINOIS));
         this.board.add(new RailRoad(BoardElements.BO_R));
@@ -275,10 +265,10 @@ public class BoardModel {
         this.board.add(new GoToJail(BoardElements.GO_TO_JAIL));
         this.board.add(new Property(BoardElements.PACIFIC));
         this.board.add(new Property(BoardElements.CAROLINA));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
-        this.board.add(new Property(BoardElements.PENNYSYLVANIA));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
+        this.board.add(new Property(BoardElements.PENNSYLVANIA));
         this.board.add(new RailRoad(BoardElements.SHORT_R));
-        this.board.add(new FreePass(BoardElements.FREEPASS));
+        this.board.add(new FreePass(BoardElements.FREE_PASS));
         this.board.add(new Property(BoardElements.PARK));
         this.board.add(new Tax(BoardElements.LUXURY));
         this.board.add(new Property(BoardElements.BOARDWALK));
@@ -368,11 +358,7 @@ public class BoardModel {
                 else{
                     p.movePlayer(sum);
                     Location place = board.get(p.getPosition());
-                    if (place.getName().equals("In Jail") && !p.getInJail()){ // change using enum
-                        p.setCurrLocation(place.getName() + ", Just visiting");
-                    }else{
-                        p.setCurrLocation(place.getName());
-                    }
+                    p.setCurrLocation(place.getName());
                     place.locationElementFunctionality(p, sum, currentTurn);
 
                     if (checkBankrupt()){
@@ -489,10 +475,6 @@ public class BoardModel {
                 }
             }
         }, 0, 200);
-    }
-
-    private void buyingHouseFunctionality(BoardEvent e){
-
     }
 
 

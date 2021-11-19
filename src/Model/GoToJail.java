@@ -35,7 +35,6 @@ public class GoToJail extends Location{
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         int oldPos = p.getPosition();
         p.setPosition(BoardModel.JAIL_POSITION);
-        p.setCurrLocation("In Jail");
         p.setInJail(true);
         for (GoToJailListener listener : this.goToJailListener){
             listener.SendPlayerToJail(new GoToJailEvent(this, p, currentTurn, oldPos, p.getPosition()));

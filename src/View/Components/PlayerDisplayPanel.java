@@ -1,5 +1,7 @@
 package View.Components;
+import Model.Location;
 import Model.Player;
+import Model.Property;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ public class PlayerDisplayPanel extends JPanel {
     private final ArrayList<JButton> playerButtons;
     private final ArrayList<JPanel> playerDisplays;
 
+    /**
+     * default constructor for PlayerDisplayPanel
+     */
     public PlayerDisplayPanel(){
         this.playerButtons = new ArrayList<>();
         this.playerDisplays = new ArrayList<>();
@@ -42,12 +47,7 @@ public class PlayerDisplayPanel extends JPanel {
             String[] text = playerButton.getText().split(" ");
             int length = text.length;
             if (text[length-1].equals(DROP_DOWN_STRING) || (text[length-1].equals(CURRENT_TURN) && text[length-2].equals(DROP_DOWN_STRING))){
-                playerDisplay.add(new JLabel("Current Location: " + p.getCurrLocation()));
-                playerDisplay.add(new JLabel("Money: " + p.getMoneyAmount()));
-                playerDisplay.add(new JLabel("Properties:"));
-                for (int i = 0; i < p.getNumOfProperties(); i++){
-                    playerDisplay.add(new JLabel(p.getPropertyByIndex(i).getName()));
-                }
+                this.addToPanel(playerDisplay, p);
                 if (text[length-1].equals(CURRENT_TURN))
                     playerButton.setText(p.getPlayerName() + " " + UP_STRING + " " + CURRENT_TURN);
                 else
@@ -81,7 +81,6 @@ public class PlayerDisplayPanel extends JPanel {
         button.setText(p.getPlayerName() + " " + OUT_STRING);
         panel.removeAll();
         button.setEnabled(false);
-        System.out.println(button.getText());
         panel.add(button);
         panel.revalidate();
     }
@@ -99,12 +98,7 @@ public class PlayerDisplayPanel extends JPanel {
         panel.removeAll();
         if (text[length-1].equals(UP_STRING) || (text[length-1].equals(CURRENT_TURN) && text[length-2].equals(UP_STRING))){
             panel.add(button);
-            panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
-            panel.add(new JLabel("Money: " + p.getMoneyAmount()));
-            panel.add(new JLabel("Properties:"));
-            for (int i = 0; i < p.getNumOfProperties(); i++){
-                panel.add(new JLabel(p.getPropertyByIndex(i).getName()));
-            }
+            this.addToPanel(panel, p);
         }
         else{
             panel.add(button);
@@ -112,7 +106,6 @@ public class PlayerDisplayPanel extends JPanel {
         panel.revalidate();
 
     }
-
 
     /**
      * updates the current turn that is being played
@@ -122,8 +115,6 @@ public class PlayerDisplayPanel extends JPanel {
      */
     public void updateCurrentTurn(int currentTurn, int index, Player p){
         String[] text = this.playerButtons.get(index).getText().split(" ");
-
-
         if (text[text.length-1].equals(OUT_STRING)){
             this.playerButtons.get(index).setText(p.getPlayerName() + " " + OUT_STRING);
         }
@@ -147,4 +138,24 @@ public class PlayerDisplayPanel extends JPanel {
             this.playerDisplays.get(index).revalidate();
         }
     }
+
+    /**
+     * Adds player contents to specific panel
+     * @param panel JPanel, the panel
+     * @param p Player, the player
+     */
+    private void addToPanel(JPanel panel, Player p){
+        panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
+        panel.add(new JLabel("Money: $" + p.getMoneyAmount()));
+        panel.add(new JLabel("Properties:"));
+        for (int i = 0; i < p.getNumOfProperties(); i++) {
+            Location place = p.getPropertyByIndex(i);
+            if (p.getPropertyByIndex(i) instanceof Property) {
+                panel.add(new JLabel(place.getName() + " [" + ((Property) place).getNumOfHouses() + " houses]"));
+            } else {
+                panel.add(new JLabel(place.getName()));
+            }
+        }
+    }
+
 }

@@ -64,7 +64,6 @@ public class HouseController {
                 options.add(pr.getName());
             }
         }
-
         JPanel panel = new JPanel(new GridLayout(2,2));
         AtomicReference<Property> place = new AtomicReference<>(listProperties.get(0));
         JComboBox houses = new JComboBox(options.toArray());

@@ -45,11 +45,11 @@ public class GameDisplayPanel extends JPanel {
     }
 
     /**
-     * sets the starting postion for images in the top
+     * sets the starting position for images in the top
      */
     private void setTopImages(){
         int  xPos = BOARD_START_TOP_X_POS;
-        ArrayList<Image> topPhotos = new ArrayList<Image>(){{
+        ArrayList<Image> topPhotos = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/TOP/FREE_PARKING.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/TOP/RED1.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/TOP/CHANCE2.png")).getImage());
@@ -92,13 +92,13 @@ public class GameDisplayPanel extends JPanel {
     }
 
     /**
-     * sets the starting postion for images in the middleleft
+     * sets the starting positions for images in the middle-left
      */
     private void setMiddleLeftImages(){
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
         int xPos = BOARD_START_TOP_X_POS;
         ArrayList<JPanel> temp = new ArrayList<>();
-        ArrayList<Image> leftPhotos = new ArrayList<Image>(){{
+        ArrayList<Image> leftPhotos = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE3.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE2.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/COMMUNITY_CHEST2.png")).getImage());
@@ -134,13 +134,13 @@ public class GameDisplayPanel extends JPanel {
     }
 
     /**
-     * sets the starting postion for images in the bottom
+     * sets the starting positions for images in the bottom
      */
     private void setBottomImages(){
         int xPos = BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_BOTTOM_Y_POS;
         ArrayList<JPanel> temp = new ArrayList<>();
-        ArrayList<Image> bottomPhotos = new ArrayList<Image>(){{
+        ArrayList<Image> bottomPhotos = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/JAIL.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE3.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE2.png")).getImage());
@@ -186,12 +186,12 @@ public class GameDisplayPanel extends JPanel {
     }
 
     /**
-     * sets images in there starting postions for middle
+     * sets images in there starting positions for middle
      */
     private void setMiddleRightImages(){
         int xPos = BOARD_START_RIGHT_X_POS + BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
-        ArrayList<Image> rightPhotos = new ArrayList<Image>(){{
+        ArrayList<Image> rightPhotos = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/RIGHT/GREEN1.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/RIGHT/GREEN2.png")).getImage());
             add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/RIGHT/COMMUNITY_CHEST3.png")).getImage());
@@ -241,7 +241,7 @@ public class GameDisplayPanel extends JPanel {
     /**
      * will move the image of a players piece across the board
      * @param currentPlayer Player currently moving
-     * @param oldPlayerPosition the starting postion of the player
+     * @param oldPlayerPosition the starting position of the player
      * @param playerPosition the ending position of the player
      */
     public void movePieceImage(int currentPlayer, int oldPlayerPosition, int playerPosition){
@@ -256,7 +256,7 @@ public class GameDisplayPanel extends JPanel {
     /**
      * will remove the players piece form the board
      * @param currentPlayer player that is currently being removed
-     * @param playerPosition Postion of the player
+     * @param playerPosition position of the player
      */
     public void removePieceFromBoard(int currentPlayer, int playerPosition){
         JLabel currentLabel = this.playerPieces.get(currentPlayer);

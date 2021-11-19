@@ -13,10 +13,10 @@ import java.util.List;
  */
 public class LandOnJail extends Location {
 
-    private List<LandOnJailListener> landOnJailListenerList;
+    private final List<LandOnJailListener> landOnJailListenerList;
 
     /**
-     * Constructor for LandOnJail for the boardmodel
+     * Constructor for LandOnJail for the BoardModel
      * @param element enum of elements
      */
     public LandOnJail(BoardModel.BoardElements element) {
@@ -28,12 +28,11 @@ public class LandOnJail extends Location {
      *  location functionality
      * @param p MVC.Player
      * @param totalDiceRoll Integer sum of dice roll
-     * @param currentTurn
+     * @param currentTurn Int, the current turn
      * @return land on jail listener
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        p.setCurrLocation(this.getName() + "- Just Visiting");
         for (LandOnJailListener listener : this.landOnJailListenerList){
             listener.visiting(new LandOnJailEvent(this, p));
         }
@@ -70,7 +69,7 @@ public class LandOnJail extends Location {
 
     /**
      * adds the listener for jail
-     * @param view
+     * @param view BoardView, the view
      */
     @Override
     public void addListener(BoardView view) {
