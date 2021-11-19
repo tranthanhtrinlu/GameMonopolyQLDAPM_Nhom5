@@ -56,11 +56,7 @@ public interface BoardView extends PropertyListener, RailRoadListener,
 
     void handleRollingDoubles(BoardEvent e);
 
-    void announceDecisionToPurchaseHouses(BoardEvent e);
-
     void handlePlayerChoiceToPurchaseHouses(BoardEvent e);
-
-    void announceDecisionToSellHouses(BoardEvent e);
 
     void handlePlayerChoiceToSellHouses(BoardEvent e);
 }

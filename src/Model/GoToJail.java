@@ -77,4 +77,9 @@ public class GoToJail extends Location{
         this.goToJailListener.add(view);
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return new GoToJail(place.getName(), place.getCost());
+    }
+
 }

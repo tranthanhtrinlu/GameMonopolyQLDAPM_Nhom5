@@ -97,18 +97,17 @@ public class BoardGUI extends JFrame implements BoardView{
         int numberOfAIs = 0;
         if (numberOfPlayers != BoardModel.MAX_PLAYERS)
             numberOfAIs = start.getNumOfAIs(this, numberOfPlayers);
-        model.setNumberOfPlayers(numberOfPlayers);
         ArrayList<String> names = start.getNameOfPlayers(numberOfPlayers, this);
-        for (int i = 0; i < numberOfPlayers; i++){
-            model.addGamePlayers(new User(names.get(i)));
+        for (int i = 0; i < numberOfPlayers + numberOfAIs; i++){
+            if (i < numberOfPlayers){
+                model.addGamePlayers(new User(names.get(i)));
+            }else{
+                model.addGamePlayers(new AI("AI" + (i - numberOfPlayers+1)));
+            }
             this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
-            this.gamePanel.addInitialPlayers(i);
+            this.gamePanel.addInitialPlayers(i, numberOfPlayers);
         }
-        for (int i = 0; i<numberOfAIs; i++){
-            model.addGamePlayers(new AI("AI" + (i+1)));
-            this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
-            this.gamePanel.addInitialPlayers(i);
-        }
+        model.setNumberOfPlayers(numberOfPlayers+numberOfAIs);
         this.updateChoicePanel(model.getPlayersByIndex(0));
     }
 
@@ -394,23 +393,11 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     @Override
-    public void announceDecisionToPurchaseHouses(BoardEvent e) {
-        ConfirmMessageController controller = new ConfirmMessageController();
-        controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " has decided to purchase houses.");
-
-    }
-
-    @Override
     public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
         HouseController controller = new HouseController();
         controller.buyHouses(this, e.getPlayer());
     }
 
-    @Override
-    public void announceDecisionToSellHouses(BoardEvent e) {
-        ConfirmMessageController controller = new ConfirmMessageController();
-        controller.sendMessage(this, "Player " + e.getPlayer().getPlayerName() + " has decided to sell houses.");
-    }
 
     @Override
     public void handlePlayerChoiceToSellHouses(BoardEvent e) {
@@ -451,8 +438,8 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleNextTurnDisplay(BoardEvent e, int updatedTurn){
         for (int i = 0; i<e.getNumOfPlayers(); i++){
-            if (e.getPlayerByIndex(i).getOut())
-                continue;
+            //if (e.getPlayerByIndex(i).getOut())
+            //    continue;
             this.sidePanel.updateCurrentTurn(updatedTurn, i, e.getPlayerByIndex(i));
         }
     }
@@ -464,8 +451,9 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleUpdateSidePanelDisplay(BoardEvent e){
         for (int i = 0; i<e.getNumOfPlayers(); i++) {
-            if (e.getPlayerByIndex(i).getOut())
-                continue;
+            if (e.getPlayerByIndex(i).getOut()){
+                this.sidePanel.removePlayerView(i, e.getPlayerByIndex(i));
+            }
             this.sidePanel.updatePlayerDisplay(i, e.getPlayerByIndex(i));
         }
     }

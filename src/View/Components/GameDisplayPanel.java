@@ -227,9 +227,14 @@ public class GameDisplayPanel extends JPanel {
      * add the starting players that will be playing the game
      * @param num Integer amount of players
      */
-    public void addInitialPlayers(int num){
+    public void addInitialPlayers(int num, int numberOfPlayers){
+        String s = "P"+(num+1);
+        if (num >= numberOfPlayers){
+            int j = num - numberOfPlayers;
+            s = "AI"+(j+1);
+        }
         System.out.println(this.playerPiecesDisplay.size());
-        this.playerPieces.add(new JLabel("P"+(num+1)));
+        this.playerPieces.add(new JLabel(s));
         this.playerPieces.get(num).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
         this.playerPieces.get(num).setFont(new Font("Verdana", Font.BOLD, 12));
         this.playerPieces.get(num).setForeground(Color.BLACK);

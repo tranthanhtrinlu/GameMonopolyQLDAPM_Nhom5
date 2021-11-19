@@ -75,4 +75,9 @@ public class LandOnJail extends Location {
         this.landOnJailListenerList.add(view);
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return new LandOnJail(place.getName(), place.getCost());
+    }
+
 }

@@ -60,6 +60,11 @@ public class Utility extends Location{
         this.utilityListenerList.add(view);
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return null;
+    }
+
 
     /**
      * gets the owner of the utility property

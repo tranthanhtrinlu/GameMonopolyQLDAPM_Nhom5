@@ -75,4 +75,11 @@ public class FreePass extends Location {
     public void addListener(BoardView view) {
         this.listeners.add(view);
     }
+
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return new FreePass(place.getName(), place.getCost());
+    }
+
+
 }

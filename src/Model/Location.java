@@ -72,4 +72,7 @@ public abstract class Location {
      * @param view A Listener.BoardView view.
      */
     public abstract void addListener(BoardView view);
+
+    public abstract Location newInstanceOfCurrentLocation(Location place);
+
 }

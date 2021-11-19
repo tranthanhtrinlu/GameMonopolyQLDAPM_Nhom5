@@ -185,12 +185,12 @@ public class BoardModel {
     private void initializeBoard(){
         this.board.add(BoardElements.GO.getPiece());
         this.board.add(BoardElements.MEDITERRANEAN.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.BALTIC.getPiece());
         this.board.add(BoardElements.INCOME.getPiece());
         this.board.add(BoardElements.READING_R.getPiece());
         this.board.add(BoardElements.ORIENTAL.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.VERMONT.getPiece());
         this.board.add(BoardElements.CONNECTICUT.getPiece());
         this.board.add(BoardElements.LAND_ON_JAIL.getPiece());
@@ -200,12 +200,12 @@ public class BoardModel {
         this.board.add(BoardElements.VIRGINIA.getPiece());
         this.board.add(BoardElements.PENNSYLVANIA_R.getPiece());
         this.board.add(BoardElements.JAMES.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.TENNESSEE.getPiece());
         this.board.add(BoardElements.NEW_YORK.getPiece());
         this.board.add(BoardElements.FREE_PARKING.getPiece());
         this.board.add(BoardElements.KENTUCKY.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.INDIANA.getPiece());
         this.board.add(BoardElements.ILLINOIS.getPiece());
         this.board.add(BoardElements.BO_R.getPiece());
@@ -216,10 +216,10 @@ public class BoardModel {
         this.board.add(BoardElements.GO_TO_JAIL.getPiece());
         this.board.add(BoardElements.PACIFIC.getPiece());
         this.board.add(BoardElements.CAROLINA.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.PENNSYLVANIA.getPiece());
         this.board.add(BoardElements.SHORT_R.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
         this.board.add(BoardElements.PARK.getPiece());
         this.board.add(BoardElements.LUXURY.getPiece());
         this.board.add(BoardElements.BOARDWALK.getPiece());
@@ -456,9 +456,16 @@ public class BoardModel {
                 if (status != Status.UNFINISHED){
                     view.handleAnnounceWinner(e);
                 }
+                view.handleRemoveOfPlayerPiece(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e, currentTurn);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
+            }
+            if (!playAI()){
+                for (BoardView view : views){
+                    view.buttonEnableCondition(true);
+                    view.updateChoicePanel(gamePlayers.get(currentTurn));
+                }
             }
         }
         else if (choice == PlayerChoice.PASS.getChoice()){ // pass
@@ -468,6 +475,12 @@ public class BoardModel {
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e, currentTurn);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
+            }
+            if (!playAI()){
+                for (BoardView view : views){
+                    view.buttonEnableCondition(true);
+                    view.updateChoicePanel(gamePlayers.get(currentTurn));
+                }
             }
         }
         else if (choice == PlayerChoice.PAY_OUT.getChoice()){ // pay out of jail
@@ -485,6 +498,12 @@ public class BoardModel {
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e, currentTurn);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
+            }
+            if (!playAI()){
+                for (BoardView view : views){
+                    view.buttonEnableCondition(true);
+                    view.updateChoicePanel(gamePlayers.get(currentTurn));
+                }
             }
         }
         else if (choice == PlayerChoice.ROLL_OUT.getChoice()){ // roll double out of jail

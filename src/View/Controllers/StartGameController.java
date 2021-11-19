@@ -24,7 +24,7 @@ public class StartGameController {
         AtomicInteger num = new AtomicInteger(2);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < BoardModel.MAX_PLAYERS-1; i++){
-            JRadioButton button = new JRadioButton(i+2 + "Players");
+            JRadioButton button = new JRadioButton(i+2 + " Players");
             if (i == 0)
                 button.setSelected(true);
             int finalI = i;
@@ -32,24 +32,6 @@ public class StartGameController {
             group.add(button);
             panel.add(button);
         }
-        /*
-        JRadioButton players2 = new JRadioButton("2 players");
-        JRadioButton players3 = new JRadioButton("3 players");
-        JRadioButton players4 = new JRadioButton("4 players");
-        JRadioButton players5 = new JRadioButton("5 players");
-        players2.setSelected(true);
-        group.add(players2);
-        group.add(players3);
-        group.add(players4);
-        group.add(players5);
-        players2.addActionListener(e -> num.set(2));
-        players3.addActionListener(e -> num.set(3));
-        players4.addActionListener(e -> num.set(4));
-        players5.addActionListener(e -> num.set(5));
-        panel.add(players2);
-        panel.add(players3);
-        panel.add(players4);
-        panel.add(players5);*/
         JOptionPane.showConfirmDialog(frame, panel,
                 "number of players", JOptionPane.DEFAULT_OPTION);
         return num.get();
@@ -99,7 +81,7 @@ public class StartGameController {
         AtomicInteger num = new AtomicInteger(0);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i<numOfAIs+1; i++){
-            JRadioButton button = new JRadioButton(i + "AI");
+            JRadioButton button = new JRadioButton(i + " AI");
             if (i == 0)
                 button.setSelected(true);
             int finalI = i;

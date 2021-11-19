@@ -88,6 +88,11 @@ public class Property extends Location{
         this.propertyListeners.add(view);
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return null;
+    }
+
     /**
      * Setter for houses.
      * @param numOfHouses An integer number of houses

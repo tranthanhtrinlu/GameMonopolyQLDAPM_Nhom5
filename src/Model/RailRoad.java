@@ -145,6 +145,11 @@ public class RailRoad extends Location{
         this.railRoadListener.add(view);
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return null;
+    }
+
     /**
      * Same payment method but using an index for the list
      * @param index An integer index

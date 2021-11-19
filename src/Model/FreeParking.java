@@ -77,5 +77,10 @@ public class FreeParking extends Location{
 
     }
 
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return new FreeParking(place.getCost(), place.getName());
+    }
+
 
 }

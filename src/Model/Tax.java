@@ -56,4 +56,9 @@ public class Tax extends Location{
         this.listeners.add(view);
 
     }
+
+    @Override
+    public Location newInstanceOfCurrentLocation(Location place) {
+        return null;
+    }
 }
