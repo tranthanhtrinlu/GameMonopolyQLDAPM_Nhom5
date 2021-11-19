@@ -17,10 +17,10 @@ public class GoToJail extends Location{
 
     /**
      * Constructor for GoToJail for the board model
-     * @param element enum of elements
+
      */
-    public GoToJail(BoardModel.BoardElements element) {
-        super(element.getCost(), element.getName());
+    public GoToJail(String name, int cost) {
+        super(cost, name);
         this.goToJailListener= new ArrayList<>();
     }
 

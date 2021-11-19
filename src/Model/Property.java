@@ -24,26 +24,25 @@ public class Property extends Location{
 
     /**
      *
-     * @param element
      */
-    public Property(BoardModel.BoardElements element){
-        super(element.getCost(), element.getName());
+    public Property(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, BoardModel.Color color, int numOfColors){
+        super(cost, name);
         this.rentCosts = new ArrayList<>(){{
-           add(element.getInitialRent());
-           add(element.getHouse1Rent());
-           add(element.getHouse2Rent());
-           add(element.getHouse3Rent());
-           add(element.getHouse4Rent());
-           add(element.getHotelRent());
+           add(initialRent);
+           add(house1Rent);
+           add(house2Rent);
+           add(house3Rent);
+           add(house4Rent);
+           add(hotelRent);
         }};
         this.propertyListeners = new ArrayList<>();
         this.numOfHouses = 0;
         this.oldNumOfHouses = 0;
         this.maxNumberOfHouses = 5;
-        this.color = element.getColor();
+        this.color = color;
         this.owner = null;
-        this.numberOfColor = element.getNumOfColors();
-        this.costPerHouse = element.getCostPerHouse();
+        this.numberOfColor = numOfColors;
+        this.costPerHouse = costPerHouse;
     }
 
     /**

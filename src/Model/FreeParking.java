@@ -15,12 +15,9 @@ public class FreeParking extends Location{
 
     ArrayList<FreeParkingListener> listeners;
 
-    /**
-     * Constructor for freeParking Boardmodel
-     * @param element enum of elements
-     */
-    public FreeParking(BoardModel.BoardElements element){
-        super(element.getCost(), element.getName());
+
+    public FreeParking(int cost, String name){
+        super(cost, name);
         this.listeners = new ArrayList<>();
 
     }

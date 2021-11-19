@@ -19,10 +19,9 @@ public class RailRoad extends Location{
 
     /**
      * Constructor for railroad boardModel
-     * @param element enum of elements
      */
-    public RailRoad(BoardModel.BoardElements element){
-        super(element.getCost(), element.getName());
+    public RailRoad(String name, int cost){
+        super(cost, name);
         this.payments = new ArrayList<>(){{
            add(25);
            add(50);

@@ -38,101 +38,51 @@ public class BoardModel {
     }
 
     public enum BoardElements{
-        MEDITERRANEAN("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2),
-        GO("Go", 0, 0,0,0,0,0,0,0,Color.NONE, 0),
-        BALTIC("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2),
-        ORIENTAL("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
-        VERMONT("Vermont Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3),
-        CONNECTICUT("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3),
-        CHARLES("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3),
-        STATES("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3),
-        VIRGINIA("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3),
-        JAMES("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3),
-        TENNESSEE("Tennessee Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3),
-        NEW_YORK("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3),
-        KENTUCKY("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3),
-        INDIANA("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3),
-        ILLINOIS("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3),
-        ATLANTIC("Atlantic Avenue", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3),
-        VENTNOR("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3),
-        MARVIN("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3),
-        PACIFIC("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
-        CAROLINA("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3),
-        PENNSYLVANIA("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3),
-        PARK("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2),
-        BOARDWALK("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2),
-        FREE_PASS( "Free Pass",0, 0, 0, 0, 0, 0, 0, 0, Color.NONE,0),
-        READING_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        PENNSYLVANIA_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        BO_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        SHORT_R("Reading Railroad", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        INCOME("Income Tax", 200,0,0,0,0,0,0,0, Color.NONE, 0),
-        LUXURY("Luxury Tax", 100,0,0,0,0,0,0,0, Color.NONE,0),
-        ELECTRIC("Electric Company", 150,0,0,0,0,0,0,0, Color.NONE, 0),
-        WATER("Water Works", 150,0,0,0,0,0,0,0, Color.NONE, 0),
-        LAND_ON_JAIL("In Jail - Just Visiting", 0,0,0,0,0,0,0,0, Color.NONE, 0),
-        GO_TO_JAIL("In Jail", 0,0,0,0,0,0,0,0, Color.NONE, 0),
-        FREE_PARKING("Free Parking", 0,0,0,0,0,0,0,0, Color.NONE, 0);
+        MEDITERRANEAN(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2)),
+        GO(new FreePass("Go", 0)),
+        BALTIC(new Property("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2)),
+        ORIENTAL(new Property("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
+        VERMONT(new Property("Vermont Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
+        CONNECTICUT(new Property("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3)),
+        CHARLES(new Property("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3)),
+        STATES(new Property("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3)),
+        VIRGINIA(new Property("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3)),
+        JAMES(new Property("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3)),
+        TENNESSEE(new Property("Tennessee Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3)),
+        NEW_YORK(new Property("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3)),
+        KENTUCKY(new Property("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3)),
+        INDIANA(new Property("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3)),
+        ILLINOIS(new Property("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3)),
+        ATLANTIC(new Property("Atlantic Avenue", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3)),
+        VENTNOR(new Property("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3)),
+        MARVIN(new Property("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3)),
+        PACIFIC(new Property("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
+        CAROLINA(new Property("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
+        PENNSYLVANIA(new Property("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3)),
+        PARK(new Property("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2)),
+        BOARDWALK(new Property("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2)),
+        FREE_PASS( new FreePass("Free Pass",0)),
+        READING_R(new RailRoad("Reading Railroad", 200)),
+        PENNSYLVANIA_R(new RailRoad("Pennsylvania Railroad", 200)),
+        BO_R(new RailRoad("B&O Railroad", 200)),
+        SHORT_R(new RailRoad("ShortLine Railroad", 200)),
+        INCOME(new Tax("Income Tax", 200)),
+        LUXURY(new Tax("Luxury Tax", 100)),
+        ELECTRIC(new Utility("Electric Company", 150)),
+        WATER(new Utility("Water Works", 150)),
+        LAND_ON_JAIL(new LandOnJail("In Jail - Just Visiting", 0)),
+        GO_TO_JAIL(new GoToJail("In Jail", 0)),
+        FREE_PARKING(new FreeParking(0, "Free Parking"));
 
 
+        private final Location piece;
 
-        private final String name;
-        private final int cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, numOfColors;
-        private final Color color;
-        BoardElements(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, Color color, int numOfColors){
-            this.name = name;
-            this.cost = cost;
-            this.costPerHouse = costPerHouse;
-            this.initialRent = initialRent;
-            this.house1Rent = house1Rent;
-            this.house2Rent = house2Rent;
-            this.house3Rent = house3Rent;
-            this.house4Rent = house4Rent;
-            this.hotelRent = hotelRent;
-            this.color = color;
-            this.numOfColors = numOfColors;
+        BoardElements(Location piece){
+            this.piece = piece;
         }
 
-        public String getName() { return this.name; }
-
-        public int getCost() {
-            return this.cost;
-        }
-
-        public int getInitialRent() {
-            return this.initialRent;
-        }
-
-        public Color getColor() {
-            return this.color;
-        }
-
-        public int getHotelRent() {
-            return this.hotelRent;
-        }
-
-        public int getCostPerHouse() {
-            return this.costPerHouse;
-        }
-
-        public int getHouse1Rent() {
-            return this.house1Rent;
-        }
-
-        public int getHouse2Rent() {
-            return this.house2Rent;
-        }
-
-        public int getHouse3Rent() {
-            return this.house3Rent;
-        }
-
-        public int getHouse4Rent() {
-            return this.house4Rent;
-        }
-
-        public int getNumOfColors() {
-            return this.numOfColors;
+        public Location getPiece() {
+            return this.piece;
         }
     }
 
@@ -232,46 +182,46 @@ public class BoardModel {
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      */
     private void initializeBoard(){
-        this.board.add(new FreePass(BoardElements.GO));
-        this.board.add(new Property(BoardElements.MEDITERRANEAN));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.BALTIC));
-        this.board.add(new Tax(BoardElements.INCOME));
-        this.board.add(new RailRoad(BoardElements.READING_R));
-        this.board.add(new Property(BoardElements.ORIENTAL));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.VERMONT));
-        this.board.add(new Property(BoardElements.CONNECTICUT));
-        this.board.add(new LandOnJail(BoardElements.LAND_ON_JAIL));
-        this.board.add(new Property(BoardElements.CHARLES));
-        this.board.add(new Utility(BoardElements.ELECTRIC));
-        this.board.add(new Property(BoardElements.STATES));
-        this.board.add(new Property(BoardElements.VIRGINIA));
-        this.board.add(new RailRoad(BoardElements.PENNSYLVANIA_R));
-        this.board.add(new Property(BoardElements.JAMES));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.TENNESSEE));
-        this.board.add(new Property(BoardElements.NEW_YORK));
-        this.board.add(new FreeParking(BoardElements.FREE_PARKING));
-        this.board.add(new Property(BoardElements.KENTUCKY));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.INDIANA));
-        this.board.add(new Property(BoardElements.ILLINOIS));
-        this.board.add(new RailRoad(BoardElements.BO_R));
-        this.board.add(new Property(BoardElements.ATLANTIC));
-        this.board.add(new Property(BoardElements.VENTNOR));
-        this.board.add(new Utility(BoardElements.WATER));
-        this.board.add(new Property(BoardElements.MARVIN));
-        this.board.add(new GoToJail(BoardElements.GO_TO_JAIL));
-        this.board.add(new Property(BoardElements.PACIFIC));
-        this.board.add(new Property(BoardElements.CAROLINA));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.PENNSYLVANIA));
-        this.board.add(new RailRoad(BoardElements.SHORT_R));
-        this.board.add(new FreePass(BoardElements.FREE_PASS));
-        this.board.add(new Property(BoardElements.PARK));
-        this.board.add(new Tax(BoardElements.LUXURY));
-        this.board.add(new Property(BoardElements.BOARDWALK));
+        this.board.add(BoardElements.GO.getPiece());
+        this.board.add(BoardElements.MEDITERRANEAN.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.BALTIC.getPiece());
+        this.board.add(BoardElements.INCOME.getPiece());
+        this.board.add(BoardElements.READING_R.getPiece());
+        this.board.add(BoardElements.ORIENTAL.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.VERMONT.getPiece());
+        this.board.add(BoardElements.CONNECTICUT.getPiece());
+        this.board.add(BoardElements.LAND_ON_JAIL.getPiece());
+        this.board.add(BoardElements.CHARLES.getPiece());
+        this.board.add(BoardElements.ELECTRIC.getPiece());
+        this.board.add(BoardElements.STATES.getPiece());
+        this.board.add(BoardElements.VIRGINIA.getPiece());
+        this.board.add(BoardElements.PENNSYLVANIA_R.getPiece());
+        this.board.add(BoardElements.JAMES.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.TENNESSEE.getPiece());
+        this.board.add(BoardElements.NEW_YORK.getPiece());
+        this.board.add(BoardElements.FREE_PARKING.getPiece());
+        this.board.add(BoardElements.KENTUCKY.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.INDIANA.getPiece());
+        this.board.add(BoardElements.ILLINOIS.getPiece());
+        this.board.add(BoardElements.BO_R.getPiece());
+        this.board.add(BoardElements.ATLANTIC.getPiece());
+        this.board.add(BoardElements.VENTNOR.getPiece());
+        this.board.add(BoardElements.WATER.getPiece());
+        this.board.add(BoardElements.MARVIN.getPiece());
+        this.board.add(BoardElements.GO_TO_JAIL.getPiece());
+        this.board.add(BoardElements.PACIFIC.getPiece());
+        this.board.add(BoardElements.CAROLINA.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.PENNSYLVANIA.getPiece());
+        this.board.add(BoardElements.SHORT_R.getPiece());
+        this.board.add(BoardElements.FREE_PASS.getPiece());
+        this.board.add(BoardElements.PARK.getPiece());
+        this.board.add(BoardElements.LUXURY.getPiece());
+        this.board.add(BoardElements.BOARDWALK.getPiece());
     }
 
     /**
@@ -465,7 +415,7 @@ public class BoardModel {
                             view.handleUpdateRoll(lastRoll1, lastRoll2);
                     }
                 } else {
-                    if (choice == 1){
+                    if (choice == PlayerChoice.ROLL.getChoice()){
                         movePlayerFunctionality(e);
                     }
                     else{

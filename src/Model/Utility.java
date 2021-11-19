@@ -19,10 +19,10 @@ public class Utility extends Location{
 
     /**
      * Constructor for Utility for the board model
-     * @param element enum of elements
+
      */
-    public Utility(BoardModel.BoardElements element) {
-        super(element.getCost(), element.getName());
+    public Utility(String name, int cost) {
+        super(cost, name);
         this.owner = null;
         this.utilityListenerList = new ArrayList<>();
     }

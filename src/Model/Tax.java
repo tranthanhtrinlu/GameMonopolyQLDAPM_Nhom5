@@ -13,10 +13,10 @@ public class Tax extends Location{
 
     /**
      * Constructor for Tax on boardModel
-     * @param element enum of elements
+
      */
-    public Tax(BoardModel.BoardElements element){
-        super(element.getCost(), element.getName());
+    public Tax(String name, int cost){
+        super(cost, name);
         this.listeners = new ArrayList<>();
     }
 

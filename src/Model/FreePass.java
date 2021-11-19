@@ -17,10 +17,10 @@ public class FreePass extends Location {
 
     /**
      * constructor for freepass board elements
-     * @param element enum of elements
+
      */
-    public FreePass(BoardModel.BoardElements element) {
-        super(element.getCost(), element.getName());
+    public FreePass(String name, int cost) {
+        super(cost, name);
         this.listeners = new ArrayList<>();
     }
 

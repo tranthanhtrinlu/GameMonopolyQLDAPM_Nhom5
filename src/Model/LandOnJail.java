@@ -17,10 +17,9 @@ public class LandOnJail extends Location {
 
     /**
      * Constructor for LandOnJail for the BoardModel
-     * @param element enum of elements
      */
-    public LandOnJail(BoardModel.BoardElements element) {
-        super(element.getCost(), element.getName());
+    public LandOnJail(String name, int cost) {
+        super(cost, name);
         this.landOnJailListenerList = new ArrayList<>();
     }
 
