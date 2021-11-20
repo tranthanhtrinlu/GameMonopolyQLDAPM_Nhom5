@@ -4,7 +4,6 @@ import Listener.BoardView;
 import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
-
 import java.util.*;
 
 /**
@@ -103,6 +102,9 @@ public class BoardModel {
         }
     }
 
+    public enum nextPlayerTurnAnnouncements{
+        ROLL_AGAIN, ROLL_OUT, PAY_OUT, PASS
+    }
 
     /**
      * Default constructor for the MVC.BoardModel.
@@ -293,11 +295,43 @@ public class BoardModel {
         return false;
     }
 
+    private void handleIfAITurn(){
+        if(!playAI()){
+            for (BoardView view : views){
+                view.buttonEnableCondition(true);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
+            }
+        }
+    }
+
+
+    private void handleBankruptcy(BoardEvent e){
+        for (BoardView view : views){
+            view.handleAnnounceBankruptedPlayer(e.getPlayer());
+            view.handleRemoveOfPlayerPiece(e);
+            view.handleRemoveOfPlayerView(e);
+
+            view.handleUpdateSidePanelDisplay(e);
+            view.handleNextTurnDisplay(e, currentTurn);
+            if (status != Status.UNFINISHED){
+                view.handleAnnounceWinner(e);
+            }
+        }
+    }
+
+    private void handleTransitionToNextPlayerTurn(BoardEvent e){
+        nextTurn();
+        for (BoardView view : views){
+            view.handleUpdateSidePanelDisplay(e);
+            view.handleNextTurnDisplay(e, currentTurn);
+        }
+    }
+
 
     private void movePlayerFunctionality(BoardEvent e){
         Timer timer2 = new Timer();
         timer2.schedule(new TimerTask() {
-            private final Player p = gamePlayers.get(currentTurn);
+            private final Player p = e.getPlayer();
             private int pos = p.getPosition();
             private final int sum = roll1 + roll2;
             @Override
@@ -319,51 +353,28 @@ public class BoardModel {
                 }
                 else{
                     p.movePlayer(sum);
-                    Location place = board.get(p.getPosition());
+                    Location place = e.boardElementByIndex(p.getPosition());
                     p.setCurrLocation(place.getName());
                     place.locationElementFunctionality(p, sum, currentTurn);
 
                     if (checkBankrupt()){
-                        for (BoardView view : views){
-                            view.handleAnnounceBankruptedPlayer(p);
-                            view.handleRemoveOfPlayerPiece(e);
-                            view.handleRemoveOfPlayerView(e);
-
-                            view.handleUpdateSidePanelDisplay(e);
-                            view.handleNextTurnDisplay(e, currentTurn);
-                            if (status != Status.UNFINISHED){
-                                view.handleAnnounceWinner(e);
-                            }
-                        }
+                        handleBankruptcy(e);
                     }else{
                         if (!e.getDoubles()){
-                            nextTurn();
-                            for (BoardView view : views){
-                                view.handleUpdateSidePanelDisplay(e);
-                                view.handleNextTurnDisplay(e, currentTurn);
-                            }
+                            handleTransitionToNextPlayerTurn(e);
                         }
                         else{
                             if (p.getInJail()){
-                                nextTurn();
-                                for (BoardView view : views){
-                                    view.handleUpdateSidePanelDisplay(e);
-                                    view.handleNextTurnDisplay(e, currentTurn);
-                                }
+                                handleTransitionToNextPlayerTurn(e);
                             }
                             else{
                                 for (BoardView view : views){
-                                    view.handleUpdateSidePanelDisplay(e);
                                     view.handleAnnounceRollingAgain(e);
+                                    view.handleUpdateSidePanelDisplay(e);
                                 }
                             }
                         }
-                        if(!playAI()){
-                            for (BoardView view : views){
-                                view.buttonEnableCondition(true);
-                                view.updateChoicePanel(gamePlayers.get(currentTurn));
-                            }
-                        }
+                        handleIfAITurn();
                     }
                     timer2.cancel();
                 }
@@ -385,26 +396,15 @@ public class BoardModel {
                 e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - 50);
             }
             if (checkBankrupt()){
-                for (BoardView view : views){
-                    view.handleAnnounceBankruptedPlayer(e.getPlayer());
-                    view.handleRemoveOfPlayerPiece(e);
-                    view.handleRemoveOfPlayerView(e);
-
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleNextTurnDisplay(e, currentTurn);
-                    if (status != Status.UNFINISHED){
-                        view.handleAnnounceWinner(e);
-                    }
-                }
+                handleBankruptcy(e);
             }else{
                 nextTurn();
                 for (BoardView view : views){
                     view.handleRollingDoubles(e);
                     view.handleUpdateSidePanelDisplay(e);
                     view.handleNextTurnDisplay(e, currentTurn);
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
                 }
+                handleIfAITurn();
             }
         }
     }
@@ -464,12 +464,7 @@ public class BoardModel {
                 view.handleNextTurnDisplay(e, currentTurn);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handleIfAITurn();
         }
         else if (choice == PlayerChoice.PASS.getChoice()){ // pass
             nextTurn();
@@ -477,21 +472,15 @@ public class BoardModel {
                 view.announcePlayerPass(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e, currentTurn);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handleIfAITurn();
         }
         else if (choice == PlayerChoice.PAY_OUT.getChoice()){ // pay out of jail
             Player p = this.gamePlayers.get(this.currentTurn);
             Location place = this.board.get(p.getPosition());
             boolean payed = false;
             if (p.payJail()){
-                p.setCurrLocation(place.getName() + " - Just Visiting"); // fix with enum
+                p.setCurrLocation(place.getName()); // fix with enum
                 p.setInJail(false);
                 payed = true;
             }
@@ -500,14 +489,8 @@ public class BoardModel {
                 view.payJail(payed, e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.handleNextTurnDisplay(e, currentTurn);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
             }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handleIfAITurn();
         }
         else if (choice == PlayerChoice.ROLL_OUT.getChoice()){ // roll double out of jail
             handleRollingDice(e, choice);
@@ -517,7 +500,6 @@ public class BoardModel {
                 view.handlePlayerChoiceToPurchaseHouses(e);
                 view.handleUpdateSidePanelDisplay(e);
                 view.updateChoicePanel(gamePlayers.get(currentTurn));
-
             }
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
