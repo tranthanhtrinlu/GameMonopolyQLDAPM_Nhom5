@@ -4,7 +4,6 @@ import Listener.BoardView;
 import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
-
 import java.util.*;
 
 /**
@@ -28,6 +27,7 @@ public class BoardModel {
     private int roll1;
     private int roll2;
     private final ArrayList<Player> gamePlayers;
+    private boolean payed;
 
 
     /**
@@ -103,6 +103,9 @@ public class BoardModel {
         }
     }
 
+    public enum nextPlayerTurnAnnouncements{
+        ROLL_AGAIN, ROLL_OUT, PAY_OUT, PASS, NONE
+    }
 
     /**
      * Default constructor for the MVC.BoardModel.
@@ -116,6 +119,7 @@ public class BoardModel {
         this.roll1 = 0;
         this.roll2 = 0;
         this.status = Status.UNFINISHED;
+        this.payed = false; 
     }
 
     /**
@@ -238,7 +242,6 @@ public class BoardModel {
         }
     }
 
-
     /**
      * method for handling the next turn of the player.
      */
@@ -255,7 +258,6 @@ public class BoardModel {
             break;
         }
     }
-
 
     /**
      * Overridden boolean method for updating the game players if one loses the game or quits.
@@ -297,11 +299,114 @@ public class BoardModel {
         return false;
     }
 
+    private void handleIfAITurn(){
+        if(!playAI()){
+            for (BoardView view : views){
+                view.buttonEnableCondition(true);
+                view.updateChoicePanel(gamePlayers.get(currentTurn));
+            }
+        }
+    }
+
+    private void getTypeOfViewAnnouncement(BoardView view, nextPlayerTurnAnnouncements announcement, BoardEvent e){
+        switch(announcement){
+            case ROLL_AGAIN:
+                view.handleAnnounceRollingAgain(e);
+                break;
+            case PASS:
+                view.announcePlayerPass(e);
+                break;
+            case ROLL_OUT:
+                view.handleRollingDoubles(e);
+                break;
+            case PAY_OUT:
+                view.payJail(payed, e);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void handleBankruptcy(BoardEvent e){
+        for (BoardView view : views){
+            view.handleAnnounceBankruptedPlayer(e.getPlayer());
+            view.handleRemoveOfPlayerPiece(e);
+            view.handleRemoveOfPlayerView(e);
+
+            view.handleUpdateSidePanelDisplay(e);
+            view.handleNextTurnDisplay(e, currentTurn);
+            if (status != Status.UNFINISHED){
+                view.handleAnnounceWinner(e);
+            }
+        }
+        handleIfAITurn();
+    }
+
+    private void handleTransitionToNextPlayerTurn(BoardEvent e, nextPlayerTurnAnnouncements announcements){
+        nextTurn();
+        for (BoardView view : views){
+            getTypeOfViewAnnouncement(view, announcements, e);
+            view.handleUpdateSidePanelDisplay(e);
+            view.handleNextTurnDisplay(e, currentTurn);
+        }
+        payed = false;
+        handleIfAITurn();
+    }
+
+    private void handlePlayerPlayAgainAnnouncement(BoardEvent e){
+        for (BoardView view : views){
+            getTypeOfViewAnnouncement(view, nextPlayerTurnAnnouncements.ROLL_AGAIN, e);
+            view.handleUpdateSidePanelDisplay(e);
+        }
+        handleIfAITurn();
+    }
+
+    private void handlePlayerQuit(BoardEvent e){
+        removePlayer();
+        for (BoardView view : this.views){
+            view.handlePlayerQuit(e);
+            if (status != Status.UNFINISHED){
+                view.handleAnnounceWinner(e);
+            }
+            view.handleRemoveOfPlayerPiece(e);
+            view.handleUpdateSidePanelDisplay(e);
+            view.handleNextTurnDisplay(e, currentTurn);
+        }
+        handleIfAITurn();
+    }
+
+    private void handlePlayerPayingOutOfJail(BoardEvent e){
+        Player p = e.getPlayer();
+        Location place = e.boardElementByIndex(p.getPosition());
+        if (p.payJail()){
+            p.setCurrLocation(place.getName()); // fix with enum
+            p.setInJail(false);
+            payed = true;
+        }
+        handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.PAY_OUT);
+    }
+
+    private void handleBuyingOfHouses(BoardEvent e){
+        for (BoardView view : this.views){
+            view.handlePlayerChoiceToPurchaseHouses(e);
+            view.handleUpdateSidePanelDisplay(e);
+            view.updateChoicePanel(e.getPlayer());
+        }
+    }
+
+    private void handleSellingOfHouses(BoardEvent e){
+        for (BoardView view : this.views){
+            view.handlePlayerChoiceToSellHouses(e);
+            view.handleUpdateSidePanelDisplay(e);
+            view.updateChoicePanel(gamePlayers.get(currentTurn));
+        }
+    }
+
 
     private void movePlayerFunctionality(BoardEvent e){
         Timer timer2 = new Timer();
         timer2.schedule(new TimerTask() {
-            private final Player p = gamePlayers.get(currentTurn);
+            private final Player p = e.getPlayer();
             private int pos = p.getPosition();
             private final int sum = roll1 + roll2;
             @Override
@@ -323,49 +428,22 @@ public class BoardModel {
                 }
                 else{
                     p.movePlayer(sum);
-                    Location place = board.get(p.getPosition());
+                    Location place = e.boardElementByIndex(p.getPosition());
                     p.setCurrLocation(place.getName());
                     place.locationElementFunctionality(p, sum, currentTurn);
 
                     if (checkBankrupt()){
-                        for (BoardView view : views){
-                            view.handleAnnounceBankruptedPlayer(p);
-                            view.handleRemoveOfPlayerPiece(e);
-                            view.handleRemoveOfPlayerView(e);
-
-                            view.handleUpdateSidePanelDisplay(e);
-                            view.handleNextTurnDisplay(e, currentTurn);
-                            if (status != Status.UNFINISHED){
-                                view.handleAnnounceWinner(e);
-                            }
-                        }
+                        handleBankruptcy(e);
                     }else{
                         if (!e.getDoubles()){
-                            nextTurn();
-                            for (BoardView view : views){
-                                view.handleUpdateSidePanelDisplay(e);
-                                view.handleNextTurnDisplay(e, currentTurn);
-                            }
+                            handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.NONE);
                         }
                         else{
                             if (p.getInJail()){
-                                nextTurn();
-                                for (BoardView view : views){
-                                    view.handleUpdateSidePanelDisplay(e);
-                                    view.handleNextTurnDisplay(e, currentTurn);
-                                }
+                                handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.NONE);
                             }
                             else{
-                                for (BoardView view : views){
-                                    view.handleUpdateSidePanelDisplay(e);
-                                    view.handleAnnounceRollingAgain(e);
-                                }
-                            }
-                        }
-                        if(!playAI()){
-                            for (BoardView view : views){
-                                view.buttonEnableCondition(true);
-                                view.updateChoicePanel(gamePlayers.get(currentTurn));
+                                handlePlayerPlayAgainAnnouncement(e);
                             }
                         }
                     }
@@ -389,26 +467,9 @@ public class BoardModel {
                 e.getPlayer().setMoneyAmount(e.getPlayer().getMoneyAmount() - 50);
             }
             if (checkBankrupt()){
-                for (BoardView view : views){
-                    view.handleAnnounceBankruptedPlayer(e.getPlayer());
-                    view.handleRemoveOfPlayerPiece(e);
-                    view.handleRemoveOfPlayerView(e);
-
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleNextTurnDisplay(e, currentTurn);
-                    if (status != Status.UNFINISHED){
-                        view.handleAnnounceWinner(e);
-                    }
-                }
+                handleBankruptcy(e);
             }else{
-                nextTurn();
-                for (BoardView view : views){
-                    view.handleRollingDoubles(e);
-                    view.handleUpdateSidePanelDisplay(e);
-                    view.handleNextTurnDisplay(e, currentTurn);
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
+                handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.ROLL_OUT);
             }
         }
     }
@@ -445,7 +506,6 @@ public class BoardModel {
         }, 0, 200);
     }
 
-
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
      */
@@ -457,79 +517,22 @@ public class BoardModel {
             handleRollingDice(e, choice);
         }
         else if (choice == PlayerChoice.QUIT.getChoice()){ // quit
-            removePlayer();
-            for (BoardView view : this.views){
-                view.handlePlayerQuit(e);
-                if (status != Status.UNFINISHED){
-                    view.handleAnnounceWinner(e);
-                }
-                view.handleRemoveOfPlayerPiece(e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e, currentTurn);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
-            }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handlePlayerQuit(e);
         }
         else if (choice == PlayerChoice.PASS.getChoice()){ // pass
-            nextTurn();
-            for (BoardView view : this.views){
-                view.announcePlayerPass(e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e, currentTurn);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
-            }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.PASS);
         }
         else if (choice == PlayerChoice.PAY_OUT.getChoice()){ // pay out of jail
-            Player p = this.gamePlayers.get(this.currentTurn);
-            Location place = this.board.get(p.getPosition());
-            boolean payed = false;
-            if (p.payJail()){
-                p.setCurrLocation(place.getName() + " - Just Visiting"); // fix with enum
-                p.setInJail(false);
-                payed = true;
-            }
-            nextTurn();
-            for (BoardView view : this.views){
-                view.payJail(payed, e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.handleNextTurnDisplay(e, currentTurn);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
-            }
-            if (!playAI()){
-                for (BoardView view : views){
-                    view.buttonEnableCondition(true);
-                    view.updateChoicePanel(gamePlayers.get(currentTurn));
-                }
-            }
+            handlePlayerPayingOutOfJail(e);
         }
         else if (choice == PlayerChoice.ROLL_OUT.getChoice()){ // roll double out of jail
             handleRollingDice(e, choice);
         }
         else if (choice == PlayerChoice.BUY_HOUSE.getChoice()){ // purchase house
-            for (BoardView view : this.views){
-                view.handlePlayerChoiceToPurchaseHouses(e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
-
-            }
+            handleBuyingOfHouses(e);
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
-            for (BoardView view : this.views){
-                view.handlePlayerChoiceToSellHouses(e);
-                view.handleUpdateSidePanelDisplay(e);
-                view.updateChoicePanel(gamePlayers.get(currentTurn));
-            }
+            handleSellingOfHouses(e);
         }
     }
 }

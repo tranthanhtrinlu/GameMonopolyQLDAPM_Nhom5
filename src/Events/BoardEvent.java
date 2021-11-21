@@ -110,7 +110,7 @@ public class BoardEvent extends EventObject {
      * @param index An integer index.
      * @return A MVC.Location object of an element on the board.
      */
-    public Location boardElement(int index){
+    public Location boardElementByIndex(int index){
         return this.board.get(index);
     }
 

@@ -1,5 +1,6 @@
 package View.Components;
 import Model.BoardElements.Location;
+import Model.BoardModel;
 import Model.GamePlayer.Player;
 import Model.BoardElements.Property;
 import javax.swing.*;

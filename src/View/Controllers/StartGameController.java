@@ -80,8 +80,8 @@ public class StartGameController {
      * @return
      */
     public int getNumOfAIs(JFrame frame, int numberOfPlayers) {
-        int numOfAIs = BoardModel.MAX_PLAYERS - numberOfPlayers;
-        JPanel panel = new JPanel(new GridLayout(numOfAIs,1));
+        int numOfAIs = (BoardModel.MAX_PLAYERS) - numberOfPlayers;
+        JPanel panel = new JPanel(new GridLayout(numOfAIs+2,1));
         AtomicInteger num = new AtomicInteger(0);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i<numOfAIs+1; i++){
