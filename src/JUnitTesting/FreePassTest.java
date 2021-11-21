@@ -16,7 +16,7 @@ public class FreePassTest {
      */
     @Test
     public void testCost(){
-        FreePass free = new FreePass(0, "Free Pass");
+        FreePass free = new FreePass("Free Pass", 0);
         assertEquals(0, free.getCost());
     }
 }

@@ -2,6 +2,7 @@ package JUnitTesting;
 
 import Model.BoardElements.Property;
 import Model.GamePlayer.Player;
+import Model.GamePlayer.User;
 import org.junit.Test;
 import Model.*;
 import static org.junit.Assert.*;
@@ -88,7 +89,7 @@ public class PropertyTest {
     @Test
     public void testValidBuyOfAPropertyByAPlayer(){
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         assertFalse(testPropertyBoardWalk.buy(testPlayer));
     }
 
@@ -99,7 +100,7 @@ public class PropertyTest {
     @Test
     public void testInvalidBuyOfAPropertyByAPlayer(){
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         testPlayer.setMoneyAmount(200);
         assertTrue(testPropertyBoardWalk.buy(testPlayer));
     }
@@ -110,7 +111,7 @@ public class PropertyTest {
     @Test
     public void testSetOfOwnerWithGetOwnerOfAProperty(){
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         testPropertyBoardWalk.setOwner(testPlayer);
         assertEquals(testPlayer, testPropertyBoardWalk.getOwner());
     }
@@ -120,7 +121,7 @@ public class PropertyTest {
      */
     @Test
     public void testingAddHouseWithPlayerValidAmount() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.getOwner().setMoneyAmount(5000);
@@ -132,7 +133,7 @@ public class PropertyTest {
      */
     @Test
     public void testingAddHouseWithPlayerInvalidAmount() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.getOwner().setMoneyAmount(200);
@@ -145,7 +146,7 @@ public class PropertyTest {
     @Test
     public void testRentWithNoHouses(){
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         testPropertyBoardWalk.buy(testPlayer);
         assertEquals(50, testPropertyBoardWalk.getRent());
     }
@@ -155,7 +156,7 @@ public class PropertyTest {
      */
     @Test
     public void testRentWithAddedHouses1() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.addHouse(1);
@@ -167,7 +168,7 @@ public class PropertyTest {
      */
     @Test
     public void testRentWithAddedHouses2() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.addHouse(2);
@@ -179,7 +180,7 @@ public class PropertyTest {
      */
     @Test
     public void testRentWithAddedHouses3() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.addHouse(3);
@@ -191,7 +192,7 @@ public class PropertyTest {
      */
     @Test
     public void testRentWithAddedHouses4() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.addHouse(4);
@@ -203,7 +204,7 @@ public class PropertyTest {
      */
     @Test
     public void testRentWithAddedHouses5() {
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.addHouse(5);
@@ -216,7 +217,7 @@ public class PropertyTest {
     @Test
     public void testGetNumberOfHousesWithAddHousesOfAProperty(){
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.getOwner().setMoneyAmount(5000);
         testPropertyBoardWalk.addHouse(1);
@@ -234,7 +235,7 @@ public class PropertyTest {
      */
     @Test
     public void testSeveralGetOldNumberOfHousesWithAddHousesOfAProperty(){
-        Player testPlayer = new Player("Testing");
+        User testPlayer = new User("Testing");
         Property testPropertyBoardWalk = new Property("BOARDWALK", 400,200,50,200,600,1400,1700,2000, BoardModel.Color.DARKBLUE, 2);
         testPropertyBoardWalk.buy(testPlayer);
         testPropertyBoardWalk.getOwner().setMoneyAmount(5000);

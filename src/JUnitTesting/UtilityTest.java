@@ -1,7 +1,7 @@
 package JUnitTesting;
 
-import Model.Player;
-import Model.Utility;
+import Model.BoardElements.Utility;
+import Model.GamePlayer.User;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,7 +19,7 @@ public class UtilityTest {
     public void testBuy() {
 
         Utility utility = new Utility("Electric Company", 100);
-        Player player = new Player("A");
+        User player = new User("A");
         player.setMoneyAmount(100);
         utility.buy(player);
         assertEquals(1, player.getNumOfProperties());
@@ -32,7 +32,7 @@ public class UtilityTest {
     @Test
     public void testResetOwner() {
         Utility utility = new Utility("Electric Company", 100);
-        Player player = new Player("A");
+        User player = new User("A");
         player.setMoneyAmount(100);
         utility.buy(player);
         utility.resetOwner();
@@ -45,7 +45,7 @@ public class UtilityTest {
     @Test
     public void testPayment() {
         Utility utility = new Utility("Electric Company", 100);
-        Player player1 = new Player("A");
+        User player1 = new User("A");
         player1.setMoneyAmount(100);
         utility.buy(player1);
         assertEquals(28, utility.payment(7));

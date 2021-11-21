@@ -1,7 +1,6 @@
 package JUnitTesting;
 
 import Model.BoardElements.GoToJail;
-import Model.GoToJail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -17,7 +16,7 @@ public class GoToJailTest {
      */
     @Test
     public void testCost(){
-        GoToJail goToJail = new GoToJail(0, "Go To Jail!");
+        GoToJail goToJail = new GoToJail("Go To Jail!", 0);
         assertEquals(0, goToJail.getCost());
     }
 }

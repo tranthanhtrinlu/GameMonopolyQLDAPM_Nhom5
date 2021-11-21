@@ -1,6 +1,6 @@
 package JUnitTesting;
 
-import Model.LandOnJail;
+import Model.BoardElements.LandOnJail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ public class LandOnJailTest {
      */
     @Test
     public void testCost(){
-        LandOnJail landOnJail= new LandOnJail(0, "Land on Jail");
+        LandOnJail landOnJail= new LandOnJail("Land on Jail", 0);
         assertEquals(0, landOnJail.getCost());
     }
 }

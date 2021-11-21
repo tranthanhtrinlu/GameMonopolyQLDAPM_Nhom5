@@ -1,5 +1,7 @@
-import Model.Player;
-import Model.RailRoad;
+package JUnitTesting;
+
+import Model.BoardElements.RailRoad;
+import Model.GamePlayer.User;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -18,10 +20,10 @@ public class RailRoadTest {
     public void testBuy() {
 
         RailRoad railRoad = new RailRoad("Short Line", 100);
-        Player player = new Player("A");
+        User player = new User("A");
         player.setMoneyAmount(100);
         railRoad.buy(player);
-        assertEquals(1, player.getNumOfProperties());
+        assertEquals(1, player.getNumOfRailroads());
 
     }
 
@@ -31,7 +33,7 @@ public class RailRoadTest {
     @Test
     public void testResetOwner() {
         RailRoad railRoad = new RailRoad("Short Line", 100);
-        Player player = new Player("A");
+        User player = new User("A");
         player.setMoneyAmount(100);
         railRoad.buy(player);
         railRoad.resetOwner();

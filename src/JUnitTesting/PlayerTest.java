@@ -3,10 +3,7 @@ package JUnitTesting;
 import Model.BoardElements.Property;
 import Model.BoardElements.RailRoad;
 import Model.BoardModel;
-import Model.GamePlayer.Player;
-import Model.Player;
-import Model.Property;
-import Model.RailRoad;
+import Model.GamePlayer.User;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -24,7 +21,7 @@ public class PlayerTest {
     @Test
     public void testGetPropertyByName() {
         Property property = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
-        Player player = new Player("Max");
+        User player = new User("Max");
         property.buy(player);
         assertNotNull(player.getPropertyByName("Mediterranean Avenue"));
     }
@@ -35,7 +32,7 @@ public class PlayerTest {
     @Test
     public void testGetNumOfProperties() {
         RailRoad railRoad = new RailRoad("Max Line", 200);
-        Player player = new Player("Max");
+        User player = new User("Max");
         railRoad.buy(player);
         assertEquals(1, player.getNumOfProperties());
     }
@@ -46,7 +43,7 @@ public class PlayerTest {
     @Test
     public void testGetPropertyByIndex() {
         RailRoad railRoad = new RailRoad("Max Line", 200);
-        Player player = new Player("Max");
+        User player = new User("Max");
         railRoad.buy(player);
         assertEquals(railRoad, player.getPropertyByIndex(0));
     }
@@ -58,7 +55,7 @@ public class PlayerTest {
     public void testNumberOfColoredPropertiesOwned() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
         Property property2 = new Property("BALTIC AVENUE", 60,50,4,20,60,180,320,450, BoardModel.Color.BROWN, 2);
-        Player player = new Player("Max");
+        User player = new User("Max");
         property1.buy(player);
         property2.buy(player);
         assertTrue(player.numberOfColoredPropertiesOwned(BoardModel.Color.BROWN, 2));
@@ -69,7 +66,7 @@ public class PlayerTest {
      */
     @Test
     public void testSetInJail() {
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.setInJail(true);
         assertTrue(player.getInJail());
     }
@@ -80,7 +77,7 @@ public class PlayerTest {
     @Test
     public void testAddProperty() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.addProperty(property1);
         assertEquals(1, player.getNumOfProperties());
     }
@@ -90,7 +87,7 @@ public class PlayerTest {
      */
     @Test
     public void testAddColorToProperty() {
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.addColorToProperty(BoardModel.Color.GREEN, 3);
         assertNotNull(player.getOwnedPropertiesBasedOnColors());
     }
@@ -101,7 +98,7 @@ public class PlayerTest {
     @Test
     public void testBankrupted() {
         Property property1 = new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250, BoardModel.Color.BROWN, 2);
-        Player player = new Player("Max");
+        User player = new User("Max");
         property1.buy(player);
         player.bankrupted();
         assertEquals(1, player.getNumOfProperties());
@@ -112,7 +109,7 @@ public class PlayerTest {
      */
     @Test
     public void testAddNumOfRailroads() {
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.addNumOfRailroads();
         assertEquals(1, player.getNumOfRailroads());
     }
@@ -122,7 +119,7 @@ public class PlayerTest {
      */
     @Test
     public void testAddNumOfUtilities() {
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.addNumOfUtilities();
         assertEquals(1, player.getNumOfUtilities());
     }
@@ -132,7 +129,7 @@ public class PlayerTest {
      */
     @Test
     public void testPayJail() {
-        Player player = new Player("Max");
+        User player = new User("Max");
         player.setMoneyAmount(70);
         assertTrue(player.payJail());
     }
