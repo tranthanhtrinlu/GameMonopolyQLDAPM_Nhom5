@@ -135,6 +135,28 @@ public class Property extends Location{
     }
 
     /**
+     * Handles player functionality when landing on property(common to AI and User)
+     * @param p current player
+     */
+    private void handlePlayerLocationOwnedFunctionality(Player p){
+        int doubleAmount = 1;
+        if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
+            doubleAmount = 2;
+        int landedPlayerMoney = p.getMoneyAmount();
+        int rentCost = this.getRentCost(this.numOfHouses) * doubleAmount;
+        if (landedPlayerMoney <= rentCost) {
+            this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
+        } else {
+            p.setMoneyAmount(p.getMoneyAmount() - rentCost);
+            this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
+        }
+
+        for (PropertyListener listener : this.propertyListeners) {
+            listener.propertyRent(new PropertyEvent(this, p, rentCost));
+        }
+    }
+
+    /**
      * handles functionality for when an AI player lands on a property
      * @param p
      * @param totalDiceRoll
@@ -142,21 +164,7 @@ public class Property extends Location{
      */
     private void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null) {
-            int doubleAmount = 1;
-            if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
-                doubleAmount = 2;
-            int landedPlayerMoney = p.getMoneyAmount();
-            int rentCost = this.getRentCost(this.numOfHouses) * doubleAmount;
-            if (landedPlayerMoney <= rentCost) {
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-            } else {
-                p.setMoneyAmount(p.getMoneyAmount() - rentCost);
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
-            }
-
-            for (PropertyListener listener : this.propertyListeners) {
-                listener.propertyRent(new PropertyEvent(this, p, rentCost));
-            }
+            handlePlayerLocationOwnedFunctionality(p);
         }
     }
 
@@ -186,21 +194,7 @@ public class Property extends Location{
                 return true;
             }
 
-            int doubleAmount = 1;
-            if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
-                doubleAmount = 2;
-            int landedPlayerMoney = p.getMoneyAmount();
-            int rentCost = this.getRentCost(this.numOfHouses) * doubleAmount;
-            if (landedPlayerMoney <= rentCost) {
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-            } else {
-                p.setMoneyAmount(p.getMoneyAmount() - rentCost);
-                this.owner.setMoneyAmount(this.owner.getMoneyAmount() + rentCost);
-            }
-
-            for (PropertyListener listener : this.propertyListeners) {
-                listener.propertyRent(new PropertyEvent(this, p, rentCost));
-            }
+            handlePlayerLocationOwnedFunctionality(p);
         }
         return false;
     }

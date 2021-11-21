@@ -78,12 +78,11 @@ public class Utility extends Location{
     }
 
     /**
-     * handles functionality for when an AI player lands on a utility
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * Handles player functionality when landing on utility(common to AI and User)
+     * @param p current player
+     * @param totalDiceRoll total of the dice roll
      */
-    private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    private void handlePlayerLocationOwnedFunctionality(Player p,int totalDiceRoll){
         int landedPlayerMoney = p.getMoneyAmount();
         int payment = this.payment(totalDiceRoll);
         if (landedPlayerMoney <= payment){
@@ -97,6 +96,16 @@ public class Utility extends Location{
         for (UtilityListener listener : this.utilityListenerList){
             listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
         }
+    }
+
+    /**
+     * handles functionality for when an AI player lands on a utility
+     * @param p
+     * @param totalDiceRoll
+     * @param currentTurn
+     */
+    private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
+        handlePlayerLocationOwnedFunctionality(p,totalDiceRoll);
         return false;
     }
 
@@ -120,18 +129,7 @@ public class Utility extends Location{
             return true;
         } else {
             if (!this.owner.equals(p)) { // if owned
-                int landedPlayerMoney = p.getMoneyAmount();
-                int payment = this.payment(totalDiceRoll);
-                if (landedPlayerMoney <= payment) {
-                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + landedPlayerMoney);
-                } else {
-                    p.setMoneyAmount(p.getMoneyAmount() - payment);
-                    this.owner.setMoneyAmount(this.owner.getMoneyAmount() + payment);
-                }
-
-                for (UtilityListener listener : this.utilityListenerList) {
-                    listener.UtilityPay(new UtilityEvent(this, p, totalDiceRoll, payment));
-                }
+                handlePlayerLocationOwnedFunctionality(p,totalDiceRoll);
                 return false;
             }
             for (UtilityListener listener : this.utilityListenerList) {
