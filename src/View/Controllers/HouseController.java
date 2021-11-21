@@ -14,7 +14,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HouseController {
 
 
-    public boolean buyHouses(JFrame frame, Player p){
+    private final static boolean SELL_HOUSE = false;
+    private final static boolean BUY_HOUSE = true;
+
+    /**
+     *
+     * @param frame
+     * @param p
+     */
+    public void buyHouses(JFrame frame, Player p){
         List<Property> listProperties = p.getEstatePropertiesOfPlayer(); // always has one
         List<String> options = new ArrayList<>();
         for(Property pr: listProperties){
@@ -27,36 +35,24 @@ public class HouseController {
         JComboBox houses = new JComboBox(options.toArray());
         AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getLst(place.get().getMaxNumberOfHouses() - place.get().getNumOfHouses()).toArray()));
         houses.addActionListener(e -> {
-            String selectedItem = (String) houses.getSelectedItem();
-            for (int i = 0; i<options.size(); i++){
-                if (options.get(i).equals(selectedItem)){
-                    place.set(listProperties.get(i));
-                }
-            }
-            num.set(new JComboBox(getLst(place.get().getMaxNumberOfHouses() - place.get().getNumOfHouses()).toArray()));
-            panel.removeAll();
-            panel.add(new JLabel("Property: "));
-            panel.add(houses);
-            panel.add(new JLabel("Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): "));
-            panel.add(num.get());
-            panel.revalidate();
+            updatePanel(panel, (String) houses.getSelectedItem(), place, num, BUY_HOUSE, options,listProperties, houses);
         });
-        panel.add(new JLabel("Property: "));
-        panel.add(houses);
-        panel.add(new JLabel("Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): "));
-        panel.add(num.get());
+        addToPanel(panel, place, num, houses, BUY_HOUSE);
         int result = JOptionPane.showConfirmDialog(frame, panel,
                 "Enter", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION){
             place.get().addHouse((int) num.get().getSelectedItem());
             JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " purchased " + num.get().getSelectedItem() + " houses for " + place.get().getName());
-            return true;
         }
-        return false;
     }
 
 
-    public boolean sellHouses(JFrame frame, Player p){
+    /**
+     *
+     * @param frame
+     * @param p
+     */
+    public void sellHouses(JFrame frame, Player p){
         List<Property> listProperties = p.getEstatePropertiesOfPlayer(); // always has one
         List<String> options = new ArrayList<>();
         for(Property pr: listProperties){
@@ -69,32 +65,15 @@ public class HouseController {
         JComboBox houses = new JComboBox(options.toArray());
         AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getLst(place.get().getNumOfHouses()).toArray()));
         houses.addActionListener(e->{
-            String selectedItem = (String) houses.getSelectedItem();
-            for (int i = 0; i<options.size(); i++){
-                if (options.get(i).equals(selectedItem)){
-                    place.set(listProperties.get(i));
-                }
-            }
-            num.set(new JComboBox(getLst(place.get().getNumOfHouses()).toArray()));
-            panel.removeAll();
-            panel.add(new JLabel("Property: "));
-            panel.add(houses);
-            panel.add(new JLabel("Number of houses " + place.get().getNumOfHouses() + ": "));
-            panel.add(num.get());
-            panel.revalidate();
+            updatePanel(panel, (String) houses.getSelectedItem(), place, num, SELL_HOUSE, options,listProperties, houses);
         });
-        panel.add(new JLabel("Property: "));
-        panel.add(houses);
-        panel.add(new JLabel("Number of houses " + place.get().getNumOfHouses() + ": "));
-        panel.add(num.get());
+        addToPanel(panel, place, num, houses, SELL_HOUSE);
         int result = JOptionPane.showConfirmDialog(frame, panel,
                 "Enter", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION){
             place.get().sellHouse((int) num.get().getSelectedItem());
             JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " sold " + num.get().getSelectedItem() + " houses on " + place.get().getName());
-            return true;
         }
-        return false;
     }
 
     /**
@@ -109,6 +88,74 @@ public class HouseController {
         return lst;
     }
 
+    /**
+     *
+     * @param panel
+     * @param selectedItem
+     * @param place
+     * @param num
+     * @param choice
+     * @param options
+     * @param listProperties
+     * @param houses
+     */
+    private void updatePanel (JPanel panel, String selectedItem, AtomicReference<Property> place, AtomicReference<JComboBox> num, boolean choice, List<String> options, List<Property> listProperties, JComboBox houses){
+        for (int i = 0; i<options.size(); i++){
+            if (options.get(i).equals(selectedItem)){
+                place.set(listProperties.get(i));
+            }
+        }
+        num.set(new JComboBox(getBuyOrSellChoices(choice, place)));
+        panel.removeAll();
+        panel.add(new JLabel("Property: "));
+        panel.add(houses);
+        panel.add(new JLabel(getText(choice, place)));
+        panel.add(num.get());
+        panel.revalidate();
+    }
+
+    /**
+     *
+     * @param choice
+     * @param place
+     * @return
+     */
+    private Object[] getBuyOrSellChoices(boolean choice, AtomicReference<Property> place){
+        if(choice == BUY_HOUSE){
+            return getLst(place.get().getMaxNumberOfHouses() - place.get().getNumOfHouses()).toArray();
+        }
+        return getLst(place.get().getNumOfHouses()).toArray();
+    }
+
+
+    /**
+     *
+     * @param choice
+     * @param place
+     * @return
+     */
+    private String getText(boolean choice, AtomicReference<Property> place){
+        if(choice == BUY_HOUSE){
+            return "Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): ";
+        }
+        return "Number of houses " + place.get().getNumOfHouses() + ": ";
+
+    }
+
+    /**
+     *
+     * @param panel
+     * @param place
+     * @param num
+     * @param houses
+     * @param choice
+     */
+    private void addToPanel(JPanel panel, AtomicReference<Property> place, AtomicReference<JComboBox> num, JComboBox houses, boolean choice){
+        panel.add(new JLabel("Property: "));
+        panel.add(houses);
+        panel.add(new JLabel(getText(choice, place)));
+        panel.add(num.get());
+    }
 
 }
 
