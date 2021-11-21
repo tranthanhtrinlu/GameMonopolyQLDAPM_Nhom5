@@ -14,6 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class StartGameController {
 
+
+    private final static String PLAYER = " Players";
+    private final static String AIPLAYER = " AI";
+
     /**
      * gets the current number of players in the game
      * @param frame JFrame
@@ -24,13 +28,7 @@ public class StartGameController {
         AtomicInteger num = new AtomicInteger(2);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < BoardModel.MAX_PLAYERS-1; i++){
-            JRadioButton button = new JRadioButton(i+2 + " Players");
-            if (i == 0)
-                button.setSelected(true);
-            int finalI = i;
-            button.addActionListener(e -> num.set(finalI +2));
-            group.add(button);
-            panel.add(button);
+            addingToPanel(panel, num, group, i+2, PLAYER);
         }
         JOptionPane.showConfirmDialog(frame, panel,
                 "number of players", JOptionPane.DEFAULT_OPTION);
@@ -75,22 +73,40 @@ public class StartGameController {
         return nameText;
     }
 
+    /**
+     *
+     * @param frame
+     * @param numberOfPlayers
+     * @return
+     */
     public int getNumOfAIs(JFrame frame, int numberOfPlayers) {
         int numOfAIs = BoardModel.MAX_PLAYERS - numberOfPlayers;
         JPanel panel = new JPanel(new GridLayout(numOfAIs,1));
         AtomicInteger num = new AtomicInteger(0);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i<numOfAIs+1; i++){
-            JRadioButton button = new JRadioButton(i + " AI");
-            if (i == 0)
-                button.setSelected(true);
-            int finalI = i;
-            button.addActionListener(e -> num.set(finalI));
-            group.add(button);
-            panel.add(button);
+            addingToPanel(panel, num, group, i, AIPLAYER);
         }
         JOptionPane.showConfirmDialog(frame, panel,
                 "Enter Number of AIs", JOptionPane.DEFAULT_OPTION);
         return num.get();
     }
+
+    /**
+     *
+     * @param panel
+     * @param num
+     * @param group
+     * @param val
+     * @param name
+     */
+    private void addingToPanel(JPanel panel, AtomicInteger num, ButtonGroup group, int val, String name){
+        JRadioButton button = new JRadioButton(val + name);
+        if (val == 0)
+            button.setSelected(true);
+        button.addActionListener(e -> num.set(val));
+        group.add(button);
+        panel.add(button);
+    }
+
 }

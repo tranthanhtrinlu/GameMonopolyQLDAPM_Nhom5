@@ -58,6 +58,10 @@ public class UtilityEvent extends EventObject {
         return super.getSource();
     }
 
+    /**
+     * Getter for the payment.
+     * @return An integer payment.
+     */
     public int getPayment() {
         return this.payment;
     }

@@ -261,7 +261,7 @@ public class BoardModel {
      * Overridden boolean method for updating the game players if one loses the game or quits.
      * @return True if the game players is updated, false otherwise.
      */
-    private boolean checkBankrupt() {
+    public boolean checkBankrupt() {
         Player p = this.gamePlayers.get(this.currentTurn);
         if (p.getMoneyAmount() == 0){
             this.removePlayer();
@@ -277,6 +277,10 @@ public class BoardModel {
         nextTurn();
         this.numberOfPlayers -= 1;
         updateStatus();
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public void updateStatus(){
