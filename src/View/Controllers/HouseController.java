@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Max and Kareem
+ * Class HouseController for controlling the purchase and selling of houses.
  */
 public class HouseController {
 
@@ -18,8 +19,8 @@ public class HouseController {
     private final static boolean BUY_HOUSE = true;
 
     /**
-     *
-     * @param frame
+     * Method for buying houses.
+     * @param frame A JFrame frame.
      * @param p
      */
     public void buyHouses(JFrame frame, Player p){
@@ -48,9 +49,9 @@ public class HouseController {
 
 
     /**
-     *
-     * @param frame
-     * @param p
+     * Method for selling houses.
+     * @param frame A JFrame frame.
+     * @param p A Player p
      */
     public void sellHouses(JFrame frame, Player p){
         List<Property> listProperties = p.getEstatePropertiesOfPlayer(); // always has one
@@ -77,8 +78,8 @@ public class HouseController {
     }
 
     /**
-     *
-     * @return
+     * Method for getting the list of integer choices for buying and selling houses
+     * @return A List of integers lst.
      */
     private List<Integer> getLst(int val){
         List<Integer> lst = new ArrayList<>();
@@ -89,15 +90,15 @@ public class HouseController {
     }
 
     /**
-     *
-     * @param panel
-     * @param selectedItem
-     * @param place
-     * @param num
-     * @param choice
-     * @param options
-     * @param listProperties
-     * @param houses
+     * Method for updating the panel.
+     * @param panel A JPanel panel.
+     * @param selectedItem A String selectedItem.
+     * @param place An Atomic reference to a Property place.
+     * @param num An Atomic reference to a JComboBox num.
+     * @param choice A Boolean choice.
+     * @param options A List of String choices.
+     * @param listProperties A List of property properties.
+     * @param houses A JComboBox houses.
      */
     private void updatePanel (JPanel panel, String selectedItem, AtomicReference<Property> place, AtomicReference<JComboBox> num, boolean choice, List<String> options, List<Property> listProperties, JComboBox houses){
         for (int i = 0; i<options.size(); i++){
@@ -115,10 +116,10 @@ public class HouseController {
     }
 
     /**
-     *
-     * @param choice
-     * @param place
-     * @return
+     * Method for getting the buy or sell choices of the player.
+     * @param choice A boolean choice.
+     * @param place An atomic reference to a property place.
+     * @return A List of choices.
      */
     private Object[] getBuyOrSellChoices(boolean choice, AtomicReference<Property> place){
         if(choice == BUY_HOUSE){
@@ -129,10 +130,10 @@ public class HouseController {
 
 
     /**
-     *
-     * @param choice
-     * @param place
-     * @return
+     * Method for returning a get text string.
+     * @param choice A Boolean choice.
+     * @param place An atomic reference to a property place.
+     * @return A string statement.
      */
     private String getText(boolean choice, AtomicReference<Property> place){
         if(choice == BUY_HOUSE){
@@ -143,12 +144,12 @@ public class HouseController {
     }
 
     /**
-     *
-     * @param panel
-     * @param place
-     * @param num
-     * @param houses
-     * @param choice
+     * Method for adding to the panel.
+     * @param panel A JPanel panel.
+     * @param place An atomic reference to a property place.
+     * @param num An atomic reference to a JComboBox num.
+     * @param houses A JComboBox houses.
+     * @param choice A boolean choice.
      */
     private void addToPanel(JPanel panel, AtomicReference<Property> place, AtomicReference<JComboBox> num, JComboBox houses, boolean choice){
         panel.add(new JLabel("Property: "));
