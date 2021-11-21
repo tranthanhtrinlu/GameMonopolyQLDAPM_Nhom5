@@ -1,5 +1,5 @@
 package Listener;
-import Events.*;
+import Events.LandOnJailEvent;
 
 
 /**

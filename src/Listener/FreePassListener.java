@@ -1,12 +1,11 @@
 package Listener;
-import Events.*;
+import Events.FreePassEvent;
 
 
 /**
  * @author Max Curkovic
  * Interface Listener.FreePassListener that describes the listener for a Free Pass element.
  */
-
 public interface FreePassListener {
 
     /**

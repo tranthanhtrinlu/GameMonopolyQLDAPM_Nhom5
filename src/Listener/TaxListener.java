@@ -1,8 +1,12 @@
 package Listener;
+import Events.TaxEvent;
 
-import Events.*;
-
+/**
+ * Listener for when player lands on tax
+ * @author Kareem
+ */
 public interface TaxListener {
+
     /**
      * Listener for when the player lands on a tax board element
      * @param e Event for Tax and free parking, taking the class and player

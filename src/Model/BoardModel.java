@@ -66,6 +66,11 @@ public class BoardModel {
         PARK(new Property("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2)),
         BOARDWALK(new Property("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2)),
         FREE_PASS( new FreePass("Free Pass",0)),
+        FREE_PASS2( new FreePass("Free Pass",0)),
+        FREE_PASS3( new FreePass("Free Pass",0)),
+        FREE_PASS4( new FreePass("Free Pass",0)),
+        FREE_PASS5( new FreePass("Free Pass",0)),
+        FREE_PASS6( new FreePass("Free Pass",0)),
         READING_R(new RailRoad("Reading Railroad", 200)),
         PENNSYLVANIA_R(new RailRoad("Pennsylvania Railroad", 200)),
         BO_R(new RailRoad("B&O Railroad", 200)),
@@ -192,12 +197,12 @@ public class BoardModel {
     private void initializeBoard(){
         this.board.add(BoardElements.GO.getPiece());
         this.board.add(BoardElements.MEDITERRANEAN.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS.getPiece());
         this.board.add(BoardElements.BALTIC.getPiece());
         this.board.add(BoardElements.INCOME.getPiece());
         this.board.add(BoardElements.READING_R.getPiece());
         this.board.add(BoardElements.ORIENTAL.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS2.getPiece());
         this.board.add(BoardElements.VERMONT.getPiece());
         this.board.add(BoardElements.CONNECTICUT.getPiece());
         this.board.add(BoardElements.LAND_ON_JAIL.getPiece());
@@ -207,12 +212,12 @@ public class BoardModel {
         this.board.add(BoardElements.VIRGINIA.getPiece());
         this.board.add(BoardElements.PENNSYLVANIA_R.getPiece());
         this.board.add(BoardElements.JAMES.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS3.getPiece());
         this.board.add(BoardElements.TENNESSEE.getPiece());
         this.board.add(BoardElements.NEW_YORK.getPiece());
         this.board.add(BoardElements.FREE_PARKING.getPiece());
         this.board.add(BoardElements.KENTUCKY.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS4.getPiece());
         this.board.add(BoardElements.INDIANA.getPiece());
         this.board.add(BoardElements.ILLINOIS.getPiece());
         this.board.add(BoardElements.BO_R.getPiece());
@@ -223,10 +228,10 @@ public class BoardModel {
         this.board.add(BoardElements.GO_TO_JAIL.getPiece());
         this.board.add(BoardElements.PACIFIC.getPiece());
         this.board.add(BoardElements.CAROLINA.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS5.getPiece());
         this.board.add(BoardElements.PENNSYLVANIA.getPiece());
         this.board.add(BoardElements.SHORT_R.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece().newInstanceOfCurrentLocation(BoardElements.FREE_PASS.getPiece()));
+        this.board.add(BoardElements.FREE_PASS6.getPiece());
         this.board.add(BoardElements.PARK.getPiece());
         this.board.add(BoardElements.LUXURY.getPiece());
         this.board.add(BoardElements.BOARDWALK.getPiece());
@@ -317,7 +322,7 @@ public class BoardModel {
                 view.announcePlayerPass(e);
                 break;
             case ROLL_OUT:
-                view.handleRollingDoubles(e);
+                view.handleResultsOfRollingInJail(e);
                 break;
             case PAY_OUT:
                 view.payJail(payed, e);
@@ -457,7 +462,7 @@ public class BoardModel {
         if (e.getDoubles()){
             e.getPlayer().setInJail(false);
             for (BoardView view : views){
-                view.handleRollingDoubles(e);
+                view.handleResultsOfRollingInJail(e);
             }
             movePlayerFunctionality(e);
         }

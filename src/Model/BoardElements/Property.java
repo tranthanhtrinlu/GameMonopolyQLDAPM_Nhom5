@@ -1,12 +1,10 @@
 package Model.BoardElements;
-
 import Events.PropertyEvent;
 import Listener.BoardView;
 import Listener.PropertyListener;
 import Model.BoardModel;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +20,22 @@ public class Property extends Location{
     private Player owner;
     private final int numberOfColor;
     private final int costPerHouse;
-    private List<PropertyListener> propertyListeners;
+    private final List<PropertyListener> propertyListeners;
     private int oldNumOfHouses;
 
     /**
-     *
+     * Constructor for Property
+     * @param name String, the name
+     * @param cost Integer, the cost
+     * @param costPerHouse Integer, the cost per house
+     * @param initialRent Integer, the initial rent
+     * @param house1Rent Integer, the rent with 1 house
+     * @param house2Rent Integer, the rent with 2 houses
+     * @param house3Rent Integer, the rent with 3 houses
+     * @param house4Rent Integer, the rent with 4 houses
+     * @param hotelRent Integer, the house with a hotel
+     * @param color BoardModel.Color, the color of property
+     * @param numOfColors Integer, then number of colors for this property
      */
     public Property(String name, int cost, int costPerHouse, int initialRent, int house1Rent, int house2Rent, int house3Rent, int house4Rent, int hotelRent, BoardModel.Color color, int numOfColors){
         super(cost, name);
@@ -91,11 +100,6 @@ public class Property extends Location{
         this.propertyListeners.add(view);
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return null;
-    }
-
     /**
      * Setter for houses.
      * @param numOfHouses An integer number of houses
@@ -119,6 +123,10 @@ public class Property extends Location{
         return false;
     }
 
+    /**
+     * Sell houses on current property
+     * @param val Integer, number of houses
+     */
     public void sellHouse(int val){
         this.numOfHouses -= val;
         this.owner.setMoneyAmount(this.owner.getMoneyAmount() + val*this.costPerHouse);
@@ -158,9 +166,9 @@ public class Property extends Location{
 
     /**
      * handles functionality for when an AI player lands on a property
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the current player
+     * @param totalDiceRoll Integer, the total Dice Roll
+     * @param currentTurn Integer, the current player turn
      */
     private void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null) {
@@ -170,9 +178,9 @@ public class Property extends Location{
 
     /**
      * handles functionality for when an human player(User) lands on a property
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current player turn
      */
     private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner == null) {
@@ -212,8 +220,6 @@ public class Property extends Location{
         }
         return false;
     }
-
-
 
     /**
      * Getter for getting cost per house

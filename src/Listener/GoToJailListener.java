@@ -1,12 +1,11 @@
 package Listener;
-import Events.*;
+import Events.GoToJailEvent;
 
 
 /**
  * @author Tony Massaad
  * Interface Listener.GoToJailListener that describes the listener for a MVC.GoToJail element.
  */
-
 public interface GoToJailListener {
 
     /**

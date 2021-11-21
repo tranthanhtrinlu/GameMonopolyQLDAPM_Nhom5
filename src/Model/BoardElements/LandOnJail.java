@@ -1,10 +1,8 @@
 package Model.BoardElements;
-
 import Events.LandOnJailEvent;
 import Listener.BoardView;
 import Listener.LandOnJailListener;
 import Model.GamePlayer.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +13,10 @@ import java.util.List;
 public class LandOnJail extends Location {
 
     private final List<LandOnJailListener> landOnJailListenerList;
-
     /**
-     * Constructor for LandOnJail for the BoardModel
+     * Constructor for LandOnJail
+     * @param name String, the name
+     * @param cost Integer, the cost
      */
     public LandOnJail(String name, int cost) {
         super(cost, name);
@@ -76,9 +75,5 @@ public class LandOnJail extends Location {
         this.landOnJailListenerList.add(view);
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return new LandOnJail(place.getName(), place.getCost());
-    }
 
 }

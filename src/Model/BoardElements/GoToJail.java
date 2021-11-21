@@ -1,11 +1,9 @@
 package Model.BoardElements;
-
 import Events.GoToJailEvent;
 import Listener.BoardView;
 import Listener.GoToJailListener;
 import Model.BoardModel;
 import Model.GamePlayer.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +13,12 @@ import java.util.List;
  */
 public class GoToJail extends Location{
 
-    private List<GoToJailListener> goToJailListener;
+    private final List<GoToJailListener> goToJailListener;
 
     /**
-     * Constructor for GoToJail for the board model
-
+     * Constructor for Go To Jail Board Element
+     * @param name String, the name
+     * @param cost Integer, the cost
      */
     public GoToJail(String name, int cost) {
         super(cost, name);
@@ -30,7 +29,7 @@ public class GoToJail extends Location{
      * Describes functionality of the MVC.GoToJail element
      * @param p MVC.Player object p
      * @param totalDiceRoll Integer sum of dice roll
-     * @param currentTurn
+     * @param currentTurn Integer, the current turn
      * @return A boolean, always returns false
      */
     @Override
@@ -79,9 +78,6 @@ public class GoToJail extends Location{
         this.goToJailListener.add(view);
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return new GoToJail(place.getName(), place.getCost());
-    }
+
 
 }

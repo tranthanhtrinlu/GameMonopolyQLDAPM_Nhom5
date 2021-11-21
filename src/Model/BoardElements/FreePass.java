@@ -1,10 +1,8 @@
 package Model.BoardElements;
-
 import Events.FreePassEvent;
 import Listener.BoardView;
 import Listener.FreePassListener;
 import Model.GamePlayer.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +12,12 @@ import java.util.List;
  */
 public class FreePass extends Location {
 
-    private List<FreePassListener> listeners;
+    private final List<FreePassListener> listeners;
 
     /**
-     * constructor for freepass board elements
-
+     * Constructor for FreePass
+     * @param name String, the name
+     * @param cost Integer, the cost
      */
     public FreePass(String name, int cost) {
         super(cost, name);
@@ -29,7 +28,7 @@ public class FreePass extends Location {
      * Boolean method for listening to the Free Pass element.
      * @param p A MVC.Player object p.
      * @param totalDiceRoll An integer totalDiceRoll.
-     * @param currentTurn
+     * @param currentTurn Integer, the current turn
      * @return Will always return false.
      */
     @Override
@@ -41,7 +40,7 @@ public class FreePass extends Location {
     }
 
     /**
-     * Overriden Java method toString for Free Pass.
+     * toString for Free Pass.
      * @param p A MVC.Player object p.
      * @return A String.
      */
@@ -77,10 +76,6 @@ public class FreePass extends Location {
         this.listeners.add(view);
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return new FreePass(place.getName(), place.getCost());
-    }
 
 
 }

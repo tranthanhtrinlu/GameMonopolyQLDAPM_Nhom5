@@ -42,7 +42,7 @@ public abstract class Location {
      * Abstract boolean method for any functionality of a location on the board.
      * @param p A MVC.Player p.
      * @param totalDiceRoll An Integer sum of the dice.
-     * @param currentTurn
+     * @param currentTurn Integer, the current turn
      * @return A boolean, value depends on the subclass.
      */
     public abstract boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn);
@@ -72,7 +72,5 @@ public abstract class Location {
      * @param view A Listener.BoardView view.
      */
     public abstract void addListener(BoardView view);
-
-    public abstract Location newInstanceOfCurrentLocation(Location place);
 
 }

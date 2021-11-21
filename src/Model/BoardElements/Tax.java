@@ -8,21 +8,32 @@ import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 
+/**
+ * Class for Tax Board Element
+ * @author Tony Massaad
+ */
 public class Tax extends Location{
 
 
-    ArrayList<TaxListener> listeners;
+    private final ArrayList<TaxListener> listeners;
 
     /**
-     * Constructor for Tax on boardModel
-
+     * Constructor for Tax
+     * @param name String, the name
+     * @param cost Integer, the cost
      */
     public Tax(String name, int cost){
         super(cost, name);
         this.listeners = new ArrayList<>();
     }
 
-
+    /**
+     * Functionality for when the player lands on Tax
+     * @param p A MVC.Player p.
+     * @param totalDiceRoll An Integer sum of the dice.
+     * @param currentTurn Integer, the current turn
+     * @return boolean, always false
+     */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (p.getMoneyAmount() <= this.getCost()){
@@ -38,29 +49,42 @@ public class Tax extends Location{
         return false;
     }
 
+    /**
+     * tostring method for displaying tax
+     * @param p A MVC.Player object p.
+     * @return String, the string
+     */
     @Override
     public String toString(Player p) {
         return p.getPlayerName() + " landed on " + this.getName() + ". Loss of money is $" + this.getCost();
     }
 
+    /**
+     * method for buying Tax (not possible so always false)
+     * @param p A MVC.Player object p.
+     * @return false
+     */
     @Override
     public boolean buy(Player p) {
         return false;
     }
 
+    /**
+     * Do nothing
+     */
     @Override
     public void resetOwner() {
         // Nothing
     }
 
+    /**
+     * add boardviw to listeners
+     * @param view A Listener.BoardView view.
+     */
     @Override
     public void addListener(BoardView view) {
         this.listeners.add(view);
 
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return null;
-    }
 }

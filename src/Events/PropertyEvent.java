@@ -1,7 +1,6 @@
 package Events;
 import Model.BoardElements.Property;
 import Model.GamePlayer.Player;
-
 import java.util.EventObject;
 
 /**

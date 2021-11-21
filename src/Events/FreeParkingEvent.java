@@ -5,6 +5,10 @@ import Model.GamePlayer.Player;
 
 import java.util.EventObject;
 
+/**
+ * class that handles the event in free parking
+ * @author Cory Helm
+ */
 public class FreeParkingEvent extends EventObject {
     private final Player player;
     private final int centerMoney;
@@ -38,7 +42,7 @@ public class FreeParkingEvent extends EventObject {
     }
 
     /**
-     * Overriden Java method for getting a source
+     * Java method for getting a source
      * @return A Java source
      */
     @Override

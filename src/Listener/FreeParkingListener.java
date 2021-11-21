@@ -1,7 +1,10 @@
 package Listener;
+import Events.FreeParkingEvent;
 
-import Events.*;
-
+/**
+ * Listener for when Player lands on Free Parking
+ * @author Tony Massaad
+ */
 public interface FreeParkingListener {
     /**
      * Listener for when the player lands on Free Parking

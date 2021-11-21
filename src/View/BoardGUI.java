@@ -378,7 +378,7 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param e BoardEvent, the BoardEvent
      */
     @Override
-    public void handleRollingDoubles(BoardEvent e){
+    public void handleResultsOfRollingInJail(BoardEvent e){
         ConfirmMessageController controller = new ConfirmMessageController();
         if (e.getDoubles()){
             controller.sendMessage(this, e.getPlayer().getPlayerName() + " rolled a double! they are now out of jail and on the move!");

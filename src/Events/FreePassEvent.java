@@ -1,7 +1,6 @@
 package Events;
 import Model.BoardElements.FreePass;
 import Model.GamePlayer.Player;
-
 import java.util.EventObject;
 
 /**
@@ -17,7 +16,7 @@ public class FreePassEvent extends EventObject {
      * Constructs a prototypical Event.
      *
      * @param pass the object on which the Event initially occurred
-     * @param p
+     * @param p Player, the player
      * @throws IllegalArgumentException if source is null
      */
     public FreePassEvent(FreePass pass, Player p) {

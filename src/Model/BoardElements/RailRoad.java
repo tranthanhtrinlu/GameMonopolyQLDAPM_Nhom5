@@ -17,7 +17,7 @@ import java.util.List;
 public class RailRoad extends Location{
     private List<Integer> payments;
     private Player owner;
-    private List<RailRoadListener> railRoadListener;
+    private final List<RailRoadListener> railRoadListener;
 
     /**
      * Constructor for railroad boardModel
@@ -160,11 +160,6 @@ public class RailRoad extends Location{
     @Override
     public void addListener(BoardView view) {
         this.railRoadListener.add(view);
-    }
-
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return null;
     }
 
     /**

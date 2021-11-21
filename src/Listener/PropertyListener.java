@@ -1,5 +1,5 @@
 package Listener;
-import Events.*;
+import Events.PropertyEvent;
 
 
 /**
@@ -29,7 +29,15 @@ public interface PropertyListener {
      */
     void propertyRent(PropertyEvent e);
 
+    /**
+     * for every listener, announce that the player could not buy property when they tried
+     * @param e PropertyEvent, the events occurring in Property
+     */
     void announceCannotBuy(PropertyEvent e);
 
+    /**
+     * for every listener, announce the purchase of property when player buys
+     * @param e Property Event, the events occurring in property
+     */
     void announcePurchaseProperty(PropertyEvent e);
 }

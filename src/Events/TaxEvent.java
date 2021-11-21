@@ -1,10 +1,12 @@
 package Events;
-
 import Model.GamePlayer.Player;
 import Model.BoardElements.Tax;
-
 import java.util.EventObject;
 
+/**
+ * Event class for what happens when player lands on Tax
+ * @author Tony Massaad
+ */
 public class TaxEvent extends EventObject {
 
     private final Player player;

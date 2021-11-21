@@ -6,10 +6,13 @@ import Model.BoardElements.Property;
 
 import java.util.List;
 
+/**
+ * Class for AI
+ * @author Kareem
+ */
 public class AI extends Player {
     /**
      * MVC.Player default constructor
-     *
      * @param name String player name
      */
     public AI(String name) {

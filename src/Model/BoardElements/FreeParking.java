@@ -15,9 +15,12 @@ import java.util.ArrayList;
 public class FreeParking extends Location{
 
 
-    ArrayList<FreeParkingListener> listeners;
-
-
+    private final ArrayList<FreeParkingListener> listeners;
+    /**
+     * Constructor for FreeParking
+     * @param cost Integer, the cost
+     * @param name String, the name
+     */
     public FreeParking(int cost, String name){
         super(cost, name);
         this.listeners = new ArrayList<>();
@@ -44,7 +47,7 @@ public class FreeParking extends Location{
     }
 
     /**
-     * Overriden Java method toString for Free Parking.
+     * toString for Free Parking.
      * @param p A MVC.Player object p.
      * @return A String.
      */
@@ -65,9 +68,7 @@ public class FreeParking extends Location{
      * Does nothing for this class.
      */
     @Override
-    public void resetOwner() {
-
-    }
+    public void resetOwner() {}
 
     /**
      * Adds the view to the ArrayList of Free Parking listeners
@@ -78,11 +79,5 @@ public class FreeParking extends Location{
         this.listeners.add(view);
 
     }
-
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return new FreeParking(place.getCost(), place.getName());
-    }
-
 
 }

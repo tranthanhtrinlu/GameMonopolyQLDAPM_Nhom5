@@ -21,8 +21,9 @@ public class Utility extends Location{
     private List<UtilityListener> utilityListenerList;
 
     /**
-     * Constructor for Utility for the board model
-
+     * Constructor for Utility
+     * @param name String, the name
+     * @param cost Integer, the cost
      */
     public Utility(String name, int cost) {
         super(cost, name);
@@ -63,11 +64,6 @@ public class Utility extends Location{
         this.utilityListenerList.add(view);
     }
 
-    @Override
-    public Location newInstanceOfCurrentLocation(Location place) {
-        return null;
-    }
-
 
     /**
      * gets the owner of the utility property
@@ -100,9 +96,9 @@ public class Utility extends Location{
 
     /**
      * handles functionality for when an AI player lands on a utility
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the sum of die
+     * @param currentTurn Integer, the current player turn
      */
     private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         handlePlayerLocationOwnedFunctionality(p,totalDiceRoll);
@@ -111,9 +107,9 @@ public class Utility extends Location{
 
     /**
      * handles functionality for when an human player(User) lands on a rail road
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the sum of die
+     * @param currentTurn Integer, the current player turn
      */
     private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null) {
@@ -140,9 +136,9 @@ public class Utility extends Location{
     }
     /**
      * location for player on the board and element functionality
-     * @param p MVC.Player
-     * @param totalDiceRoll integer of amount rolled on the dice
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the sum of die
+     * @param currentTurn Integer, the current player turn
      * @return Boolean, true if no owner, otherwise false
      */
     @Override

@@ -1,5 +1,5 @@
 package Listener;
-import Events.*;
+import Events.UtilityEvent;
 
 /**
  * @author Tony Massaad
@@ -27,7 +27,15 @@ public interface UtilityListener {
      */
     void UtilityPay(UtilityEvent e);
 
+    /**
+     * for every listener, handle the announcement of player attempting to buy Utitlity but could not
+     * @param utilityEvent UtilityEvent, the events occurring in Utility
+     */
     void announceCannotBuyUtility(UtilityEvent utilityEvent);
 
+    /**
+     * for every listener, handle the announcement of player buying a utility Location
+     * @param utilityEvent UtilityEvent, the events occurring in Utility
+     */
     void announcePurchaseOfUtility(UtilityEvent utilityEvent);
 }
