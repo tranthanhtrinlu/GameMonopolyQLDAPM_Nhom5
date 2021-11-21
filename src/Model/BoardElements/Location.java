@@ -38,7 +38,6 @@ public abstract class Location {
         return this.cost;
     }
 
-
     /**
      * Abstract boolean method for any functionality of a location on the board.
      * @param p A MVC.Player p.
