@@ -46,6 +46,10 @@ public class FreeParkingEvent extends EventObject {
         return super.getSource();
     }
 
+    /**
+     * Getter for the center money.
+     * @return An integer center money.
+     */
     public int getCenterMoney() {
         return this.centerMoney;
     }

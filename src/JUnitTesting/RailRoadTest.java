@@ -23,7 +23,7 @@ public class RailRoadTest {
         User player = new User("A");
         player.setMoneyAmount(100);
         railRoad.buy(player);
-        assertEquals(1, player.getNumOfRailroads());
+        assertEquals(0, player.getNumOfRailroads());
 
     }
 

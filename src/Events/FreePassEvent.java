@@ -42,6 +42,10 @@ public class FreePassEvent extends EventObject {
         return super.getSource();
     }
 
+    /**
+     * Getter for the player.
+     * @return A Player player.
+     */
     public Player getPlayer() {
         return this.player;
     }
