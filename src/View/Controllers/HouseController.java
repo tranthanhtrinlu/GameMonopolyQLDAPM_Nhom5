@@ -154,9 +154,9 @@ public class HouseController {
      */
     private String getText(boolean choice, AtomicReference<Property> place){
         if(choice == BUY_HOUSE){
-            return "Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): \nCost per house is $" + place.get().getCostPerHouse();
+            return "<html>Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): <br>(Cost per house is $" + place.get().getCostPerHouse() + ")</html>";
         }
-        return "Number of houses " + place.get().getNumOfHouses() + ": \nprofit per house is $" + place.get().getCostPerHouse();
+        return "<html>Number of houses " + place.get().getNumOfHouses() + ": <br>(profit per house is $" + place.get().getCostPerHouse() + ")</html>";
 
     }
 

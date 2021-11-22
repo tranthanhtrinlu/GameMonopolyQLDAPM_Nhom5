@@ -1,6 +1,7 @@
 package Model.BoardElements;
 import Events.PropertyEvent;
 import Listener.BoardView;
+import Listener.BuyableLocation;
 import Listener.PropertyListener;
 import Model.BoardModel;
 import Model.GamePlayer.AI;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Cory Helm
  * Class MVC.Property that defines a property. Extends MVC.Location
  */
-public class Property extends Location{
+public class Property extends Location implements BuyableLocation {
     private final List<Integer> rentCosts;
     private int numOfHouses;
     private final int maxNumberOfHouses;
@@ -143,10 +144,13 @@ public class Property extends Location{
     }
 
     /**
-     * Handles player functionality when landing on property(common to AI and User)
-     * @param p current player
+     * handle location owned by another user
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
      */
-    private void handlePlayerLocationOwnedFunctionality(Player p){
+    @Override
+    public void handleLocationOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
         int doubleAmount = 1;
         if (this.owner.numberOfColoredPropertiesOwned(this.color, this.numberOfColor))
             doubleAmount = 2;
@@ -165,6 +169,39 @@ public class Property extends Location{
     }
 
     /**
+     * handle Location not owned functionality for the user
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationNotOwnedFunctionalityUser(Player p, int totalDiceRoll, int currentTurn){
+        if (p.getMoneyAmount() > this.getCost()){
+            for (PropertyListener listener : this.propertyListeners) {
+                if (listener.propertyNoOwner(new PropertyEvent(this, p, 0))) {
+                    if (!this.buy(p)) {
+                        listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * handle location owned by the current player landing on it
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationOwnedByPlayerFunctionality(Player p, int totalDiceRoll, int currentTurn){
+        for (PropertyListener listener : this.propertyListeners) {
+            listener.propertyOwned(new PropertyEvent(this, p, 0));
+        }
+    }
+
+
+    /**
      * handles functionality for when an AI player lands on a property
      * @param p Player, the current player
      * @param totalDiceRoll Integer, the total Dice Roll
@@ -172,7 +209,7 @@ public class Property extends Location{
      */
     private void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null) {
-            handlePlayerLocationOwnedFunctionality(p);
+            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
         }
     }
 
@@ -184,25 +221,15 @@ public class Property extends Location{
      */
     private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner == null) {
-            for (PropertyListener listener : this.propertyListeners) {
-                if (listener.propertyNoOwner(new PropertyEvent(this, p, 0))) {
-                    if (this.buy(p)) {
-                        listener.announceCannotBuy(new PropertyEvent(this, p, 0));
-                    } else {
-                        listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
-                    }
-                }
-            }
+            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
         } else {
             if (this.owner.equals(p)) {
-                for (PropertyListener listener : this.propertyListeners) {
-                    listener.propertyOwned(new PropertyEvent(this, p, 0));
-                }
+                handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
                 return true;
             }
 
-            handlePlayerLocationOwnedFunctionality(p);
+            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
         }
         return false;
     }
@@ -310,7 +337,7 @@ public class Property extends Location{
         int total = 0;
         int totalHousesToBuy = this.maxNumberOfHouses - this.numOfHouses;
         for (int i = 0; i < totalHousesToBuy; i++){
-            if (this.owner.getMoneyAmount() * (i+1)*this.costPerHouse >= 0){
+            if ((this.owner.getMoneyAmount() - (i+1)*this.costPerHouse) >= 0){
                 total++;
             }
         }

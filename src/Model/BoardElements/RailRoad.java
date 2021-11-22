@@ -1,6 +1,7 @@
 package Model.BoardElements;
 
 import Events.RailRoadEvent;
+import Listener.BuyableLocation;
 import Listener.RailRoadListener;
 import Listener.BoardView;
 import Model.GamePlayer.AI;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Kareem El-Hajjar
  * Class Railroad that defines a railroad element. Extends MVC.Location
  */
-public class RailRoad extends Location{
+public class RailRoad extends Location implements BuyableLocation {
     private List<Integer> payments;
     private Player owner;
     private final List<RailRoadListener> railRoadListener;
@@ -35,10 +36,13 @@ public class RailRoad extends Location{
     }
 
     /**
-     * Handles player functionality when landing on railroad(common to AI and User)
-     * @param p current player
+     * handle location functionality if the location is owned
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
      */
-    private void handlePlayerLocationOwnedFunctionality(Player p){
+    @Override
+    public void handleLocationOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
         int landedPlayerMoney = p.getMoneyAmount();
         int payment = this.payments.get(this.owner.getNumOfRailroads());
         if (landedPlayerMoney <= payment){
@@ -55,14 +59,47 @@ public class RailRoad extends Location{
     }
 
     /**
+     * handle location functionality if location is not owned for the User
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationNotOwnedFunctionalityUser(Player p, int totalDiceRoll, int currentTurn) {
+        if (p.getMoneyAmount() > this.getCost()){
+            for (RailRoadListener listener : this.railRoadListener){
+                if (listener.railRoadNoOwner(new RailRoadEvent(this, p, 0))){
+                    if (!this.buy(p)) {
+                        listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * handle location owned by the current player landing on it
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationOwnedByPlayerFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        for (RailRoadListener listener : this.railRoadListener){
+            listener.railRoadOwned(new RailRoadEvent(this, p, 0));
+        }
+    }
+
+    /**
      * handles functionality for when an AI player lands on a railroad
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the dice sum
+     * @param currentTurn Integer, the current player turn
      */
     private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null){
-            handlePlayerLocationOwnedFunctionality(p);
+            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
             return false;
         }
         return false;
@@ -70,33 +107,21 @@ public class RailRoad extends Location{
 
     /**
      * handles functionality for when an human player(User) lands on a rail road
-     * @param p
-     * @param totalDiceRoll
-     * @param currentTurn
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the dice sum
+     * @param currentTurn Integer, the current player turn
      */
     private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null){
-            for (RailRoadListener listener : this.railRoadListener){
-                if (listener.railRoadNoOwner(new RailRoadEvent(this, p, 0))){
-                    if (this.buy(p)) {
-                        listener.announceCannotBuyRailRoad(new RailRoadEvent(this, p, 0));
-                    }
-                    else{
-                        listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
-                    }
-                }
-            }
+            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
         }
         else {
             if (!this.owner.equals(p)) {
-                handlePlayerLocationOwnedFunctionality(p);
+                handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
                 return false;
             }
-
-            for (RailRoadListener listener : this.railRoadListener){
-                listener.railRoadOwned(new RailRoadEvent(this, p, 0));
-            }
+            handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
 
         }
         return false;
@@ -106,7 +131,7 @@ public class RailRoad extends Location{
      * element functionality
      * @param p MVC.Player
      * @param totalDiceRoll Integer sum of dice roll
-     * @param currentTurn
+     * @param currentTurn Integer, the currentTurn
      * @return true or false
      */
     @Override

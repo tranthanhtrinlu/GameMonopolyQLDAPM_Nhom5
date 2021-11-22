@@ -413,7 +413,7 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
     /**
-     *
+     * disable or enable the buttons
      * @param b boolean, true to enable otherwise false
      */
     @Override
@@ -435,6 +435,7 @@ public class BoardGUI extends JFrame implements BoardView{
     public void announceReachingGo(BoardEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
         controller.sendMessage(this, e.getPlayer().getPlayerName() + " received $" + BoardModel.GO_MONEY + " for reaching GO");
+        this.handleUpdateSidePanelDisplay(e);
     }
 
 
@@ -445,8 +446,6 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void handleNextTurnDisplay(BoardEvent e, int updatedTurn){
         for (int i = 0; i<e.getNumOfPlayers(); i++){
-            //if (e.getPlayerByIndex(i).getOut())
-            //    continue;
             this.sidePanel.updateCurrentTurn(updatedTurn, i, e.getPlayerByIndex(i));
         }
     }
@@ -528,7 +527,7 @@ public class BoardGUI extends JFrame implements BoardView{
     public void updateChoicePanel(Player player) {
         this.gameControlPanel.removeAll();
         boolean inJail = player.getInJail();
-        boolean canPurchase = player.numberOfEstateProperties() != 0;
+        boolean canPurchase = player.numberOfEstatePropertiesThatPlayerCanBuyHousesFor() != 0;
         boolean canSell = player.numberOfEstatePropertiesWithHouses() != 0;
 
         if (!inJail) {

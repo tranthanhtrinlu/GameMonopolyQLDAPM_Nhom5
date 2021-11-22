@@ -68,7 +68,6 @@ public class PlayerDisplayPanel extends JPanel {
         this.playerButtons.add(playerButton);
         this.playerDisplays.add(playerDisplay);
         this.add(playerDisplay);
-        this.revalidate();
     }
 
     /**
@@ -83,7 +82,6 @@ public class PlayerDisplayPanel extends JPanel {
         panel.removeAll();
         button.setEnabled(false);
         panel.add(button);
-        panel.revalidate();
     }
 
     /**
@@ -104,8 +102,6 @@ public class PlayerDisplayPanel extends JPanel {
         else{
             panel.add(button);
         }
-        panel.revalidate();
-
     }
 
     /**
@@ -136,7 +132,6 @@ public class PlayerDisplayPanel extends JPanel {
                 }
                 this.playerButtons.get(index).setText(s);
             }
-            this.playerDisplays.get(index).revalidate();
         }
     }
 
@@ -146,13 +141,14 @@ public class PlayerDisplayPanel extends JPanel {
      * @param p Player, the player
      */
     private void addToPanel(JPanel panel, Player p){
+        JLabel label = new JLabel("Money: $" + p.getMoneyAmount());
         panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
-        panel.add(new JLabel("Money: $" + p.getMoneyAmount()));
+        panel.add(label);
         panel.add(new JLabel("Properties:"));
         for (int i = 0; i < p.getNumOfProperties(); i++) {
             Location place = p.getPropertyByIndex(i);
             if (p.getPropertyByIndex(i) instanceof Property) {
-                panel.add(new JLabel(place.getName() + " [" + ((Property) place).getNumOfHouses() + " houses]"));
+                panel.add(new JLabel(place.getName() + " [" + ((Property) place).getNumOfHouses() + " houses, rent: $" + ((Property) place).getRent() + "]"));
             } else {
                 panel.add(new JLabel(place.getName()));
             }

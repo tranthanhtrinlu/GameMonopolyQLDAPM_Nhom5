@@ -293,13 +293,16 @@ public abstract class Player{
      * Integer method that checks the number of properties that can have houses on them
      * @return An integer k
      */
-    public int numberOfEstateProperties(){
+    public int numberOfEstatePropertiesThatPlayerCanBuyHousesFor(){
         int k = 0;
         for (Location ownedProperty : this.ownedProperties) {
             if (ownedProperty instanceof Property) {
                 //if (this.ownedPropertiesBasedOnColors.get(((Property) ownedProperty).getColor()) == ((Property) ownedProperty).getNumberOfColor())
-                if (((Property) ownedProperty).getNumOfHouses() != ((Property) ownedProperty).getMaxNumberOfHouses())
-                    k++;
+                if (((Property) ownedProperty).getNumOfHouses() != ((Property) ownedProperty).getMaxNumberOfHouses()){
+                    if (((Property) ownedProperty).numberOfHousesCanBuy() > 0){
+                        k++;
+                    }
+                }
             }
         }
         return k;

@@ -1,6 +1,7 @@
 package Model.BoardElements;
 
 import Events.UtilityEvent;
+import Listener.BuyableLocation;
 import Listener.UtilityListener;
 import Listener.BoardView;
 import Model.BoardModel;
@@ -15,10 +16,10 @@ import java.util.List;
 * @author Kareem El-Hajjar, Max Curkovic
 * Class MVC.Utility for a utility element
 */
-public class Utility extends Location{
+public class Utility extends Location implements BuyableLocation {
 
     private Player owner;
-    private List<UtilityListener> utilityListenerList;
+    private final List<UtilityListener> utilityListenerList;
 
     /**
      * Constructor for Utility
@@ -44,6 +45,7 @@ public class Utility extends Location{
         this.owner = p;
         this.owner.addProperty(this);
         this.owner.addNumOfUtilities();
+        this.owner.setMoneyAmount(this.owner.getMoneyAmount() - this.getCost());
         return false;
     }
 
@@ -64,7 +66,6 @@ public class Utility extends Location{
         this.utilityListenerList.add(view);
     }
 
-
     /**
      * gets the owner of the utility property
      * @return MVC.Player, the owner
@@ -74,11 +75,13 @@ public class Utility extends Location{
     }
 
     /**
-     * Handles player functionality when landing on utility(common to AI and User)
-     * @param p current player
-     * @param totalDiceRoll total of the dice roll
+     * handle location functionality if the location is owned
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
      */
-    private void handlePlayerLocationOwnedFunctionality(Player p,int totalDiceRoll){
+    @Override
+    public void handleLocationOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
         int landedPlayerMoney = p.getMoneyAmount();
         int payment = this.payment(totalDiceRoll);
         if (landedPlayerMoney <= payment){
@@ -95,13 +98,47 @@ public class Utility extends Location{
     }
 
     /**
+     * handle location functionality if the location is not owned for the user
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationNotOwnedFunctionalityUser(Player p, int totalDiceRoll, int currentTurn) {
+        if (p.getMoneyAmount() > this.getCost()){
+            for (UtilityListener listener : this.utilityListenerList) {
+                if (listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll, 0))) {
+                    if (this.buy(p)) {
+                        listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * handle location functionality if the location is owned by another player
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current turn
+     */
+    @Override
+    public void handleLocationOwnedByPlayerFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        for (UtilityListener listener : this.utilityListenerList) {
+            listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll, 0));
+        }
+    }
+
+    /**
      * handles functionality for when an AI player lands on a utility
      * @param p Player, the player
      * @param totalDiceRoll Integer, the sum of die
      * @param currentTurn Integer, the current player turn
      */
     private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
-        handlePlayerLocationOwnedFunctionality(p,totalDiceRoll);
+        if (!this.owner.equals(p)){
+            handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
+        }
         return false;
     }
 
@@ -113,24 +150,14 @@ public class Utility extends Location{
      */
     private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null) {
-            for (UtilityListener listener : this.utilityListenerList) {
-                if (listener.UtilityNoOwner(new UtilityEvent(this, p, totalDiceRoll, 0))) {
-                    if (this.buy(p)) {
-                        listener.announceCannotBuyUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
-                    } else {
-                        listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
-                    }
-                }
-            }
+            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
         } else {
             if (!this.owner.equals(p)) { // if owned
-                handlePlayerLocationOwnedFunctionality(p,totalDiceRoll);
+                handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
                 return false;
             }
-            for (UtilityListener listener : this.utilityListenerList) {
-                listener.UtilityOwned(new UtilityEvent(this, p, totalDiceRoll, 0));
-            }
+            handleLocationOwnedByPlayerFunctionality(p,totalDiceRoll, currentTurn);
             return false;
         }
     }
