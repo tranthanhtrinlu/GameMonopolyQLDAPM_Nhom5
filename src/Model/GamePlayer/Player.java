@@ -288,6 +288,10 @@ public abstract class Player{
         return null;
     }
 
+    public boolean hasColor(BoardModel.Color color){
+        return this.ownedPropertiesBasedOnColors.containsKey(color);
+    }
+
 
     /**
      * Integer method that checks the number of properties that can have houses on them

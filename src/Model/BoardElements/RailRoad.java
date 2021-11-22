@@ -1,7 +1,9 @@
 package Model.BoardElements;
 
+import Events.PropertyEvent;
 import Events.RailRoadEvent;
 import Listener.BuyableLocation;
+import Listener.PropertyListener;
 import Listener.RailRoadListener;
 import Listener.BoardView;
 import Model.GamePlayer.AI;
@@ -10,12 +12,14 @@ import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Kareem El-Hajjar
  * Class Railroad that defines a railroad element. Extends MVC.Location
  */
 public class RailRoad extends Location implements BuyableLocation {
+    private final static int AI_RANDOM_CHOICE_BUY = 0;
     private List<Integer> payments;
     private Player owner;
     private final List<RailRoadListener> railRoadListener;
@@ -98,9 +102,16 @@ public class RailRoad extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
-        if (this.owner != null){
-            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
+    public void handleLocationNotOwnedFunctionalityAI(Player p, int totalDiceRoll, int currentTurn){
+        if (p.getMoneyAmount() > this.getCost()){
+            Random r = new Random();
+            int choice = r.nextInt(2);
+            if (choice == AI_RANDOM_CHOICE_BUY){
+                this.buy(p);
+                for (RailRoadListener listener : this.railRoadListener){
+                    listener.announcePurchaseRailRoad(new RailRoadEvent(this, p, 0));
+                }
+            }
         }
     }
 
@@ -111,18 +122,11 @@ public class RailRoad extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (this.owner == null){
-            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
-            return true;
-        }
-        else {
-            if (!this.owner.equals(p)) {
-                handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
-                return false;
-            }
-            handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
-
+    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        if(p instanceof AI){
+            handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
+        }else{
+            handleLocationNotOwnedFunctionalityUser(p,totalDiceRoll,currentTurn);
         }
         return false;
     }
@@ -136,10 +140,17 @@ public class RailRoad extends Location implements BuyableLocation {
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if(p instanceof AI){
-            handleAIFunctionality(p,totalDiceRoll,currentTurn);
-        }else{
-            return(handleUserFunctionality(p,totalDiceRoll,currentTurn));
+        if (this.owner == null){
+            handleLocationNotOwnedFunctionality(p, totalDiceRoll, currentTurn);
+            return true;
+        }
+        else {
+            if (!this.owner.equals(p)) {
+                handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
+                return false;
+            }
+            handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
+
         }
         return false;
     }

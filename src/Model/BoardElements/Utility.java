@@ -1,7 +1,9 @@
 package Model.BoardElements;
 
+import Events.RailRoadEvent;
 import Events.UtilityEvent;
 import Listener.BuyableLocation;
+import Listener.RailRoadListener;
 import Listener.UtilityListener;
 import Listener.BoardView;
 import Model.BoardModel;
@@ -11,13 +13,14 @@ import Model.GamePlayer.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
 * @author Kareem El-Hajjar, Max Curkovic
 * Class MVC.Utility for a utility element
 */
 public class Utility extends Location implements BuyableLocation {
-
+    private final static int AI_RANDOM_CHOICE_BUY = 0;
     private Player owner;
     private final List<UtilityListener> utilityListenerList;
 
@@ -136,31 +139,33 @@ public class Utility extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
-        if (!this.owner.equals(p)){
-            handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
+    public void handleLocationNotOwnedFunctionalityAI(Player p, int totalDiceRoll, int currentTurn){
+        if (p.getMoneyAmount() > this.getCost()){
+            Random r = new Random();
+            int choice = r.nextInt(2);
+            if (choice == AI_RANDOM_CHOICE_BUY){
+                this.buy(p);
+                for (UtilityListener listener : this.utilityListenerList) {
+                    listener.announcePurchaseOfUtility(new UtilityEvent(this, p, totalDiceRoll, 0));
+                }
+            }
         }
     }
 
     /**
-     * handles functionality for when an human player(User) lands on a rail road
+     * handles functionality for when a player lands on a rail road
      * @param p Player, the player
      * @param totalDiceRoll Integer, the sum of die
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (this.owner == null) {
-            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
-            return true;
-        } else {
-            if (!this.owner.equals(p)) { // if owned
-                handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
-                return false;
-            }
-            handleLocationOwnedByPlayerFunctionality(p,totalDiceRoll, currentTurn);
-            return false;
+    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+        if(p instanceof AI){
+            handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
+        }else{
+            handleLocationNotOwnedFunctionalityUser(p,totalDiceRoll,currentTurn);
         }
+        return false;
     }
     /**
      * location for player on the board and element functionality
@@ -171,16 +176,18 @@ public class Utility extends Location implements BuyableLocation {
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if(p instanceof AI){
-            handleAIFunctionality(p,totalDiceRoll,currentTurn);
-        }else{
-            return (handleUserFunctionality(p,totalDiceRoll,currentTurn));
+        if (this.owner == null) {
+            handleLocationNotOwnedFunctionality(p, totalDiceRoll, currentTurn);
+            return true;
+        } else {
+            if (!this.owner.equals(p)) { // if owned
+                handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
+                return false;
+            }
+            handleLocationOwnedByPlayerFunctionality(p,totalDiceRoll, currentTurn);
+            return false;
         }
-        return false;
     }
-
-
-
 
     /**
      * how much someone has to pay if a player lands on utility

@@ -8,12 +8,15 @@ import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Cory Helm
  * Class MVC.Property that defines a property. Extends MVC.Location
  */
 public class Property extends Location implements BuyableLocation {
+    private final static int AI_RANDOM_CHOICE_BUY = 0;
+
     private final List<Integer> rentCosts;
     private int numOfHouses;
     private final int maxNumberOfHouses;
@@ -208,9 +211,24 @@ public class Property extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
-        if (this.owner != null) {
-            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
+    public void handleLocationNotOwnedFunctionalityAI(Player p, int totalDiceRoll, int currentTurn){
+        if (p.getMoneyAmount() > this.getCost()){
+            if (p.hasColor(this.color)){
+                this.buy(p);
+                for (PropertyListener listener : this.propertyListeners){
+                    listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
+                }
+            }
+            else{
+                Random r = new Random();
+                int choice = r.nextInt(2);
+                if (choice == AI_RANDOM_CHOICE_BUY){
+                    this.buy(p);
+                    for (PropertyListener listener : this.propertyListeners){
+                        listener.announcePurchaseProperty(new PropertyEvent(this, p, 0));
+                    }
+                }
+            }
         }
     }
 
@@ -221,17 +239,11 @@ public class Property extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn){
-        if (this.owner == null) {
-            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
-            return true;
+    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
+        if (p instanceof AI) {
+            handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
         } else {
-            if (this.owner.equals(p)) {
-                handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
-                return true;
-            }
-
-            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
+            handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
         }
         return false;
     }
@@ -242,10 +254,15 @@ public class Property extends Location implements BuyableLocation {
      */
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
-        if (p instanceof AI) {
-            handleAIFunctionality(p,totalDiceRoll,currentTurn);
+        if (this.owner == null) {
+            handleLocationNotOwnedFunctionality(p, totalDiceRoll, currentTurn);
+            return true;
         } else {
-            return handleUserFunctionality(p,totalDiceRoll,currentTurn);
+            if (this.owner.equals(p)) {
+                handleLocationOwnedByPlayerFunctionality(p, totalDiceRoll, currentTurn);
+                return true;
+            }
+            handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
         }
         return false;
     }
