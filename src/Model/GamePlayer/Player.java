@@ -1,9 +1,9 @@
 package Model.GamePlayer;
-
 import Model.BoardModel;
 import Model.BoardElements.Location;
 import Model.BoardElements.Property;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,6 +21,8 @@ public abstract class Player{
     private int numOfRailroads;
     private int numOfUtilities;
     private boolean out;
+    private HashMap<BoardModel.Color, Integer> ownedPropertiesBasedOnColors;
+    private List<Location> ownedProperties;
 
     /**
      *  MVC.Player default constructor
@@ -33,16 +35,25 @@ public abstract class Player{
         this.position = 0;
         this.inJail = false;
         this.turnsInJail = 0;
-        this.currLocation = "GO";
+        this.currLocation = BoardModel.BoardElements.GO.getPiece().getName();
         this.numOfRailroads = 0;
         this.numOfUtilities = 0;
+        this.ownedPropertiesBasedOnColors = new HashMap<>();
+        this.ownedProperties = new ArrayList<>();
     }
 
-
+    /**
+     * set the player out if they quit or are bankrupted
+     * @param out boolean
+     */
     public void setOut(boolean out) {
         this.out = out;
     }
 
+    /**
+     * get the player attribute out
+     * @return boolean
+     */
     public boolean getOut(){
         return this.out;
     }
@@ -70,7 +81,7 @@ public abstract class Player{
      */
     public boolean movePlayer(int combinedRolls){
         this.position += combinedRolls;
-        if (this.position >= BoardModel.SIZE_OF_BOARD){
+        if (this.position > BoardModel.SIZE_OF_BOARD){
             this.moneyAmount += BoardModel.GO_MONEY;
             this.position -= BoardModel.SIZE_OF_BOARD;
             return true;
@@ -78,9 +89,15 @@ public abstract class Player{
         return false;
     }
 
+    /**
+     * get the total sum of movements the player would move with dice dum
+     * @param pos Integer, hypothetical position
+     * @param sum Integer, the sum of dice
+     * @return Integer, the new position
+     */
     public int getSumOfMovement(int pos, int sum){
         pos += sum;
-        if (pos >= BoardModel.SIZE_OF_BOARD){
+        if (pos > BoardModel.SIZE_OF_BOARD){
             pos -= BoardModel.SIZE_OF_BOARD;
         }
         return pos;
@@ -147,7 +164,7 @@ public abstract class Player{
     }
 
     /**
-     *adds railroads to player
+     * Add to the the number of railroads the player owns
      */
     public void addNumOfRailroads(){
         this.numOfRailroads++;
@@ -189,6 +206,7 @@ public abstract class Player{
      * @param obj Object, the object to check
      * @return boolean, true iff the comparison and the object is identical, otherwise false
      */
+    @Override
     public boolean equals(Object obj){
         if (this == obj){
             return true;
@@ -196,11 +214,12 @@ public abstract class Player{
         if(obj == null || obj.getClass()!= this.getClass()){
             return false;
         }
-        Player player = (Player) obj;
-        return this.playerName.equals(player.playerName) && this.moneyAmount == player.moneyAmount
-                && this.position == player.position
-                && this.inJail == player.inJail && this.currLocation.equals(player.currLocation) && this.numOfRailroads == player.numOfRailroads
-                && this.numOfUtilities == player.numOfUtilities && this.turnsInJail == player.turnsInJail;
+        User player = (User) obj;
+        return this.playerName.equals(player.getPlayerName()) && this.moneyAmount == player.getMoneyAmount()
+                && this.ownedPropertiesBasedOnColors == player.getOwnedPropertiesBasedOnColors()
+                && this.position == player.getPosition() && this.ownedProperties == player.getOwnedProperties()
+                && this.inJail == player.getInJail() && this.currLocation.equals(player.getCurrLocation()) && this.numOfRailroads == player.getNumOfRailroads()
+                && this.numOfUtilities == player.getNumOfUtilities() && this.turnsInJail == player.getTurnsInJail() && this.out == player.getOut();
     }
 
     /**
@@ -217,7 +236,7 @@ public abstract class Player{
      */
     public String toString(){
         return "Player: " + this.playerName + "\n{\n" +
-                "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\n}";
+                "Money: $" + this.moneyAmount + "\nLocation: " + this.currLocation + "\nOwned Properties: " + this.printOwnedProperties() + "\n}";
     }
 
     /**
@@ -228,22 +247,148 @@ public abstract class Player{
         return this.moneyAmount - 50 > 0;
 
     }
-    
-    public abstract void bankrupted();
 
-    public abstract void addProperty(Location property);
+    /**
+     * lets you print properties player owns
+     * @return String of owned property by the player
+     */
+    public String printOwnedProperties(){
+        StringBuilder s = new StringBuilder();
+        for(Location location : this.ownedProperties){
+            s.append(location.getName()).append(", ");
+        }
+        return s.toString();
+    }
 
-    public abstract void addColorToProperty(BoardModel.Color color, int i);
+    /**
+     * gets the properties in a players list
+     * @return properties
+     */
+    public List<Property> getEstatePropertiesOfPlayer(){
+        List<Property> properties = new ArrayList<>();
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                properties.add((Property) ownedProperty);
+            }
+        }
+        return properties;
+    }
 
-    public abstract List<Property> getEstatePropertiesOfPlayer();
+    /**
+     * gets the property using its name
+     * @param name String name of property
+     * @return if it is owned
+     */
+    public Property getPropertyByName(String name){
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty.getName().equals(name)){
+                return (Property) ownedProperty;
+            }
+        }
+        return null;
+    }
 
-    public abstract int numberOfEstateProperties();
 
-    public abstract int numberOfEstatePropertiesWithHouses();
+    /**
+     * Integer method that checks the number of properties that can have houses on them
+     * @return An integer k
+     */
+    public int numberOfEstateProperties(){
+        int k = 0;
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                //if (this.ownedPropertiesBasedOnColors.get(((Property) ownedProperty).getColor()) == ((Property) ownedProperty).getNumberOfColor())
+                if (((Property) ownedProperty).getNumOfHouses() != ((Property) ownedProperty).getMaxNumberOfHouses())
+                    k++;
+            }
+        }
+        return k;
+    }
 
-    public abstract int getNumOfProperties();
 
-    public abstract Location getPropertyByIndex(int i);
+    /**
+     * Integer method that checks the number of properties that has houses on them
+     * @return An integer k
+     */
+    public int numberOfEstatePropertiesWithHouses(){
+        int k = 0;
+        for (Location ownedProperty : this.ownedProperties) {
+            if (ownedProperty instanceof Property) {
+                if (((Property) ownedProperty).getNumOfHouses() > 0)
+                    k++;
+            }
+        }
+        return k;
+    }
 
-    public abstract boolean numberOfColoredPropertiesOwned(BoardModel.Color color, int numberOfColor);
+    /**
+     * get the size of teh property owned arrays
+     * @return Integer, the size
+     */
+    public int getNumOfProperties(){
+        return this.ownedProperties.size();
+    }
+
+    /**
+     * Get property in list by index
+     * @param i, Integer index
+     * @return Location, the property
+     */
+    public Location getPropertyByIndex(int i){
+        return this.ownedProperties.get(i);
+    }
+
+    /**
+     * how many color properties does the player own
+     * @param color Color
+     * @param numOfColor Integer
+     * @return number of colored properties owned by player
+     */
+    public boolean numberOfColoredPropertiesOwned(BoardModel.Color color, int numOfColor){
+        return this.ownedPropertiesBasedOnColors.get(color) == numOfColor;
+    }
+
+    /**
+     * Getter for the color hashmap.
+     * @return A Color, Integer hashmap ownedPropertiesBasedOnColors.
+     */
+    public HashMap<BoardModel.Color, Integer> getOwnedPropertiesBasedOnColors() {
+        return ownedPropertiesBasedOnColors;
+    }
+
+    /**
+     * Void method to add a property to the player's list of owned properties
+     * @param p A MVC.Location p
+     */
+    public void addProperty(Location p){
+        this.ownedProperties.add(p);
+    }
+
+
+    /**
+     * adds a color code to properties if the player owns all of one color double rent
+     * @param color Color
+     * @param add Integer color int added to property
+     */
+    public void addColorToProperty(BoardModel.Color color, int add){
+        if (this.ownedPropertiesBasedOnColors.containsKey(color)){
+            int oldVal = this.ownedPropertiesBasedOnColors.get(color);
+            this.ownedPropertiesBasedOnColors.replace(color, oldVal + add);
+            return;
+        }
+        this.ownedPropertiesBasedOnColors.put(color, add);
+    }
+
+    /**
+     * if player bankrupt reset all properties own by them
+     */
+    public void bankrupted(){
+        for (Location location : this.ownedProperties){
+            location.resetOwner();
+        }
+    }
+
+    public List<Location> getOwnedProperties() {
+        return this.ownedProperties;
+    }
 }

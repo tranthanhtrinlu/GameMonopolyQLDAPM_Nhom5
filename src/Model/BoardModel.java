@@ -31,89 +31,116 @@ public class BoardModel {
 
 
     /**
-     * Sets up the colours for element of the board.
+     * Color constants for the Board
      */
     public enum Color{
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE, NONE
     }
 
+    /**
+     * Status Constant of the Game.
+     */
     public enum Status{
         FINISHED, UNFINISHED
     }
 
+    /**
+     * Constants for each board element in board
+     */
     public enum BoardElements{
-        MEDITERRANEAN(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2)),
         GO(new FreePass("Go", 0)),
+        MEDITERRANEAN(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2)),
+        FREE_PASS( new FreePass("Free Pass",0)),
         BALTIC(new Property("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2)),
+        INCOME(new Tax("Income Tax", 200)),
+        READING_R(new RailRoad("Reading Railroad", 200)),
         ORIENTAL(new Property("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
+        FREE_PASS2( new FreePass("Free Pass",0)),
         VERMONT(new Property("Vermont Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
         CONNECTICUT(new Property("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3)),
+        LAND_ON_JAIL(new LandOnJail("In Jail - Just Visiting", 0)),
         CHARLES(new Property("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3)),
+        ELECTRIC(new Utility("Electric Company", 150)),
         STATES(new Property("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3)),
         VIRGINIA(new Property("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3)),
+        PENNSYLVANIA_R(new RailRoad("Pennsylvania Railroad", 200)),
         JAMES(new Property("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3)),
+        FREE_PASS3( new FreePass("Free Pass",0)),
         TENNESSEE(new Property("Tennessee Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3)),
         NEW_YORK(new Property("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3)),
+        FREE_PARKING(new FreeParking(0, "Free Parking")),
         KENTUCKY(new Property("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3)),
+        FREE_PASS4( new FreePass("Free Pass",0)),
         INDIANA(new Property("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3)),
         ILLINOIS(new Property("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3)),
+        BO_R(new RailRoad("B&O Railroad", 200)),
         ATLANTIC(new Property("Atlantic Avenue", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3)),
         VENTNOR(new Property("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3)),
+        WATER(new Utility("Water Works", 150)),
         MARVIN(new Property("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3)),
+        GO_TO_JAIL(new GoToJail("In Jail", 0)),
         PACIFIC(new Property("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
         CAROLINA(new Property("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
-        PENNSYLVANIA(new Property("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3)),
-        PARK(new Property("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2)),
-        BOARDWALK(new Property("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2)),
-        FREE_PASS( new FreePass("Free Pass",0)),
-        FREE_PASS2( new FreePass("Free Pass",0)),
-        FREE_PASS3( new FreePass("Free Pass",0)),
-        FREE_PASS4( new FreePass("Free Pass",0)),
         FREE_PASS5( new FreePass("Free Pass",0)),
-        FREE_PASS6( new FreePass("Free Pass",0)),
-        READING_R(new RailRoad("Reading Railroad", 200)),
-        PENNSYLVANIA_R(new RailRoad("Pennsylvania Railroad", 200)),
-        BO_R(new RailRoad("B&O Railroad", 200)),
+        PENNSYLVANIA(new Property("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3)),
         SHORT_R(new RailRoad("ShortLine Railroad", 200)),
-        INCOME(new Tax("Income Tax", 200)),
+        FREE_PASS6( new FreePass("Free Pass",0)),
+        PARK(new Property("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2)),
         LUXURY(new Tax("Luxury Tax", 100)),
-        ELECTRIC(new Utility("Electric Company", 150)),
-        WATER(new Utility("Water Works", 150)),
-        LAND_ON_JAIL(new LandOnJail("In Jail - Just Visiting", 0)),
-        GO_TO_JAIL(new GoToJail("In Jail", 0)),
-        FREE_PARKING(new FreeParking(0, "Free Parking"));
-
+        BOARDWALK(new Property("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2));
 
         private final Location piece;
-
+        /**
+         * Constructor for Each boardElements
+         * @param piece Location, the location of the board element
+         */
         BoardElements(Location piece){
             this.piece = piece;
         }
 
+        /**
+         * Getter method to get the location piece
+         * @return Location, the location piece
+         */
         public Location getPiece() {
             return this.piece;
         }
     }
 
+    /**
+     * Constants for handling player choice throughout the game
+     */
     public enum PlayerChoice{
         ROLL(1), QUIT(2), PASS(3), PAY_OUT(4), ROLL_OUT(5), BUY_HOUSE(6), SELL_HOUSE(7);
 
         private final int choice;
+
+        /**
+         * Constructor for player choice
+         * @param choice Integer, the choice
+         */
         PlayerChoice(int choice){
             this.choice = choice;
         }
 
+        /**
+         * getter method to get the choice
+         * @return Integer, the choice
+         */
         public int getChoice() {
             return choice;
         }
     }
 
+    /**
+     * constants for what announcements the view should handle
+     */
     public enum nextPlayerTurnAnnouncements{
         ROLL_AGAIN, ROLL_OUT, PAY_OUT, PASS, NONE
     }
 
     /**
-     * Default constructor for the MVC.BoardModel.
+     * Default constructor for the BoardModel.
      */
     public BoardModel(){
         this.gamePlayers = new ArrayList<>();
@@ -152,14 +179,27 @@ public class BoardModel {
     }
 
 
+    /**
+     * add players to the game
+     * @param player Player, the player
+     */
     public void addGamePlayers(Player player) {
         this.gamePlayers.add(player);
     }
 
+    /**
+     * Get the player by index
+     * @param i Integer, the index
+     * @return Player, the player
+     */
     public Player getPlayersByIndex(int i) {
         return this.gamePlayers.get(i);
     }
 
+    /**
+     * set the number of players in the game
+     * @param num Integer, the number
+     */
     public void setNumberOfPlayers(int num){
         this.numberOfPlayers = num;
     }
@@ -195,46 +235,9 @@ public class BoardModel {
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      */
     private void initializeBoard(){
-        this.board.add(BoardElements.GO.getPiece());
-        this.board.add(BoardElements.MEDITERRANEAN.getPiece());
-        this.board.add(BoardElements.FREE_PASS.getPiece());
-        this.board.add(BoardElements.BALTIC.getPiece());
-        this.board.add(BoardElements.INCOME.getPiece());
-        this.board.add(BoardElements.READING_R.getPiece());
-        this.board.add(BoardElements.ORIENTAL.getPiece());
-        this.board.add(BoardElements.FREE_PASS2.getPiece());
-        this.board.add(BoardElements.VERMONT.getPiece());
-        this.board.add(BoardElements.CONNECTICUT.getPiece());
-        this.board.add(BoardElements.LAND_ON_JAIL.getPiece());
-        this.board.add(BoardElements.CHARLES.getPiece());
-        this.board.add(BoardElements.ELECTRIC.getPiece());
-        this.board.add(BoardElements.STATES.getPiece());
-        this.board.add(BoardElements.VIRGINIA.getPiece());
-        this.board.add(BoardElements.PENNSYLVANIA_R.getPiece());
-        this.board.add(BoardElements.JAMES.getPiece());
-        this.board.add(BoardElements.FREE_PASS3.getPiece());
-        this.board.add(BoardElements.TENNESSEE.getPiece());
-        this.board.add(BoardElements.NEW_YORK.getPiece());
-        this.board.add(BoardElements.FREE_PARKING.getPiece());
-        this.board.add(BoardElements.KENTUCKY.getPiece());
-        this.board.add(BoardElements.FREE_PASS4.getPiece());
-        this.board.add(BoardElements.INDIANA.getPiece());
-        this.board.add(BoardElements.ILLINOIS.getPiece());
-        this.board.add(BoardElements.BO_R.getPiece());
-        this.board.add(BoardElements.ATLANTIC.getPiece());
-        this.board.add(BoardElements.VENTNOR.getPiece());
-        this.board.add(BoardElements.WATER.getPiece());
-        this.board.add(BoardElements.MARVIN.getPiece());
-        this.board.add(BoardElements.GO_TO_JAIL.getPiece());
-        this.board.add(BoardElements.PACIFIC.getPiece());
-        this.board.add(BoardElements.CAROLINA.getPiece());
-        this.board.add(BoardElements.FREE_PASS5.getPiece());
-        this.board.add(BoardElements.PENNSYLVANIA.getPiece());
-        this.board.add(BoardElements.SHORT_R.getPiece());
-        this.board.add(BoardElements.FREE_PASS6.getPiece());
-        this.board.add(BoardElements.PARK.getPiece());
-        this.board.add(BoardElements.LUXURY.getPiece());
-        this.board.add(BoardElements.BOARDWALK.getPiece());
+        for (BoardElements elements : BoardElements.values()){
+            this.board.add(elements.getPiece());
+        }
     }
 
     /**
@@ -277,6 +280,13 @@ public class BoardModel {
         return false;
     }
 
+    /**
+     * Remove the current player of the game
+     * set the player out attribute to true
+     * bankrupt the player and move to the next turn
+     * if the status checks the next player is the last, announce winner
+     * otherwise reduce the number of players by 1
+     */
     private void removePlayer(){
         Player p = this.gamePlayers.get(this.currentTurn);
         p.setOut(true);
@@ -286,24 +296,45 @@ public class BoardModel {
         updateStatus();
     }
 
+    /**
+     * get the current status
+     * @return Status, the status
+     */
     public Status getStatus() {
-        return status;
+        return this.status;
     }
 
+    /**
+     * check if there is a winner
+     * if winner, change the status to finished
+     * otherwise not
+     */
     public void updateStatus(){
         if (this.numberOfPlayers == 1){
             this.status = Status.FINISHED;
         }
     }
 
+    /**
+     * If the current player turn is the AI, AI rolls if they are not in jail, otherwise try to roll double
+     * @return boolean, true if AI otherwise false
+     */
     private boolean playAI(){
-        if(this.gamePlayers.get(this.currentTurn) instanceof AI){
-            playCurrPlayerTurn(PlayerChoice.ROLL.getChoice());
+        Player p = this.gamePlayers.get(this.currentTurn);
+        if(p instanceof AI){
+            if (!p.getInJail())
+                playCurrPlayerTurn(PlayerChoice.ROLL.getChoice());
+            else
+                playCurrPlayerTurn(PlayerChoice.ROLL_OUT.getChoice());
             return true;
         }
         return false;
     }
 
+    /**
+     * handle what happens to the player view if it's the AI's turn or not
+     * if it is the AI's turn, the play buttons are disabled, otherwise enabled and updated
+     */
     private void handleIfAITurn(){
         if(!playAI()){
             for (BoardView view : views){
@@ -313,6 +344,12 @@ public class BoardModel {
         }
     }
 
+    /**
+     * Get the type of announcement to display to the view depending on what happens
+     * @param view BoardView, the current view
+     * @param announcement nextPlayerTurnAnnouncements, the announcement handler
+     * @param e BoardEvent, the events occurring in the BoardModel
+     */
     private void getTypeOfViewAnnouncement(BoardView view, nextPlayerTurnAnnouncements announcement, BoardEvent e){
         switch(announcement){
             case ROLL_AGAIN:
@@ -332,6 +369,10 @@ public class BoardModel {
         }
     }
 
+    /**
+     * handle the bankruptcy functionality for when a player is bankrupted
+     * @param e BoardEvent, the event occurring in the BoardModel
+     */
     private void handleBankruptcy(BoardEvent e){
         for (BoardView view : views){
             view.handleAnnounceBankruptedPlayer(e.getPlayer());
@@ -347,6 +388,11 @@ public class BoardModel {
         handleIfAITurn();
     }
 
+    /**
+     * handle the transition to the next player with the respective announcements of the current player result
+     * @param e BoardEvent, the events occurring in the BoardModel
+     * @param announcements nextPlayerTurnAnnouncements, the announcement of the current player result
+     */
     private void handleTransitionToNextPlayerTurn(BoardEvent e, nextPlayerTurnAnnouncements announcements){
         nextTurn();
         for (BoardView view : views){
@@ -358,6 +404,10 @@ public class BoardModel {
         handleIfAITurn();
     }
 
+    /**
+     * handler for when the player rolls doubles and can roll again
+     * @param e BoardEvent, the events occurring in the BoardModel
+     */
     private void handlePlayerPlayAgainAnnouncement(BoardEvent e){
         for (BoardView view : views){
             getTypeOfViewAnnouncement(view, nextPlayerTurnAnnouncements.ROLL_AGAIN, e);
@@ -366,6 +416,10 @@ public class BoardModel {
         handleIfAITurn();
     }
 
+    /**
+     * handler for when the player quits the game
+     * @param e BoardEvent, the events occurring in the BoardModel
+     */
     private void handlePlayerQuit(BoardEvent e){
         removePlayer();
         for (BoardView view : this.views){
@@ -380,17 +434,25 @@ public class BoardModel {
         handleIfAITurn();
     }
 
+    /**
+     * handler for when the player pays out of Jail
+     * @param e BoardEvent, the events occurring in the BoardModel
+     */
     private void handlePlayerPayingOutOfJail(BoardEvent e){
         Player p = e.getPlayer();
         Location place = e.boardElementByIndex(p.getPosition());
         if (p.payJail()){
-            p.setCurrLocation(place.getName()); // fix with enum
+            p.setCurrLocation(place.getName());
             p.setInJail(false);
             payed = true;
         }
         handleTransitionToNextPlayerTurn(e, nextPlayerTurnAnnouncements.PAY_OUT);
     }
 
+    /**
+     * Handler for when the player chooses to purchase houses
+     * @param e BoardEvent, the events occurring the BoardModel
+     */
     private void handleBuyingOfHouses(BoardEvent e){
         for (BoardView view : this.views){
             view.handlePlayerChoiceToPurchaseHouses(e);
@@ -399,15 +461,26 @@ public class BoardModel {
         }
     }
 
+    /**
+     * handler for when the player chooses to sell houses
+     * @param e BoardEvent, the events occurring the BoardModel
+     */
     private void handleSellingOfHouses(BoardEvent e){
         for (BoardView view : this.views){
             view.handlePlayerChoiceToSellHouses(e);
             view.handleUpdateSidePanelDisplay(e);
-            view.updateChoicePanel(gamePlayers.get(currentTurn));
+            view.updateChoicePanel(e.getPlayer());
         }
     }
 
-
+    /**
+     * Handler for when the player rolls
+     * displays the movement of player
+     * operates the property landed functionality, and run the state of the game accordingly
+     * If player is bankrupted, handle bankruptcy method
+     * otherwise if not doubles, move to next player, otherwise play again if not in jail else move to next player
+     * @param e BoardEvent, the events occurring in the BoardModel
+     */
     private void movePlayerFunctionality(BoardEvent e){
         Timer timer2 = new Timer();
         timer2.schedule(new TimerTask() {
@@ -420,7 +493,7 @@ public class BoardModel {
                     int oldPos = pos;
                     boolean go = false;
                     pos++;
-                    if (pos - SIZE_OF_BOARD+1 == 0){
+                    if (pos > SIZE_OF_BOARD){
                         go = true;
                         pos = 0;
                     }
@@ -458,6 +531,12 @@ public class BoardModel {
         }, 0, 200);
     }
 
+    /**
+     * Handler for when the player attempts to roll out of jail
+     * if the player rolls doubles, announce and run the movePlayerFunctionality method
+     * otherwise, handle the in jail functionality accordingly
+     * @param e BoardEvent, the event
+     */
     private void rollingOutOfJailFunctionality(BoardEvent e){
         if (e.getDoubles()){
             e.getPlayer().setInJail(false);
@@ -479,7 +558,13 @@ public class BoardModel {
         }
     }
 
-
+    /**
+     * handler for when the player rolls in general
+     * animation for rolling
+     * if player rolls, run movePlayerFunctionality. Otherwise, run rollingOutOfJailFunctionality
+     * @param e BoardEvent, the events occurring in the BoardModel
+     * @param choice Integer, the player choice
+     */
     private void handleRollingDice(BoardEvent e, int choice){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {

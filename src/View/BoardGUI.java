@@ -301,7 +301,7 @@ public class BoardGUI extends JFrame implements BoardView{
     @Override
     public void visiting(LandOnJailEvent e) {
         ConfirmMessageController controller = new ConfirmMessageController();
-        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed " + e.getLandOnJail().getName() + " - Just Visiting");
+        controller.sendMessage(this, e.getPlayer().getPlayerName() + " landed " + e.getLandOnJail().getName());
     }
 
 
@@ -392,13 +392,20 @@ public class BoardGUI extends JFrame implements BoardView{
         }
     }
 
+    /**
+     * handles the choice to buy houses
+     * @param e BoardEvent, the event occurring in the BoardModel
+     */
     @Override
     public void handlePlayerChoiceToPurchaseHouses(BoardEvent e) {
         HouseController controller = new HouseController();
         controller.buyHouses(this, e.getPlayer());
     }
 
-
+    /**
+     * handle the choice to sell houses
+     * @param e BoardEvent, the event occurring in the BoardModel
+     */
     @Override
     public void handlePlayerChoiceToSellHouses(BoardEvent e) {
         HouseController controller = new HouseController();

@@ -21,7 +21,7 @@ public class BoardController implements ActionListener {
 
     /**
      * The Action Event for when a certain button is pressed according to the command of the button
-     * @param e
+     * @param e ActionEvent, the ActionEvent
      */
     @Override
     public void actionPerformed(ActionEvent e) {

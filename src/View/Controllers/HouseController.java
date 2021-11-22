@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * @author Max and Kareem
+ * @author Max, Kareem, Tony and Cory
  * Class HouseController for controlling the purchase and selling of houses.
  */
 public class HouseController {
@@ -21,7 +21,7 @@ public class HouseController {
     /**
      * Method for buying houses.
      * @param frame A JFrame frame.
-     * @param p
+     * @param p Player, the current player
      */
     public void buyHouses(JFrame frame, Player p){
         List<Property> listProperties = p.getEstatePropertiesOfPlayer(); // always has one
@@ -31,27 +31,14 @@ public class HouseController {
                 options.add(pr.getName());
             }
         }
-        JPanel panel = new JPanel(new GridLayout(2,2));
-        AtomicReference<Property> place = new AtomicReference<>(listProperties.get(0));
-        JComboBox houses = new JComboBox(options.toArray());
-        AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getLst(place.get().getMaxNumberOfHouses() - place.get().getNumOfHouses()).toArray()));
-        houses.addActionListener(e -> {
-            updatePanel(panel, (String) houses.getSelectedItem(), place, num, BUY_HOUSE, options,listProperties, houses);
-        });
-        addToPanel(panel, place, num, houses, BUY_HOUSE);
-        int result = JOptionPane.showConfirmDialog(frame, panel,
-                "Enter", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION){
-            place.get().addHouse((int) num.get().getSelectedItem());
-            JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " purchased " + num.get().getSelectedItem() + " houses for " + place.get().getName());
-        }
+        handlePanelOfBuyOrSellHouses(BUY_HOUSE, listProperties, options, p, frame);
     }
 
 
     /**
      * Method for selling houses.
      * @param frame A JFrame frame.
-     * @param p A Player p
+     * @param p Player, the current player
      */
     public void sellHouses(JFrame frame, Player p){
         List<Property> listProperties = p.getEstatePropertiesOfPlayer(); // always has one
@@ -61,21 +48,51 @@ public class HouseController {
                 options.add(pr.getName());
             }
         }
+        handlePanelOfBuyOrSellHouses(SELL_HOUSE, listProperties, options, p, frame);
+    }
+
+    /**
+     * create the panel for buy or sell houses accordingly, depending on the choice
+     * @param choice boolean, true if buy houses otherwise false
+     * @param listProperties List<Property>, a list of player properties
+     * @param options List<String> list of player properties as strings respective to listProperties
+     * @param p Player, the player
+     * @param frame JFrame, the frame
+     */
+    private void handlePanelOfBuyOrSellHouses(boolean choice, List<Property> listProperties, List<String> options, Player p, JFrame frame){
         JPanel panel = new JPanel(new GridLayout(2,2));
-        AtomicReference<Property> place = new AtomicReference<>(listProperties.get(0));
+        AtomicReference<Property> place = new AtomicReference<>(p.getPropertyByName(options.get(0)));
         JComboBox houses = new JComboBox(options.toArray());
-        AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getLst(place.get().getNumOfHouses()).toArray()));
+        AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getBuyOrSellChoices(choice, place)));
         houses.addActionListener(e->{
-            updatePanel(panel, (String) houses.getSelectedItem(), place, num, SELL_HOUSE, options,listProperties, houses);
+            updatePanel(panel, (String) houses.getSelectedItem(), place, num, choice, options,listProperties, houses);
         });
-        addToPanel(panel, place, num, houses, SELL_HOUSE);
+        addToPanel(panel, place, num, houses, choice);
         int result = JOptionPane.showConfirmDialog(frame, panel,
                 "Enter", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION){
-            place.get().sellHouse((int) num.get().getSelectedItem());
-            JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " sold " + num.get().getSelectedItem() + " houses on " + place.get().getName());
+            getResultOfChoice(choice, place, num, frame, p);
         }
     }
+
+    /**
+     * method for getting the result of choice
+     * @param choice boolean, true if buy houses otherwise false
+     * @param place AtomicReference, Property place of player choice
+     * @param num AtomicInteger, int value of player choice
+     * @param p Player, the player
+     * @param frame JFrame, the frame
+     */
+    private void getResultOfChoice(boolean choice, AtomicReference<Property> place, AtomicReference<JComboBox> num, JFrame frame, Player p){
+        if (choice == BUY_HOUSE){
+            place.get().addHouse((int) num.get().getSelectedItem());
+            JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " purchased " + num.get().getSelectedItem() + " houses for " + place.get().getName());
+            return;
+        }
+        place.get().sellHouse((int) num.get().getSelectedItem());
+        JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " sold " + num.get().getSelectedItem() + " houses on " + place.get().getName());
+    }
+
 
     /**
      * Method for getting the list of integer choices for buying and selling houses
@@ -123,7 +140,7 @@ public class HouseController {
      */
     private Object[] getBuyOrSellChoices(boolean choice, AtomicReference<Property> place){
         if(choice == BUY_HOUSE){
-            return getLst(place.get().getMaxNumberOfHouses() - place.get().getNumOfHouses()).toArray();
+            return getLst(place.get().numberOfHousesCanBuy()).toArray();
         }
         return getLst(place.get().getNumOfHouses()).toArray();
     }
@@ -137,9 +154,9 @@ public class HouseController {
      */
     private String getText(boolean choice, AtomicReference<Property> place){
         if(choice == BUY_HOUSE){
-            return "Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): ";
+            return "Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): \nCost per house is $" + place.get().getCostPerHouse();
         }
-        return "Number of houses " + place.get().getNumOfHouses() + ": ";
+        return "Number of houses " + place.get().getNumOfHouses() + ": \nprofit per house is $" + place.get().getCostPerHouse();
 
     }
 

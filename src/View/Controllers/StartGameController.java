@@ -1,6 +1,5 @@
 package View.Controllers;
 import Model.BoardModel;
-import View.BoardGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,13 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Controller for intro to the game
  * mainly for getting the number of players and their names
- * @author Tony Massaad
+ * @author Tony Massaad and Cory Helm
  */
 public class StartGameController {
 
 
     private final static String PLAYER = " Players";
-    private final static String AIPLAYER = " AI";
+    private final static String AI_PLAYER = " AI";
 
     /**
      * gets the current number of players in the game
@@ -28,7 +27,7 @@ public class StartGameController {
         AtomicInteger num = new AtomicInteger(2);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i < BoardModel.MAX_PLAYERS-1; i++){
-            addingToPanel(panel, num, group, i+2, PLAYER);
+            addingToPanel(panel, num, group, i, i+2, PLAYER);
         }
         JOptionPane.showConfirmDialog(frame, panel,
                 "number of players", JOptionPane.DEFAULT_OPTION);
@@ -74,10 +73,10 @@ public class StartGameController {
     }
 
     /**
-     *
-     * @param frame
-     * @param numberOfPlayers
-     * @return
+     * get the choice of the number of AI
+     * @param frame JFrame, the frame
+     * @param numberOfPlayers Integer, the number of players
+     * @return Integer, the number of AIs
      */
     public int getNumOfAIs(JFrame frame, int numberOfPlayers) {
         int numOfAIs = (BoardModel.MAX_PLAYERS) - numberOfPlayers;
@@ -85,7 +84,7 @@ public class StartGameController {
         AtomicInteger num = new AtomicInteger(0);
         ButtonGroup group = new ButtonGroup();
         for (int i = 0; i<numOfAIs+1; i++){
-            addingToPanel(panel, num, group, i, AIPLAYER);
+            addingToPanel(panel, num, group, i, i, AI_PLAYER);
         }
         JOptionPane.showConfirmDialog(frame, panel,
                 "Enter Number of AIs", JOptionPane.DEFAULT_OPTION);
@@ -93,18 +92,19 @@ public class StartGameController {
     }
 
     /**
-     *
-     * @param panel
-     * @param num
-     * @param group
-     * @param val
-     * @param name
+     * Add to the choice panel for the viewer to choose from
+     * @param panel JPanel, the panel
+     * @param num AtomicInteger, the val to set the choice
+     * @param group ButtonGroup, group the radio buttons
+     * @param actualVal Integer, the value index in which the button is at
+     * @param theoreticalVal Integer, the value index on what to set the num and button text to
+     * @param name String, the name. AI if AI otherwise PLAYER
      */
-    private void addingToPanel(JPanel panel, AtomicInteger num, ButtonGroup group, int val, String name){
-        JRadioButton button = new JRadioButton(val + name);
-        if (val == 0)
+    private void addingToPanel(JPanel panel, AtomicInteger num, ButtonGroup group, int actualVal, int theoreticalVal, String name){
+        JRadioButton button = new JRadioButton(theoreticalVal + name);
+        if (actualVal == 0)
             button.setSelected(true);
-        button.addActionListener(e -> num.set(val));
+        button.addActionListener(e -> num.set(theoreticalVal));
         group.add(button);
         panel.add(button);
     }

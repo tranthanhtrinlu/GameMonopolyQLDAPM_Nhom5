@@ -301,4 +301,19 @@ public class Property extends Location{
         return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Rent: "
                 + this.rentCosts.get(numOfHouses) + "} \n" + p.getPlayerName() + " will lose money now";
     }
+
+    /**
+     * get the number of houses a current property can be bought by the Player owner
+     * @return Integer, the total number of houses
+     */
+    public int numberOfHousesCanBuy() {
+        int total = 0;
+        int totalHousesToBuy = this.maxNumberOfHouses - this.numOfHouses;
+        for (int i = 0; i < totalHousesToBuy; i++){
+            if (this.owner.getMoneyAmount() * (i+1)*this.costPerHouse >= 0){
+                total++;
+            }
+        }
+        return total;
+    }
 }
