@@ -93,7 +93,6 @@ public class HouseController {
         JOptionPane.showMessageDialog(frame, "Player: " + p.getPlayerName() + " sold " + num.get().getSelectedItem() + " houses on " + place.get().getName());
     }
 
-
     /**
      * Method for getting the list of integer choices for buying and selling houses
      * @return A List of integers lst.
