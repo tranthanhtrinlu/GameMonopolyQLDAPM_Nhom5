@@ -8,7 +8,7 @@ Since the last deliverable, we have implemented the housing system (which is now
 
 The current implementation focuses on a GUI with a jail system, ability to buy properties, railroads and utilities. Players can go around the board and each move/roll of the die has an animation that really makes the Monopoly game feel life-like. On the side bar, the list of players and their owned properties/money balance is listed. Each option the player is given, whether it would be to pass/roll or buy a new property, is given as a pop up. There is also the option for a player to purchase and sell houses.
 
-For testing purposing, a player can buy houses whenever they own a property. For Milestone 4, this will change to true Monopoly rules and set it so that the Player can only purchase properties if and only if they own all the necessary colors of a given property. 
+For testing purposes, a player can buy houses whenever they own a property. For Milestone 4, this will change to true Monopoly rules and set it so that the Player can only purchase properties if and only if they own all the necessary colors of a given property. 
 
 The only issue with our project is the AI. The AIs are not very smart, and will randomly make choices for buying properties that a human player would typically not make. In Milestone 4, we plan on making these AIs act like a human and be able to make specific choices. Other than this, the Milestone 3 has been tested and fully implemented with no known bugs.
 
