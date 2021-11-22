@@ -1,9 +1,7 @@
 package Model.BoardElements;
 
-import Events.RailRoadEvent;
 import Events.UtilityEvent;
 import Listener.BuyableLocation;
-import Listener.RailRoadListener;
 import Listener.UtilityListener;
 import Listener.BoardView;
 import Model.BoardModel;
@@ -159,13 +157,12 @@ public class Utility extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+    public void handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if(p instanceof AI){
             handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
         }else{
             handleLocationNotOwnedFunctionalityUser(p,totalDiceRoll,currentTurn);
         }
-        return false;
     }
     /**
      * location for player on the board and element functionality

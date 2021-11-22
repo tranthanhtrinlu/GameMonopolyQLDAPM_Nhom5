@@ -46,6 +46,6 @@ public interface BuyableLocation {
      * @param totalDiceRoll Integer, the total dice roll
      * @param currentTurn Integer, the current player turn
      */
-    boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn);
+    void handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn);
 
 }

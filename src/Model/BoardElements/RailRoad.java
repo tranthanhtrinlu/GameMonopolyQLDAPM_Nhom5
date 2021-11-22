@@ -1,9 +1,7 @@
 package Model.BoardElements;
 
-import Events.PropertyEvent;
 import Events.RailRoadEvent;
 import Listener.BuyableLocation;
-import Listener.PropertyListener;
 import Listener.RailRoadListener;
 import Listener.BoardView;
 import Model.GamePlayer.AI;
@@ -122,13 +120,12 @@ public class RailRoad extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+    public void handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if(p instanceof AI){
             handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
         }else{
             handleLocationNotOwnedFunctionalityUser(p,totalDiceRoll,currentTurn);
         }
-        return false;
     }
 
     /**
@@ -196,15 +193,6 @@ public class RailRoad extends Location implements BuyableLocation {
     @Override
     public void addListener(BoardView view) {
         this.railRoadListener.add(view);
-    }
-
-    /**
-     * Same payment method but using an index for the list
-     * @param index An integer index
-     * @return An integer payment
-     */
-    public int getPayment(int index){
-        return this.payments.get(index);
     }
 
     /**

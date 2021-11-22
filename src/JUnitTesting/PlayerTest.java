@@ -10,7 +10,8 @@ import static org.junit.Assert.*;
 
 /**
  * @author Max Curkovic
- * All required tests for the Player class.
+ * All required tests for the Player abstract class.
+ * Note that User and AI are extended from this class.
  */
 public class PlayerTest {
 

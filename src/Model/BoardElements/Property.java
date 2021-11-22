@@ -239,13 +239,12 @@ public class Property extends Location implements BuyableLocation {
      * @param currentTurn Integer, the current player turn
      */
     @Override
-    public boolean handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    public void handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (p instanceof AI) {
             handleLocationNotOwnedFunctionalityAI(p,totalDiceRoll,currentTurn);
         } else {
             handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
         }
-        return false;
     }
 
     /**
