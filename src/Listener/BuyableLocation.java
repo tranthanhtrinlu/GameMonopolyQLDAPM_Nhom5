@@ -32,4 +32,20 @@ public interface BuyableLocation {
      */
     void handleLocationOwnedByPlayerFunctionality(Player p, int totalDiceRoll, int currentTurn);
 
+    /**
+     * handles functionality for when an AI player lands on a property
+     * @param p Player, the current player
+     * @param totalDiceRoll Integer, the total Dice Roll
+     * @param currentTurn Integer, the current player turn
+     */
+    void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn);
+
+    /**
+     * handles functionality for when an human player(User) lands on a property
+     * @param p Player, the player
+     * @param totalDiceRoll Integer, the total dice roll
+     * @param currentTurn Integer, the current player turn
+     */
+    boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn);
+
 }

@@ -135,11 +135,11 @@ public class Utility extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the sum of die
      * @param currentTurn Integer, the current player turn
      */
-    private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    @Override
+    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (!this.owner.equals(p)){
             handleLocationOwnedFunctionality(p,totalDiceRoll, currentTurn);
         }
-        return false;
     }
 
     /**
@@ -148,7 +148,8 @@ public class Utility extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the sum of die
      * @param currentTurn Integer, the current player turn
      */
-    private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+    @Override
+    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null) {
             handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
@@ -171,10 +172,11 @@ public class Utility extends Location implements BuyableLocation {
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if(p instanceof AI){
-            return (handleAIFunctionality(p,totalDiceRoll,currentTurn));
+            handleAIFunctionality(p,totalDiceRoll,currentTurn);
         }else{
             return (handleUserFunctionality(p,totalDiceRoll,currentTurn));
         }
+        return false;
     }
 
 

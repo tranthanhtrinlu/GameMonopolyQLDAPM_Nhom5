@@ -97,12 +97,11 @@ public class RailRoad extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the dice sum
      * @param currentTurn Integer, the current player turn
      */
-    private boolean handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    @Override
+    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null){
             handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
-            return false;
         }
-        return false;
     }
 
     /**
@@ -111,7 +110,8 @@ public class RailRoad extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the dice sum
      * @param currentTurn Integer, the current player turn
      */
-    private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
+    @Override
+    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if (this.owner == null){
             handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
@@ -137,11 +137,11 @@ public class RailRoad extends Location implements BuyableLocation {
     @Override
     public boolean locationElementFunctionality(Player p, int totalDiceRoll, int currentTurn) {
         if(p instanceof AI){
-            return(handleAIFunctionality(p,totalDiceRoll,currentTurn));
+            handleAIFunctionality(p,totalDiceRoll,currentTurn);
         }else{
             return(handleUserFunctionality(p,totalDiceRoll,currentTurn));
         }
-
+        return false;
     }
 
     /**

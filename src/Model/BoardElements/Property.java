@@ -207,7 +207,8 @@ public class Property extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the total Dice Roll
      * @param currentTurn Integer, the current player turn
      */
-    private void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    @Override
+    public void handleAIFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner != null) {
             handleLocationOwnedFunctionality(p, totalDiceRoll, currentTurn);
         }
@@ -219,7 +220,8 @@ public class Property extends Location implements BuyableLocation {
      * @param totalDiceRoll Integer, the total dice roll
      * @param currentTurn Integer, the current player turn
      */
-    private boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn){
+    @Override
+    public boolean handleUserFunctionality(Player p, int totalDiceRoll, int currentTurn){
         if (this.owner == null) {
             handleLocationNotOwnedFunctionalityUser(p, totalDiceRoll, currentTurn);
             return true;
