@@ -10,6 +10,6 @@ The current implementation focuses on a GUI with a jail system, ability to buy p
 
 The only issue with our project is the AI. The AIs are not very smart, and will randomly make choices for buying properties that a human player would typically not make. In Milestone 4, we plan on making these AIs act like a human and be able to make specific choices. Other than this, the Milestone 3 has been tested and fully implemented with no known bugs.
 
-Over the next week or two (during the final milestone), we will be implementing a save/load feature, as well as an international version with custom street names, values, and currencies. These will be the final additions to the project before it is complete. 
+Over the next week or two (during the final milestone), we will be implementing a save/load feature, as well as an international version with custom street names, values, and currencies. These will be the final additions to the project before it is complete. We will also fine tune the aesthetics by fixing the side panel and, overall, making the game look really good.
 
 *note to Michael: We did our best to equally distribute the workload. It shows a lot better in the commits. ~ MC
