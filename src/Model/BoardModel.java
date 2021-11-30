@@ -143,15 +143,19 @@ public class BoardModel {
      * Default constructor for the BoardModel.
      */
     public BoardModel(){
+         this(0,0,0);
+    }
+
+    public BoardModel(int currentTurn, int roll1, int roll2){
         this.gamePlayers = new ArrayList<>();
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
-        this.currentTurn = 0;
+        this.currentTurn = currentTurn;
         this.initializeBoard();
-        this.roll1 = 0;
-        this.roll2 = 0;
+        this.roll1 = roll1;
+        this.roll2 = roll2;
         this.status = Status.UNFINISHED;
-        this.payed = false; 
+        this.payed = false;
     }
 
     /**

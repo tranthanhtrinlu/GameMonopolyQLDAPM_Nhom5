@@ -11,8 +11,8 @@ public class User extends Player {
      *
      * @param name String player name
      */
-    public User(String name) {
-        super(name);
+    public User(String name, int moneyAmount) {
+        super(name, moneyAmount);
     }
 
 }

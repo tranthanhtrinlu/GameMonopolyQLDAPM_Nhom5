@@ -28,16 +28,20 @@ public abstract class Player{
      *  MVC.Player default constructor
      * @param name String player name
      */
-    public Player(String name){
-        this.playerName = name;
-        this.moneyAmount = 1500;
-        this.out = false;
-        this.position = 0;
-        this.inJail = false;
-        this.turnsInJail = 0;
-        this.currLocation = BoardModel.BoardElements.GO.getPiece().getName();
-        this.numOfRailroads = 0;
-        this.numOfUtilities = 0;
+    public Player(String name, int moneyAmount){
+        this(name, moneyAmount, false, 0, false, 0, BoardModel.BoardElements.GO.getPiece().getName(), 0,0);
+    }
+
+    public Player(String playerName, int moneyAmount, boolean out,  int position, boolean inJail, int turnsInJail, String currLocation, int numOfRailroads, int numOfUtilities){
+        this.playerName = playerName;
+        this.moneyAmount = moneyAmount;
+        this.out = out;
+        this.position = position;
+        this.inJail = inJail;
+        this.turnsInJail = turnsInJail;
+        this.currLocation = currLocation;
+        this.numOfRailroads = numOfRailroads;
+        this.numOfUtilities = numOfUtilities;
         this.ownedPropertiesBasedOnColors = new HashMap<>();
         this.ownedProperties = new ArrayList<>();
     }

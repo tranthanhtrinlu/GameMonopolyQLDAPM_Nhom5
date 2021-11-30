@@ -21,6 +21,8 @@ public class BoardGUI extends JFrame implements BoardView{
     public final static int GAME_WIDTH = 985;
     public final static int GAME_HEIGHT = 807;
     private final static int[] DICE_DIM = new int[]{96, 96};
+    private final int ORIGINAL_STARTING_MONEY = 1500;
+    private final int UK_STARTING_MONEY = 15000000;
 
     private final GameDisplayPanel gamePanel;
     private final PlayerDisplayPanel sidePanel;
@@ -100,9 +102,9 @@ public class BoardGUI extends JFrame implements BoardView{
         ArrayList<String> names = start.getNameOfPlayers(numberOfPlayers, this);
         for (int i = 0; i < numberOfPlayers + numberOfAIs; i++){
             if (i < numberOfPlayers){
-                model.addGamePlayers(new User(names.get(i)));
+                model.addGamePlayers(new User(names.get(i), ORIGINAL_STARTING_MONEY));
             }else{
-                model.addGamePlayers(new AI("AI" + (i - numberOfPlayers+1)));
+                model.addGamePlayers(new AI("AI" + (i - numberOfPlayers+1), ORIGINAL_STARTING_MONEY));
             }
             this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
             this.gamePanel.addInitialPlayers(i, numberOfPlayers);

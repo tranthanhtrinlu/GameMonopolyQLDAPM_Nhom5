@@ -1,0 +1,32 @@
+<boardModel>
+    <version>//which type of monopoly game we playing (original or UK)</version>
+    <centermoney>//the center money</centermoney>
+    <currentTurn>// current turn</currentTurn>
+    <roll1>//the roll</roll1>
+    <roll2>//the roll</roll2>
+    <player>
+        <moneyAmount>//money</moneyAmount>>
+        <playerName>//the name</playerName>
+        <inJail>//boolean set here</inJail>
+        <turnsInJail>//the turn</turnsInJail>
+        <position>//the position</position>
+        <currLocation>//the current location</currLocation>
+        <numOfRailroads>//number of railroads</numOfRailroads>
+        <numOfUtilities>//number of utilities</numOfUtilities>
+        <out>//boolean out</out>
+        <ownedProperties>
+            // list the respective locations here with details i.e In the game we loop through the board and buy the property for the respective player
+            <Location>
+                <name>//name</name>
+                <name>//cost</name>
+            </Location>>
+        </ownedProperties>>
+        <coloredOwnedProperties>
+            <index>
+                <color>//color</color>
+                <number>//number of colors</number>
+            </index>
+        </coloredOwnedProperties>
+    </player>
+    ....if more players same format
+</boardModel>
