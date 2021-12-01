@@ -24,19 +24,19 @@ public class BoardGUI extends JFrame implements BoardView{
     private final int ORIGINAL_STARTING_MONEY = 1500;
     private final int UK_STARTING_MONEY = 15000000;
 
-    private final GameDisplayPanel gamePanel;
-    private final PlayerDisplayPanel sidePanel;
-    private final JPanel gameControlPanel;
+    private GameDisplayPanel gamePanel;
+    private PlayerDisplayPanel sidePanel;
+    private JPanel gameControlPanel;
 
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
     private final ArrayList<Image> diceImages;
-    private final JLabel dice1, dice2;
+    private JLabel dice1, dice2;
 
     public BoardGUI(){
         super("Monopoly");
-        this.gamePanel = new GameDisplayPanel();
-        this.sidePanel = new PlayerDisplayPanel();
         BoardModel model = new BoardModel();
+        mainMenu(model);
+
         this.turnPass = new JButton("Pass");
         this.quit = new JButton("Quit");
         this.roll = new JButton("Roll");
@@ -61,13 +61,7 @@ public class BoardGUI extends JFrame implements BoardView{
         this.sellHouses.setActionCommand(BoardModel.PlayerChoice.SELL_HOUSE.getChoice() + " ");
         this.sellHouses.addActionListener(controller);
 
-        this.gameControlPanel = new JPanel();
-        this.gameControlPanel.setLayout(new GridLayout(10,1));
-        this.gameControlPanel.setBounds(520,315, 150,200);
-        this.gameControlPanel.setBackground(new Color(255,255,255));
-        this.setLayout(null);
-        this.sidePanel.setBounds(0,0,200, GAME_HEIGHT);
-        this.gamePanel.setBounds(200,0,GAME_WIDTH,GAME_HEIGHT);
+
         this.diceImages = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice1.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice2.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
@@ -76,8 +70,118 @@ public class BoardGUI extends JFrame implements BoardView{
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice5.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice6.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
         }};
+
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setVisible(true);
+
+    }
+    private void mainMenu(BoardModel model) {
+        this.getContentPane().removeAll();
+        this.revalidate();
+        this.repaint();
+
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        JPanel blank = new JPanel();
+        JPanel blankTwo = new JPanel();
+        JButton newGame = new JButton("New Game");
+        JButton loadGame = new JButton("Load Game");
+        JButton quitMainMenu = new JButton("Quit");
+        JLabel main = new JLabel("     Monopoly");
+        JLabel bottom = new JLabel("");
+        main.setFont(new Font("Arial",Font.BOLD,40));
+
+        buttonPanel.setPreferredSize(new Dimension(200, 400));
+        blank.setPreferredSize(new Dimension(50, 400));
+        blankTwo.setPreferredSize(new Dimension(50, 400));
+
+        newGame.setPreferredSize(new Dimension(200,85));
+        loadGame.setPreferredSize(new Dimension(200,125));
+        quitMainMenu.setPreferredSize(new Dimension(200,85));
+        main.setPreferredSize(new Dimension(300, 50));
+        bottom.setPreferredSize(new Dimension(300,50));
+
+        this.add(blank, BorderLayout.LINE_START);
+        this.add(buttonPanel, BorderLayout.CENTER);
+        this.add(blankTwo, BorderLayout.LINE_END);
+        this.add(main, BorderLayout.PAGE_START);
+        this.add(bottom, BorderLayout.PAGE_END);
+
+        buttonPanel.add(newGame, BorderLayout.PAGE_START);
+        buttonPanel.add(loadGame, BorderLayout.CENTER);
+        buttonPanel.add(quitMainMenu, BorderLayout.PAGE_END);
+
+        newGame.addActionListener(e -> {playerBoardChoice(model);});
+        quitMainMenu.addActionListener(e -> {System.exit(0);});
+
+        this.pack();
+        this.setSize(300,400);
+    }
+
+    private void playerBoardChoice(BoardModel model){
+
+        this.getContentPane().removeAll();
+        this.revalidate();
+        this.repaint();
+
+
+        JPanel choicePanel = new JPanel(new BorderLayout());
+        JPanel blank = new JPanel();
+        JPanel blankTwo = new JPanel();
+        JButton UK = new JButton("UK Version");
+        JButton US = new JButton("US Version");
+        JButton back = new JButton("Back");
+        JLabel main = new JLabel("     Monopoly");
+        JLabel bottom = new JLabel("");
+        main.setFont(new Font("Arial",Font.BOLD,40));
+
+        choicePanel.setPreferredSize(new Dimension(200, 400));
+        blank.setPreferredSize(new Dimension(50, 400));
+        blankTwo.setPreferredSize(new Dimension(50, 400));
+
+        UK.setPreferredSize(new Dimension(200,85));
+        US.setPreferredSize(new Dimension(200,125));
+        back.setPreferredSize(new Dimension(200,85));
+        main.setPreferredSize(new Dimension(300, 50));
+        bottom.setPreferredSize(new Dimension(300,50));
+
+        this.add(blank, BorderLayout.LINE_START);
+        this.add(choicePanel, BorderLayout.CENTER);
+        this.add(blankTwo, BorderLayout.LINE_END);
+        this.add(main, BorderLayout.PAGE_START);
+        this.add(bottom, BorderLayout.PAGE_END);
+
+        choicePanel.add(UK, BorderLayout.PAGE_START);
+        choicePanel.add(US, BorderLayout.CENTER);
+        choicePanel.add(back, BorderLayout.PAGE_END);
+
+        this.pack();
+        this.setSize(300,400);
+
+        UK.addActionListener(e -> {initializeNewGame(UK_STARTING_MONEY, model, "");});
+        US.addActionListener(e -> {initializeNewGame(ORIGINAL_STARTING_MONEY, model, "");});
+        back.addActionListener(e -> {mainMenu(model);});
+    }
+
+    private void initializeNewGame(int initialCost, BoardModel model, String path){
+        //model.initializeBoard(path);
+        this.getContentPane().removeAll();
+        this.revalidate();
+        this.repaint();
+        this.gamePanel = new GameDisplayPanel();
+        this.sidePanel = new PlayerDisplayPanel();
+
+        this.gameControlPanel = new JPanel();
+        this.gameControlPanel.setLayout(new GridLayout(10,1));
+        this.gameControlPanel.setBounds(520,315, 150,200);
+        this.gameControlPanel.setBackground(new Color(255,255,255));
+        this.setLayout(null);
+        this.sidePanel.setBounds(0,0,200, GAME_HEIGHT);
+        this.gamePanel.setBounds(200,0,GAME_WIDTH,GAME_HEIGHT);
+
         this.dice1 = new JLabel(new ImageIcon(this.diceImages.get(0)));
         this.dice2 = new JLabel(new ImageIcon(this.diceImages.get(0)));
+
         this.dice1.setBounds(450,150,96,96);
         this.dice2.setBounds(650,150,96,96);
         this.add(this.dice1);
@@ -90,9 +194,6 @@ public class BoardGUI extends JFrame implements BoardView{
         model.addView(this);
         model.addViewToListener(this);
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setVisible(true);
 
         StartGameController start = new StartGameController();
         int numberOfPlayers = start.getNumOfPlayers(this);
@@ -102,15 +203,16 @@ public class BoardGUI extends JFrame implements BoardView{
         ArrayList<String> names = start.getNameOfPlayers(numberOfPlayers, this);
         for (int i = 0; i < numberOfPlayers + numberOfAIs; i++){
             if (i < numberOfPlayers){
-                model.addGamePlayers(new User(names.get(i), ORIGINAL_STARTING_MONEY));
+                model.addGamePlayers(new User(names.get(i), initialCost));
             }else{
-                model.addGamePlayers(new AI("AI" + (i - numberOfPlayers+1), ORIGINAL_STARTING_MONEY));
+                model.addGamePlayers(new AI("AI" + (i - numberOfPlayers+1), initialCost));
             }
             this.sidePanel.addNewPlayerViewButton(model.getPlayersByIndex(i), i);
             this.gamePanel.addInitialPlayers(i, numberOfPlayers);
         }
         model.setNumberOfPlayers(numberOfPlayers+numberOfAIs);
         this.updateChoicePanel(model.getPlayersByIndex(0));
+
     }
 
     //****BEGINNING OF PROPERTY FUNCTIONS**//
