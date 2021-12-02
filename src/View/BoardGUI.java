@@ -8,9 +8,12 @@ import Model.GamePlayer.User;
 import View.Components.GameDisplayPanel;
 import View.Components.PlayerDisplayPanel;
 import View.Controllers.*;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +35,7 @@ public class BoardGUI extends JFrame implements BoardView{
     private final ArrayList<Image> diceImages;
     private final JLabel dice1, dice2;
 
-    public BoardGUI(){
+    public BoardGUI() throws IOException, ParserConfigurationException, SAXException {
         super("Monopoly");
         this.gamePanel = new GameDisplayPanel();
         this.sidePanel = new PlayerDisplayPanel();
@@ -567,7 +570,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         new BoardGUI();
     }
 
