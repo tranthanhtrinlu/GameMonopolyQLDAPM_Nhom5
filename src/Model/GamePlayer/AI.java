@@ -1,5 +1,7 @@
 package Model.GamePlayer;
 
+import Model.BoardModel;
+
 /**
  * Class for AI
  * @author Kareem
@@ -12,4 +14,16 @@ public class AI extends Player {
     public AI(String name, int moneyAmount) {
         super(name, moneyAmount);
     }
+
+    /**
+     * Play the AI's turn dependent on the state of the AI
+     * @return Integer, the AI's choice
+     */
+    public int playAI(){
+        if (!super.getInJail())
+            return BoardModel.PlayerChoice.ROLL.getChoice();
+        return BoardModel.PlayerChoice.ROLL_OUT.getChoice();
+    }
+
+
 }

@@ -1,8 +1,14 @@
 package View.Components;
+import Model.BoardModel;
+import Model.GamePlayer.Player;
+import Model.GamePlayer.User;
+import View.Components.GamePhotosComponents.BoardGetterFunctionality;
+import View.Components.GamePhotosComponents.UKBoard;
+import View.Components.GamePhotosComponents.USBoard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * GameDisplayPanel for the BoardGUI
@@ -27,16 +33,33 @@ public class GameDisplayPanel extends JPanel {
 
     private final ArrayList<JLabel> playerPieces;
     private final ArrayList<JPanel> playerPiecesDisplay;
+    private final ArrayList<Image> topPhotos;
+    private final ArrayList<Image> bottomPhotos;
+    private final ArrayList<Image> leftPhotos;
+    private final ArrayList<Image> rightPhotos;
 
-    public GameDisplayPanel(){
+    public GameDisplayPanel(String version){
+        BoardGetterFunctionality board;
+        if (version.equals(BoardModel.TypeOfBoards.US.getVersion()))
+            board = new USBoard();
+        else
+            board = new UKBoard();
+
         this.playerPieces = new ArrayList<>();
         this.playerPiecesDisplay = new ArrayList<>();
-        Image hLine = new ImageIcon (Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BlackBorders/HORIZONTAL_BAR.png"))).getImage();
-        Image vLine = new ImageIcon (Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BlackBorders/VERTICAL_BAR.png"))).getImage();
+
+        this.topPhotos = board.getTopPhotos();
+        this.bottomPhotos = board.getBottomPhotos();
+        this.leftPhotos = board.getLeftPhotos();
+        this.rightPhotos = board.getRightPhotos();
+        Image hLine = board.getHorizontalLine();
+        Image vLine = board.getVerticalLine();
+
         hLine = hLine.getScaledInstance(H_LINE_WIDTH_HEIGHT[0], H_LINE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
         vLine = vLine.getScaledInstance(V_LINE_WIDTH_HEIGHT[0],V_LINE_WIDTH_HEIGHT[1], Image.SCALE_SMOOTH);
         this.horizontalBorder = new ImageIcon(hLine);
         this.verticalBorder = new ImageIcon(vLine);
+
         this.setBottomImages();
         this.setMiddleLeftImages();
         this.setTopImages();
@@ -50,19 +73,6 @@ public class GameDisplayPanel extends JPanel {
      */
     private void setTopImages(){
         int  xPos = BOARD_START_TOP_X_POS;
-        ArrayList<Image> topPhotos = new ArrayList<>(){{
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/FREE_PARKING.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/RED1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/CHANCE2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/RED2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/RED3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/RAILROAD3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/YELLOW1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/YELLOW2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/WATERWORKS.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/YELLOW3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/TOP/GO_TO_JAIL.png"))).getImage());
-        }};
         for (int i = 0; i<11; i++){
             Image location = topPhotos.get(i);
             JLabel imageLabel, border;
@@ -99,18 +109,6 @@ public class GameDisplayPanel extends JPanel {
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
         int xPos = BOARD_START_TOP_X_POS;
         ArrayList<JPanel> temp = new ArrayList<>();
-        ArrayList<Image> leftPhotos = new ArrayList<>(){{
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE3.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE2.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/COMMUNITY_CHEST2.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ORANGE1.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/RAILROAD2.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/PINK3.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/PINK2.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/ELECTRIC1.png")).getImage());
-            add(new ImageIcon(this.getClass().getResource("/MonopolyBoardImages/LEFT/PINK1.png")).getImage());
-        }};
-
         for (int i = 0; i < 9; i++){
             Image location = leftPhotos.get(i);
             JPanel panel = new JPanel();
@@ -141,19 +139,6 @@ public class GameDisplayPanel extends JPanel {
         int xPos = BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_BOTTOM_Y_POS;
         ArrayList<JPanel> temp = new ArrayList<>();
-        ArrayList<Image> bottomPhotos = new ArrayList<>(){{
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/JAIL.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/CHANCE1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/LIGHT_BLUE1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/RAILROAD1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/INCOME_TAX.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/BROWN2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/COMMUNITY_CHEST1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/BROWN1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/BOTTOM/GO.png"))).getImage());
-        }};
         for (int i = 0; i<11; i++){
             Image location = bottomPhotos.get(i);
             JLabel imageLabel, border;
@@ -192,18 +177,6 @@ public class GameDisplayPanel extends JPanel {
     private void setMiddleRightImages(){
         int xPos = BOARD_START_RIGHT_X_POS + BOARD_START_TOP_X_POS;
         int yPos = BOARD_START_MIDDLE_LEFT_RIGHT_Y_POS;
-        ArrayList<Image> rightPhotos = new ArrayList<>(){{
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/GREEN1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/GREEN2.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/COMMUNITY_CHEST3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/GREEN3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/RAILROAD4.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/CHANCE3.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/DARK_BLUE1.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/LUXURY_TAX.png"))).getImage());
-            add(new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/MonopolyBoardImages/RIGHT/DARK_BLUE2.png"))).getImage());
-        }};
-
         for (int i = 0; i < 9; i++){
             Image location = rightPhotos.get(i);
             JPanel panel = new JPanel();
@@ -227,6 +200,7 @@ public class GameDisplayPanel extends JPanel {
     /**
      * add the starting players that will be playing the game
      * @param num Integer amount of players
+     * @param numberOfPlayers Integer, the total number of players
      */
     public void addInitialPlayers(int num, int numberOfPlayers){
         String s = "P"+(num+1);
@@ -234,13 +208,39 @@ public class GameDisplayPanel extends JPanel {
             int j = num - numberOfPlayers;
             s = "AI"+(j+1);
         }
-        System.out.println(this.playerPiecesDisplay.size());
-        this.playerPieces.add(new JLabel(s));
-        this.playerPieces.get(num).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-        this.playerPieces.get(num).setFont(new Font("Verdana", Font.BOLD, 12));
-        this.playerPieces.get(num).setForeground(Color.BLACK);
-        this.playerPiecesDisplay.get(0).add(this.playerPieces.get(num));
-        this.playerPiecesDisplay.get(0).revalidate();
+        this.addPlayerPieceOnBoard(num, 0, s);
+    }
+
+    /**
+     * Load in the player state to the game
+     * @param p Player, the player
+     * @param num Integer amount of players
+     * @param numberOfPlayers Integer, the total number of players
+     */
+    public void loadInPlayers(Player p, int num, int numberOfPlayers){
+        String s;
+        if (p instanceof User){
+            s = "P"+(num+1);
+        }else{
+            int j = num - numberOfPlayers;
+            s = "AI"+(j+1);
+        }
+        this.addPlayerPieceOnBoard(num, p.getPosition(), s);
+    }
+
+    /**
+     * add the player to the board according to the data collected and the index of the player
+     * @param index Integer, the Player's index relative to its turn
+     * @param position Integer, the player's position
+     * @param name String, the Player's name on the board
+     */
+    private void addPlayerPieceOnBoard(int index, int position, String name){
+        this.playerPieces.add(new JLabel(name));
+        this.playerPieces.get(index).setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+        this.playerPieces.get(index).setFont(new Font("Verdana", Font.BOLD, 12));
+        this.playerPieces.get(index).setForeground(Color.BLACK);
+        this.playerPiecesDisplay.get(position).add(this.playerPieces.get(index));
+        this.playerPiecesDisplay.get(position).revalidate();
     }
 
 
