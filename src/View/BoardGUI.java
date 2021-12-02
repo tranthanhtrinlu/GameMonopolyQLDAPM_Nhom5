@@ -8,9 +8,12 @@ import Model.GamePlayer.User;
 import View.Components.GameDisplayPanel;
 import View.Components.PlayerDisplayPanel;
 import View.Controllers.*;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +35,7 @@ public class BoardGUI extends JFrame implements BoardView{
     private final ArrayList<Image> diceImages;
     private JLabel dice1, dice2;
 
-    public BoardGUI(){
+    public BoardGUI() throws IOException, ParserConfigurationException, SAXException {
         super("Monopoly");
         BoardModel model = new BoardModel();
         mainMenu(model);
@@ -76,6 +79,11 @@ public class BoardGUI extends JFrame implements BoardView{
         this.setVisible(true);
 
     }
+
+    /**
+     * creates the main menu panel with new game, load game, quit
+     * @param model BaordModel
+     */
     private void mainMenu(BoardModel model) {
         this.getContentPane().removeAll();
         this.revalidate();
@@ -118,6 +126,10 @@ public class BoardGUI extends JFrame implements BoardView{
         this.setSize(300,400);
     }
 
+    /**
+     * gives the player choice between US and UK versions of the game
+     * @param model BoardModel
+     */
     private void playerBoardChoice(BoardModel model){
 
         this.getContentPane().removeAll();
@@ -163,6 +175,12 @@ public class BoardGUI extends JFrame implements BoardView{
         back.addActionListener(e -> {mainMenu(model);});
     }
 
+    /**
+     * creates a new game after the version is selected
+     * @param initialCost Int of starting money
+     * @param model BoardModel
+     * @param path String
+     */
     private void initializeNewGame(int initialCost, BoardModel model, String path){
         //model.initializeBoard(path);
         this.getContentPane().removeAll();
@@ -669,7 +687,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         new BoardGUI();
     }
 
