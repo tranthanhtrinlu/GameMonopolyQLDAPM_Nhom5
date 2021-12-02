@@ -402,4 +402,51 @@ public abstract class Player{
     public List<Location> getOwnedProperties() {
         return this.ownedProperties;
     }
+
+    /**
+     * returns a xml represntation of player as a single string
+     * @return
+     */
+    public String toXML(){
+        String str = "";
+        str += "\t\t<moneyAmount>" + this.getMoneyAmount() + "</moneyAmount>\n";
+        str += "\t\t<playerName>" + this.getPlayerName() + "</playerName>\n";
+        str += "\t\t<inJail>" + this.getInJail() + "</inJail>\n";
+        str += "\t\t<turnsInJail>" + this.getTurnsInJail() + "</turnsInJail>\n";
+        str += "\t\t<position>" + this.getPosition() + "</position>\n";
+        str += "\t\t<currLocation>" + this.getCurrLocation() + "</currLocation>\n";
+        str += "\t\t<numOfRailroads>" + this.getNumOfRailroads() + "</numOfRailroads>\n";
+        str += "\t\t<numOfUtilities>" + this.getNumOfUtilities() + "</numOfUtilities>\n";
+        str += "\t\t<out>" + this.getOut() + "</out>\n";
+
+        // Properties
+        str += "\t\t<ownedProperties>\n";
+
+        for(Location l : this.getOwnedProperties()){
+            str += "\t\t\t<Location>\n";
+
+            str += "\t\t\t\t<name>" + l.getName() + "</name>\n";
+            str += "\t\t\t\t<cost>" + l.getCost() + "</cost>\n";
+
+            str += "\t\t\t</Location>\n";
+        }
+
+        str += "\t\t</ownedProperties>\n";
+
+        // Colored Owned Properties
+        str += "\t\t<coloredOwnedProperties>\n";
+
+        for(BoardModel.Color color : this.getOwnedPropertiesBasedOnColors().keySet()){
+            str += "\t\t\t<index>\n";
+
+            str += "\t\t\t\t<color>" + color + "</color>\n";
+            str += "\t\t\t\t<number>" + this.getOwnedPropertiesBasedOnColors().get(color) + "</number>\n";
+
+            str += "\t\t\t</index>\n";
+        }
+
+        str += "\t\t</coloredOwnedProperties>\n";
+
+        return str;
+    }
 }
