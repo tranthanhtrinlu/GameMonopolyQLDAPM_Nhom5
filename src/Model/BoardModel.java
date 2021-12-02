@@ -5,6 +5,9 @@ import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -618,6 +621,46 @@ public class BoardModel {
                 }
             }
         }, 0, 200);
+    }
+
+    /**
+     * handler for when the player decides to save the game.
+     * @param filename String, the name of the file to save the information in
+     */
+    private void handleSaveToXML(String filename){
+        try{
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename+".xml"));
+            out.write(this.toXML());
+            out.close();
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * returns an XML representation of the board model as a singular string
+     * @return str, the string containing the XML representation of this board model
+     */
+    private String toXML(){
+        String str = "<boardModel>\n";
+
+        //str += "\t<version>" + this.getVersion + "</version>\n";
+        str += "\t<centerMoney>" + this.centerMoney + "</centerMoney>\n";
+        str += "\t<currentTurn>" + this.currentTurn + "</currentTurn>\n";
+        str += "\t<roll1>" + this.roll1 + "</roll1>\n";
+        str += "\t<roll2>" + this.roll2 + "</roll2>\n";
+
+        for(Player p : this.gamePlayers){
+            str += "\t<player>\n";
+
+            str += p.toXML();
+
+            str += "\t</player>\n";
+        }
+
+        str += "</boardModel>\n";
+
+        return str;
     }
 
     /**
