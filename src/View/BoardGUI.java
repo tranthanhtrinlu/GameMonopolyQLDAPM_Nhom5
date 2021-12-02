@@ -170,8 +170,28 @@ public class BoardGUI extends JFrame implements BoardView{
         this.pack();
         this.setSize(300,400);
 
-        UK.addActionListener(e -> {initializeNewGame(UK_STARTING_MONEY, model, "");});
-        US.addActionListener(e -> {initializeNewGame(ORIGINAL_STARTING_MONEY, model, "");});
+        UK.addActionListener(e -> {
+            try {
+                initializeNewGame(BoardModel.TypeOfBoards.UK.getVersion(), UK_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
+            } catch (ParserConfigurationException parserConfigurationException) {
+                parserConfigurationException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
+        US.addActionListener(e -> {
+            try {
+                initializeNewGame(BoardModel.TypeOfBoards.US.getVersion(), ORIGINAL_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
+            } catch (ParserConfigurationException parserConfigurationException) {
+                parserConfigurationException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
         back.addActionListener(e -> {mainMenu(model);});
     }
 
@@ -181,12 +201,12 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param model BoardModel
      * @param path String
      */
-    private void initializeNewGame(int initialCost, BoardModel model, String path){
-        //model.initializeBoard(path);
+    private void initializeNewGame(String version, int initialCost, BoardModel model, String path) throws ParserConfigurationException, SAXException, IOException {
+        model.initializeBoard(path);
         this.getContentPane().removeAll();
         this.revalidate();
         this.repaint();
-        this.gamePanel = new GameDisplayPanel();
+        this.gamePanel = new GameDisplayPanel(version);
         this.sidePanel = new PlayerDisplayPanel();
 
         this.gameControlPanel = new JPanel();

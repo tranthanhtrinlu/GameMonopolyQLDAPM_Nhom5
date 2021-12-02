@@ -181,12 +181,11 @@ public class BoardModel {
          this(0,0,0);
     }
 
-    public BoardModel(int currentTurn, int roll1, int roll2) throws IOException, ParserConfigurationException, SAXException {
+    public BoardModel(int currentTurn, int roll1, int roll2) {
         this.gamePlayers = new ArrayList<>();
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
         this.currentTurn = currentTurn;
-        this.initializeBoard("");
         this.roll1 = roll1;
         this.roll2 = roll2;
         this.status = Status.UNFINISHED;
