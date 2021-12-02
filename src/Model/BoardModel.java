@@ -4,8 +4,17 @@ import Listener.BoardView;
 import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -172,12 +181,12 @@ public class BoardModel {
          this(0,0,0);
     }
 
-    public BoardModel(int currentTurn, int roll1, int roll2){
+    public BoardModel(int currentTurn, int roll1, int roll2) throws IOException, ParserConfigurationException, SAXException {
         this.gamePlayers = new ArrayList<>();
         this.board = new ArrayList<>();
         this.views = new ArrayList<>();
         this.currentTurn = currentTurn;
-        this.initializeBoard();
+        this.initializeBoard("");
         this.roll1 = roll1;
         this.roll2 = roll2;
         this.status = Status.UNFINISHED;
@@ -264,9 +273,70 @@ public class BoardModel {
     /**
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      */
-    private void initializeBoard(){
-        for (BoardElements elements : BoardElements.values()){
-            this.board.add(elements.getPiece());
+    public void initializeBoard(String path) throws IOException, SAXException, ParserConfigurationException {
+        File file = new File(path);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(file);
+        doc.getDocumentElement().normalize();
+        NodeList nodeList = doc.getElementsByTagName("Location");
+        for (int itr = 0; itr < nodeList.getLength(); itr++) {
+            Node node = nodeList.item(itr).getFirstChild();
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                if (node.getNodeName().equals("FreePass")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    this.board.add(new FreePass(name, 0));//add to board accordingly
+                }
+                else if (node.getNodeName().equals("Property")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
+                    int costPerHouse = Integer.parseInt(e.getElementsByTagName("costPerHouse").item(0).getTextContent());//Parse accordingly
+                    int initialRent = Integer.parseInt(e.getElementsByTagName("initialRent").item(0).getTextContent());//Parse accordingly
+                    int house1Rent = Integer.parseInt(e.getElementsByTagName("house1Rent").item(0).getTextContent());//Parse accordingly
+                    int house2Rent = Integer.parseInt(e.getElementsByTagName("house2Rent").item(0).getTextContent());//Parse accordingly
+                    int house3Rent = Integer.parseInt(e.getElementsByTagName("house3Rent").item(0).getTextContent());//Parse accordingly
+                    int house4Rent = Integer.parseInt(e.getElementsByTagName("house4Rent").item(0).getTextContent());//Parse accordingly
+                    int hotelRent = Integer.parseInt(e.getElementsByTagName("hotelRent").item(0).getTextContent());//Parse accordingly
+                    BoardModel.Color color = Color.valueOf(e.getElementsByTagName("color").item(0).getTextContent());//Parse accordingly
+                    int numOfColors = Integer.parseInt(e.getElementsByTagName("numOfColors").item(0).getTextContent());//Parse accordingly
+                    this.board.add(new Property(name, cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, color, numOfColors));
+                }
+                else if (node.getNodeName().equals("Tax")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
+                    this.board.add(new Tax(name, cost));
+                }
+                else if (node.getNodeName().equals("RailRoad")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
+                    this.board.add(new RailRoad(name, cost));
+                }
+                else if (node.getNodeName().equals("LandOnJail")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    this.board.add(new LandOnJail(name, 0));//add to board accordingly
+                }
+                else if (node.getNodeName().equals("Utility")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
+                    this.board.add(new Utility(name, cost));
+                }
+                else if (node.getNodeName().equals("FreeParking")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    this.board.add(new FreeParking(0, name));//add to board accordingly
+                }
+                else if (node.getNodeName().equals("GoToJail")) {
+                    Element e = (Element) node;
+                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+                    this.board.add(new GoToJail(name, 0));//add to board accordingly
+                }
+            }
         }
     }
 
