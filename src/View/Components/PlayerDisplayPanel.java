@@ -1,6 +1,5 @@
 package View.Components;
 import Model.BoardElements.Location;
-import Model.BoardModel;
 import Model.GamePlayer.Player;
 import Model.BoardElements.Property;
 import javax.swing.*;
@@ -72,7 +71,7 @@ public class PlayerDisplayPanel extends JPanel {
 
     /**
      * removes the player view
-     * @param i Integer
+     * @param i Integer, index of player
      * @param p Player being removed
      */
     public void removePlayerView(int i, Player p){

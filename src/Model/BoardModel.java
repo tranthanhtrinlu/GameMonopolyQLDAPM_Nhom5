@@ -4,6 +4,8 @@ import Listener.BoardView;
 import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -43,6 +45,27 @@ public class BoardModel {
     public enum Status{
         FINISHED, UNFINISHED
     }
+
+    /**
+     * The type of boards board model can play
+     */
+    public enum TypeOfBoards{
+        UK("UK"), US("US");
+
+        private final String version;
+        TypeOfBoards(String version){
+            this.version = version;
+        }
+
+        /**
+         * get the version of the game as string
+         * @return String, the version
+         */
+        public String getVersion() {
+            return this.version;
+        }
+    }
+
 
     /**
      * Constants for each board element in board
@@ -326,10 +349,7 @@ public class BoardModel {
     private boolean playAI(){
         Player p = this.gamePlayers.get(this.currentTurn);
         if(p instanceof AI){
-            if (!p.getInJail())
-                playCurrPlayerTurn(PlayerChoice.ROLL.getChoice());
-            else
-                playCurrPlayerTurn(PlayerChoice.ROLL_OUT.getChoice());
+            playCurrPlayerTurn(((AI) p).playAI());
             return true;
         }
         return false;
