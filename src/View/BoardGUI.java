@@ -564,6 +564,8 @@ public class BoardGUI extends JFrame implements BoardView{
         this.rollDouble.setEnabled(b);
         this.purchaseEstateHouses.setEnabled(b);
         this.sellHouses.setEnabled(b);
+        this.save.setEnabled(b);
+        this.save_quit.setEnabled(b);
         this.gameControlPanel.revalidate();
     }
 
