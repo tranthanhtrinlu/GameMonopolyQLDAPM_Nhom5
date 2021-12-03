@@ -1,48 +1,70 @@
 <boardModel>
-	<version>US</version>
+	<version>UK</version>
 	<centerMoney>0</centerMoney>
-	<numberOfPlayers>2</numberOfPlayers>
-	<currentTurn>1</currentTurn>
-	<roll1>3</roll1>
-	<roll2>5</roll2>
+	<numberOfPlayers>3</numberOfPlayers>
+	<currentTurn>0</currentTurn>
+	<roll1>5</roll1>
+	<roll2>6</roll2>
 	<player>
 		<typeOfPlayer>User</typeOfPlayer>
-		<moneyAmount>1120</moneyAmount>
-		<playerName>a</playerName>
+		<moneyAmount>7400000</moneyAmount>
+		<playerName>Tony</playerName>
 		<inJail>false</inJail>
 		<turnsInJail>0</turnsInJail>
-		<position>21</position>
-		<currLocation>Kentucky Avenue</currLocation>
-		<numOfRailroads>0</numOfRailroads>
-		<numOfUtilities>0</numOfUtilities>
-		<out>true</out>
-		<ownedProperties>
-		</ownedProperties>
-		<coloredOwnedProperties>
-		</coloredOwnedProperties>
-	</player>
-	<player>
-		<typeOfPlayer>User</typeOfPlayer>
-		<moneyAmount>870</moneyAmount>
-		<playerName>s</playerName>
-		<inJail>false</inJail>
-		<turnsInJail>0</turnsInJail>
-		<position>16</position>
-		<currLocation>ST. James Place</currLocation>
+		<position>23</position>
+		<currLocation>Keele</currLocation>
 		<numOfRailroads>0</numOfRailroads>
 		<numOfUtilities>0</numOfUtilities>
 		<out>false</out>
 		<ownedProperties>
 			<Location>
 				<Property>
-					<name>Vermont Avenue</name>
+					<name>Colchester</name>
 					<numberOfHouses>4</numberOfHouses>
 					<oldNumOfHouses>0</oldNumOfHouses>
 				</Property>
 			</Location>
 			<Location>
 				<Property>
-					<name>ST. James Place</name>
+					<name>Keele</name>
+					<numberOfHouses>0</numberOfHouses>
+					<oldNumOfHouses>0</oldNumOfHouses>
+				</Property>
+			</Location>
+		</ownedProperties>
+		<coloredOwnedProperties>
+			<index>
+				<color>PURPLE</color>
+				<number>1</number>
+			</index>
+			<index>
+				<color>RED</color>
+				<number>1</number>
+			</index>
+		</coloredOwnedProperties>
+	</player>
+	<player>
+		<typeOfPlayer>User</typeOfPlayer>
+		<moneyAmount>13999860</moneyAmount>
+		<playerName>Max</playerName>
+		<inJail>false</inJail>
+		<turnsInJail>0</turnsInJail>
+		<position>13</position>
+		<currLocation>Manchester</currLocation>
+		<numOfRailroads>0</numOfRailroads>
+		<numOfUtilities>0</numOfUtilities>
+		<out>false</out>
+		<ownedProperties>
+			<Location>
+				<Property>
+					<name>Middlesbrough</name>
+					<numberOfHouses>0</numberOfHouses>
+					<oldNumOfHouses>0</oldNumOfHouses>
+				</Property>
+			</Location>
+			<Location>
+				<Property>
+					<name>Manchester</name>
 					<numberOfHouses>0</numberOfHouses>
 					<oldNumOfHouses>0</oldNumOfHouses>
 				</Property>
@@ -54,30 +76,41 @@
 				<number>1</number>
 			</index>
 			<index>
-				<color>ORANGE</color>
+				<color>PURPLE</color>
 				<number>1</number>
 			</index>
 		</coloredOwnedProperties>
 	</player>
 	<player>
 		<typeOfPlayer>AI</typeOfPlayer>
-		<moneyAmount>1600</moneyAmount>
+		<moneyAmount>12000000</moneyAmount>
 		<playerName>AI1</playerName>
 		<inJail>false</inJail>
 		<turnsInJail>0</turnsInJail>
-		<position>6</position>
-		<currLocation>Oriental Avenue</currLocation>
+		<position>32</position>
+		<currLocation>Cambridge</currLocation>
 		<numOfRailroads>1</numOfRailroads>
 		<numOfUtilities>0</numOfUtilities>
 		<out>false</out>
 		<ownedProperties>
 			<Location>
+				<Property>
+					<name>Cardiff</name>
+					<numberOfHouses>0</numberOfHouses>
+					<oldNumOfHouses>0</oldNumOfHouses>
+				</Property>
+			</Location>
+			<Location>
 				<RailRoad>
-					<name>ShortLine Railroad</name>
+					<name>Belfast Airport</name>
 				</RailRoad>
 			</Location>
 		</ownedProperties>
 		<coloredOwnedProperties>
+			<index>
+				<color>LIGHTBLUE</color>
+				<number>1</number>
+			</index>
 		</coloredOwnedProperties>
 	</player>
 </boardModel>

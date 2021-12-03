@@ -126,14 +126,14 @@ public class BoardGUI extends JFrame implements BoardView{
         addToMenuPanels(UK, US, back);
         UK.addActionListener(e -> {
             try {
-                initializeNewGame(BoardModel.TypeOfBoards.UK.getVersion(), UK_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
+                initializeNewGame(BoardModel.TypeOfBoards.UK.getVersion(), UK_STARTING_MONEY, model);
             } catch (ParserConfigurationException | SAXException | IOException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
             }
         });
         US.addActionListener(e -> {
             try {
-                initializeNewGame(BoardModel.TypeOfBoards.US.getVersion(), ORIGINAL_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
+                initializeNewGame(BoardModel.TypeOfBoards.US.getVersion(), ORIGINAL_STARTING_MONEY, model);
             } catch (ParserConfigurationException | SAXException | IOException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
             }
@@ -174,9 +174,8 @@ public class BoardGUI extends JFrame implements BoardView{
      * creates a new game after the version is selected
      * @param initialCost Int of starting money
      * @param model BoardModel
-     * @param path String
      */
-    private void initializeNewGame(String version, int initialCost, BoardModel model, String path) throws ParserConfigurationException, SAXException, IOException {
+    private void initializeNewGame(String version, int initialCost, BoardModel model) throws ParserConfigurationException, SAXException, IOException {
         model.setGameVersion(version);
         model.createBoard();
         resetFrame();

@@ -690,7 +690,7 @@ public class BoardModel {
         if (this.version.equals(TypeOfBoards.US.getVersion())){
             initializeBoard("src/LoadXML/NewBoardModel.xml");
         }else{
-            //initializeBoard();
+            initializeBoard("src/LoadXML/UKBoardModel.xml");
         }
     }
 
