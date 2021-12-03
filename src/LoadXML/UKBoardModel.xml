@@ -93,7 +93,7 @@
         <Property>
             <name>York</name>
             <cost>1200000</cost>
-            <costPerHouse>500000000</costPerHouse>
+            <costPerHouse>50000</costPerHouse>
             <initialRent>80000</initialRent>
             <house1Rent>400000</house1Rent>
             <house2Rent>1000000</house2Rent>
@@ -164,7 +164,7 @@
     <Location>
         <RailRoad>
             <name>Belfast Airport</name>
-            <cost>200</cost>
+            <cost>2000000</cost>
         </RailRoad>
     </Location>
     <Location>
@@ -314,7 +314,7 @@
     <Location>
         <Utility>
             <name>Satellite</name>
-            <cost>150</cost>
+            <cost>1500000</cost>
         </Utility>
     </Location>
     <Location>
@@ -392,7 +392,7 @@
     <Location>
         <RailRoad>
             <name>Luton Airport</name>
-            <cost>200</cost>
+            <cost>2000000</cost>
         </RailRoad>
     </Location>
     <Location>
@@ -419,7 +419,7 @@
     <Location>
         <Tax>
             <name>Super Tax</name>
-            <cost>100</cost>
+            <cost>1000000</cost>
         </Tax>
     </Location>
     <Location>
