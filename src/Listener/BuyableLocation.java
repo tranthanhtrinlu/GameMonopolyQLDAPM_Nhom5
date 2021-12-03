@@ -48,4 +48,10 @@ public interface BuyableLocation {
      */
     void handleLocationNotOwnedFunctionality(Player p, int totalDiceRoll, int currentTurn);
 
+    /**
+     * parse buyable location to XML
+     * @return String, the xml
+     */
+    String toXML();
+
 }

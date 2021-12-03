@@ -7,6 +7,8 @@ import Listener.BoardView;
 import Model.BoardModel;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 
 import java.util.ArrayList;
@@ -215,5 +217,24 @@ public class Utility extends Location implements BuyableLocation {
             amount = 10;
         return "Property name: " + this.getName() + " {Owned: + " + this.owner.getPlayerName() + ", Payment: dice rolls * "
                 + amount + "} \n" + p.getPlayerName() + " will lose money now";
+    }
+
+    @Override
+    public String toXML(){
+        String str = "\t\t\t\t<Utility>\n";
+        str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
+        str += "\t\t\t\t</Utility>\n";
+        return str;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
+    public static Location createNewUtility(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());
+        return new Utility(name, cost);
     }
 }

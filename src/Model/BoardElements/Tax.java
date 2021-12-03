@@ -5,6 +5,8 @@ import Listener.BoardView;
 import Listener.TaxListener;
 import Model.BoardModel;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 
@@ -78,13 +80,19 @@ public class Tax extends Location{
     }
 
     /**
-     * add boardviw to listeners
+     * add boardView to listeners
      * @param view A Listener.BoardView view.
      */
     @Override
     public void addListener(BoardView view) {
         this.listeners.add(view);
+    }
 
+    public static Location createNewTax(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
+        return new Tax(name, cost);
     }
 
 }

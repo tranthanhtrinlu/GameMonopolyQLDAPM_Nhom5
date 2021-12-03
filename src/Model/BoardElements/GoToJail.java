@@ -4,6 +4,9 @@ import Listener.BoardView;
 import Listener.GoToJailListener;
 import Model.BoardModel;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +81,12 @@ public class GoToJail extends Location{
         this.goToJailListener.add(view);
     }
 
+    public static Location createNewGoToJail(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());
+        return new GoToJail(name, cost);
+    }
 
 
 }

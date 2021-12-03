@@ -31,7 +31,7 @@ public class BoardGUI extends JFrame implements BoardView{
     private PlayerDisplayPanel sidePanel;
     private JPanel gameControlPanel;
 
-    private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses;
+    private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses, save, save_quit;
     private final ArrayList<Image> diceImages;
     private JLabel dice1, dice2;
 
@@ -47,6 +47,8 @@ public class BoardGUI extends JFrame implements BoardView{
         this.rollDouble = new JButton("Roll Double");
         this.purchaseEstateHouses = new JButton("Purchase Houses");
         this.sellHouses = new JButton("Sell Houses");
+        this.save = new JButton("Save");
+        this.save_quit = new JButton("Save and Quit");
 
         BoardController controller = new BoardController(model);
         this.roll.setActionCommand(BoardModel.PlayerChoice.ROLL.getChoice() + " ");
@@ -63,7 +65,10 @@ public class BoardGUI extends JFrame implements BoardView{
         this.purchaseEstateHouses.addActionListener(controller);
         this.sellHouses.setActionCommand(BoardModel.PlayerChoice.SELL_HOUSE.getChoice() + " ");
         this.sellHouses.addActionListener(controller);
-
+        this.save.setActionCommand(BoardModel.PlayerChoice.SAVE.getChoice() + " ");
+        this.save.addActionListener(controller);
+        this.save_quit.setActionCommand(BoardModel.PlayerChoice.SAVE_QUIT.getChoice() + " ");
+        this.save_quit.addActionListener(controller);
 
         this.diceImages = new ArrayList<>(){{
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice1.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
@@ -73,57 +78,40 @@ public class BoardGUI extends JFrame implements BoardView{
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice5.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
             add(new ImageIcon(this.getClass().getResource("/DiceImages/dice6.png")).getImage().getScaledInstance(DICE_DIM[0], DICE_DIM[1], Image.SCALE_SMOOTH));
         }};
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setVisible(true);
-
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
     }
 
-    /**
-     * creates the main menu panel with new game, load game, quit
-     * @param model BaordModel
-     */
-    private void mainMenu(BoardModel model) {
+
+    private void resetFrame(){
         this.getContentPane().removeAll();
         this.revalidate();
         this.repaint();
+    }
 
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        JPanel blank = new JPanel();
-        JPanel blankTwo = new JPanel();
+
+    /**
+     * creates the main menu panel with new game, load game, quit
+     * @param model BoardModel
+     */
+    private void mainMenu(BoardModel model) {
+        resetFrame();
         JButton newGame = new JButton("New Game");
-        JButton loadGame = new JButton("Load Game");
+        JButton loadGame = new JButton("Load Recent Game");
         JButton quitMainMenu = new JButton("Quit");
-        JLabel main = new JLabel("     Monopoly");
-        JLabel bottom = new JLabel("");
-        main.setFont(new Font("Arial",Font.BOLD,40));
-
-        buttonPanel.setPreferredSize(new Dimension(200, 400));
-        blank.setPreferredSize(new Dimension(50, 400));
-        blankTwo.setPreferredSize(new Dimension(50, 400));
-
-        newGame.setPreferredSize(new Dimension(200,85));
-        loadGame.setPreferredSize(new Dimension(200,125));
-        quitMainMenu.setPreferredSize(new Dimension(200,85));
-        main.setPreferredSize(new Dimension(300, 50));
-        bottom.setPreferredSize(new Dimension(300,50));
-
-        this.add(blank, BorderLayout.LINE_START);
-        this.add(buttonPanel, BorderLayout.CENTER);
-        this.add(blankTwo, BorderLayout.LINE_END);
-        this.add(main, BorderLayout.PAGE_START);
-        this.add(bottom, BorderLayout.PAGE_END);
-
-        buttonPanel.add(newGame, BorderLayout.PAGE_START);
-        buttonPanel.add(loadGame, BorderLayout.CENTER);
-        buttonPanel.add(quitMainMenu, BorderLayout.PAGE_END);
-
+        addToMenuPanels(newGame, loadGame, quitMainMenu);
         newGame.addActionListener(e -> {playerBoardChoice(model);});
         quitMainMenu.addActionListener(e -> {System.exit(0);});
-
-        this.pack();
-        this.setSize(300,400);
+        loadGame.addActionListener(e -> {
+            try {
+                loadSavedGame(model);
+            } catch (IOException | ParserConfigurationException | SAXException ioException) {
+                ioException.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -131,68 +119,55 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param model BoardModel
      */
     private void playerBoardChoice(BoardModel model){
-
-        this.getContentPane().removeAll();
-        this.revalidate();
-        this.repaint();
-
-
-        JPanel choicePanel = new JPanel(new BorderLayout());
-        JPanel blank = new JPanel();
-        JPanel blankTwo = new JPanel();
+        resetFrame();
         JButton UK = new JButton("UK Version");
         JButton US = new JButton("US Version");
         JButton back = new JButton("Back");
-        JLabel main = new JLabel("     Monopoly");
-        JLabel bottom = new JLabel("");
-        main.setFont(new Font("Arial",Font.BOLD,40));
-
-        choicePanel.setPreferredSize(new Dimension(200, 400));
-        blank.setPreferredSize(new Dimension(50, 400));
-        blankTwo.setPreferredSize(new Dimension(50, 400));
-
-        UK.setPreferredSize(new Dimension(200,85));
-        US.setPreferredSize(new Dimension(200,125));
-        back.setPreferredSize(new Dimension(200,85));
-        main.setPreferredSize(new Dimension(300, 50));
-        bottom.setPreferredSize(new Dimension(300,50));
-
-        this.add(blank, BorderLayout.LINE_START);
-        this.add(choicePanel, BorderLayout.CENTER);
-        this.add(blankTwo, BorderLayout.LINE_END);
-        this.add(main, BorderLayout.PAGE_START);
-        this.add(bottom, BorderLayout.PAGE_END);
-
-        choicePanel.add(UK, BorderLayout.PAGE_START);
-        choicePanel.add(US, BorderLayout.CENTER);
-        choicePanel.add(back, BorderLayout.PAGE_END);
-
-        this.pack();
-        this.setSize(300,400);
-
+        addToMenuPanels(UK, US, back);
         UK.addActionListener(e -> {
             try {
                 initializeNewGame(BoardModel.TypeOfBoards.UK.getVersion(), UK_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
-            } catch (ParserConfigurationException parserConfigurationException) {
+            } catch (ParserConfigurationException | SAXException | IOException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
-            } catch (SAXException saxException) {
-                saxException.printStackTrace();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             }
         });
         US.addActionListener(e -> {
             try {
                 initializeNewGame(BoardModel.TypeOfBoards.US.getVersion(), ORIGINAL_STARTING_MONEY, model, "src/LoadXML/NewBoardModel.xml");
-            } catch (ParserConfigurationException parserConfigurationException) {
+            } catch (ParserConfigurationException | SAXException | IOException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
-            } catch (SAXException saxException) {
-                saxException.printStackTrace();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             }
         });
         back.addActionListener(e -> {mainMenu(model);});
+    }
+
+
+
+    private void addToMenuPanels(JButton topButton, JButton middleButton, JButton bottomButton) {
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        JPanel blank = new JPanel();
+        JPanel blankTwo = new JPanel();
+        JLabel mainTitle = new JLabel("     Monopoly");
+        JLabel bottomBlank = new JLabel("");
+        mainTitle.setFont(new Font("Arial", Font.BOLD, 40));
+        buttonPanel.setPreferredSize(new Dimension(200, 400));
+        blank.setPreferredSize(new Dimension(50, 400));
+        blankTwo.setPreferredSize(new Dimension(50, 400));
+        topButton.setPreferredSize(new Dimension(200, 85));
+        middleButton.setPreferredSize(new Dimension(200, 125));
+        bottomButton.setPreferredSize(new Dimension(200, 85));
+        mainTitle.setPreferredSize(new Dimension(300, 50));
+        bottomBlank.setPreferredSize(new Dimension(300, 50));
+        this.add(blank, BorderLayout.LINE_START);
+        this.add(buttonPanel, BorderLayout.CENTER);
+        this.add(blankTwo, BorderLayout.LINE_END);
+        this.add(mainTitle, BorderLayout.PAGE_START);
+        this.add(bottomBlank, BorderLayout.PAGE_END);
+        buttonPanel.add(topButton, BorderLayout.PAGE_START);
+        buttonPanel.add(middleButton, BorderLayout.CENTER);
+        buttonPanel.add(bottomButton, BorderLayout.PAGE_END);
+        this.pack();
+        this.setSize(300, 400);
     }
 
     /**
@@ -202,37 +177,10 @@ public class BoardGUI extends JFrame implements BoardView{
      * @param path String
      */
     private void initializeNewGame(String version, int initialCost, BoardModel model, String path) throws ParserConfigurationException, SAXException, IOException {
-        model.initializeBoard(path);
-        this.getContentPane().removeAll();
-        this.revalidate();
-        this.repaint();
-        this.gamePanel = new GameDisplayPanel(version);
-        this.sidePanel = new PlayerDisplayPanel();
-
-        this.gameControlPanel = new JPanel();
-        this.gameControlPanel.setLayout(new GridLayout(10,1));
-        this.gameControlPanel.setBounds(520,315, 150,200);
-        this.gameControlPanel.setBackground(new Color(255,255,255));
-        this.setLayout(null);
-        this.sidePanel.setBounds(0,0,200, GAME_HEIGHT);
-        this.gamePanel.setBounds(200,0,GAME_WIDTH,GAME_HEIGHT);
-
-        this.dice1 = new JLabel(new ImageIcon(this.diceImages.get(0)));
-        this.dice2 = new JLabel(new ImageIcon(this.diceImages.get(0)));
-
-        this.dice1.setBounds(450,150,96,96);
-        this.dice2.setBounds(650,150,96,96);
-        this.add(this.dice1);
-        this.add(this.dice2);
-        this.add(this.gameControlPanel);
-        this.add(this.gamePanel);
-        JScrollPane scroll = new JScrollPane(this.sidePanel);
-        scroll.setBounds(0,0,200, GAME_HEIGHT);
-        this.add(scroll);
-        model.addView(this);
-        model.addViewToListener(this);
-        this.setSize(GAME_WIDTH,GAME_HEIGHT);
-
+        model.setGameVersion(version);
+        model.createBoard();
+        resetFrame();
+        addToGame(version, 0,0);
         StartGameController start = new StartGameController();
         int numberOfPlayers = start.getNumOfPlayers(this);
         int numberOfAIs = 0;
@@ -250,8 +198,57 @@ public class BoardGUI extends JFrame implements BoardView{
         }
         model.setNumberOfPlayers(numberOfPlayers+numberOfAIs);
         this.updateChoicePanel(model.getPlayersByIndex(0));
-
+        model.addView(this);
+        model.addViewToListener(this);
     }
+
+    private void loadSavedGame(BoardModel model) throws IOException, SAXException, ParserConfigurationException {
+        model.loadSavedXML("src/SaveXML/savedFile.xml");
+        resetFrame();
+        addToGame(model.getGameVersion(), model.getRoll1()-1, model.getRoll2()-1);
+        for (int i = 0; i<model.getNumberOfPlayers(); i++){
+            Player p = model.getPlayersByIndex(i);
+            this.gamePanel.loadInPlayers(p, i, model.getNumberOfPlayers());
+            this.sidePanel.addNewPlayerViewButton(p, i);
+            if (p.getOut()) {
+                this.sidePanel.removePlayerView(i, p);
+                this.gamePanel.removePieceFromBoard(i, p.getPosition());
+            }
+        }
+        for (int i = 0; i<model.getNumOfPlayers(); i++){
+            this.sidePanel.updateCurrentTurn(model.getCurrentTurn(), i, model.getPlayersByIndex(i));
+        }
+        this.updateChoicePanel(model.getPlayersByIndex(model.getCurrentTurn()));
+        model.addView(this);
+        model.addViewToListener(this);
+    }
+
+    private void addToGame(String version, int dice1, int dice2){
+        this.gamePanel = new GameDisplayPanel(version);
+        this.sidePanel = new PlayerDisplayPanel();
+        this.gameControlPanel = new JPanel();
+        this.gameControlPanel.setLayout(new GridLayout(10,1));
+        this.gameControlPanel.setBounds(520,315, 150,200);
+        this.gameControlPanel.setBackground(new Color(255,255,255));
+        this.setLayout(null);
+        this.sidePanel.setBounds(0,0,200, GAME_HEIGHT);
+        this.gamePanel.setBounds(200,0,GAME_WIDTH,GAME_HEIGHT);
+        this.dice1 = new JLabel(new ImageIcon(this.diceImages.get(dice1)));
+        this.dice2 = new JLabel(new ImageIcon(this.diceImages.get(dice2)));
+        this.dice1.setBounds(450,150,96,96);
+        this.dice2.setBounds(650,150,96,96);
+        this.add(this.dice1);
+        this.add(this.dice2);
+        this.add(this.gameControlPanel);
+        this.add(this.gamePanel);
+        JScrollPane scroll = new JScrollPane(this.sidePanel);
+        scroll.setBounds(0,0,200, GAME_HEIGHT);
+        this.add(scroll);
+        this.setSize(GAME_WIDTH,GAME_HEIGHT);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+    }
+
 
     //****BEGINNING OF PROPERTY FUNCTIONS**//
 
@@ -567,6 +564,8 @@ public class BoardGUI extends JFrame implements BoardView{
         this.rollDouble.setEnabled(b);
         this.purchaseEstateHouses.setEnabled(b);
         this.sellHouses.setEnabled(b);
+        this.save.setEnabled(b);
+        this.save_quit.setEnabled(b);
         this.gameControlPanel.revalidate();
     }
 
@@ -702,6 +701,8 @@ public class BoardGUI extends JFrame implements BoardView{
             this.gameControlPanel.add(this.rollDouble);
             this.gameControlPanel.add(this.quit);
         }
+        this.gameControlPanel.add(this.save);
+        this.gameControlPanel.add(this.save_quit);
         this.gameControlPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.gameControlPanel.revalidate();
 

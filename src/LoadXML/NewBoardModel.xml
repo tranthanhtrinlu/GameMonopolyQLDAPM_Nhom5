@@ -16,7 +16,7 @@
             <house3Rent>90</house3Rent>
             <house4Rent>160</house4Rent>
             <hotelRent>250</hotelRent>
-            <color>Color.BROWN</color>
+            <color>BROWN</color>
             <numOfColors>2</numOfColors>
         </Property>
     </Location>
@@ -37,7 +37,7 @@
             <house3Rent>180</house3Rent>
             <house4Rent>320</house4Rent>
             <hotelRent>450</hotelRent>
-            <color>Color.BROWN</color>
+            <color>BROWN</color>
             <numOfColors>2</numOfColors>
         </Property>
     </Location>
@@ -64,7 +64,7 @@
             <house3Rent>270</house3Rent>
             <house4Rent>400</house4Rent>
             <hotelRent>550</hotelRent>
-            <color>Color.LIGHTBLUE</color>
+            <color>LIGHTBLUE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -85,7 +85,7 @@
             <house3Rent>270</house3Rent>
             <house4Rent>400</house4Rent>
             <hotelRent>550</hotelRent>
-            <color>Color.LIGHTBLUE</color>
+            <color>LIGHTBLUE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -100,7 +100,7 @@
             <house3Rent>300</house3Rent>
             <house4Rent>450</house4Rent>
             <hotelRent>600</hotelRent>
-            <color>Color.LIGHTBLUE</color>
+            <color>LIGHTBLUE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -121,7 +121,7 @@
             <house3Rent>450</house3Rent>
             <house4Rent>625</house4Rent>
             <hotelRent>750</hotelRent>
-            <color>Color.PURPLE</color>
+            <color>PURPLE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -142,7 +142,7 @@
             <house3Rent>450</house3Rent>
             <house4Rent>625</house4Rent>
             <hotelRent>750</hotelRent>
-            <color>Color.PURPLE</color>
+            <color>PURPLE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -157,7 +157,7 @@
             <house3Rent>500</house3Rent>
             <house4Rent>700</house4Rent>
             <hotelRent>900</hotelRent>
-            <color>Color.PURPLE</color>
+            <color>PURPLE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -178,7 +178,7 @@
             <house3Rent>550</house3Rent>
             <house4Rent>750</house4Rent>
             <hotelRent>950</hotelRent>
-            <color>Color.ORANGE</color>
+            <color>ORANGE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -199,7 +199,7 @@
             <house3Rent>550</house3Rent>
             <house4Rent>750</house4Rent>
             <hotelRent>950</hotelRent>
-            <color>Color.ORANGE</color>
+            <color>ORANGE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -214,7 +214,7 @@
             <house3Rent>600</house3Rent>
             <house4Rent>800</house4Rent>
             <hotelRent>1000</hotelRent>
-            <color>Color.ORANGE</color>
+            <color>ORANGE</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -235,7 +235,7 @@
             <house3Rent>700</house3Rent>
             <house4Rent>875</house4Rent>
             <hotelRent>1050</hotelRent>
-            <color>Color.RED</color>
+            <color>RED</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -256,7 +256,7 @@
             <house3Rent>700</house3Rent>
             <house4Rent>875</house4Rent>
             <hotelRent>1050</hotelRent>
-            <color>Color.RED</color>
+            <color>RED</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -271,7 +271,7 @@
             <house3Rent>750</house3Rent>
             <house4Rent>925</house4Rent>
             <hotelRent>1110</hotelRent>
-            <color>Color.RED</color>
+            <color>RED</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -292,7 +292,7 @@
             <house3Rent>800</house3Rent>
             <house4Rent>975</house4Rent>
             <hotelRent>1150</hotelRent>
-            <color>Color.YELLOW</color>
+            <color>YELLOW</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -307,7 +307,7 @@
             <house3Rent>800</house3Rent>
             <house4Rent>975</house4Rent>
             <hotelRent>1150</hotelRent>
-            <color>Color.YELLOW</color>
+            <color>YELLOW</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -328,7 +328,7 @@
             <house3Rent>850</house3Rent>
             <house4Rent>1025</house4Rent>
             <hotelRent>1200</hotelRent>
-            <color>Color.YELLOW</color>
+            <color>YELLOW</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -349,7 +349,7 @@
             <house3Rent>900</house3Rent>
             <house4Rent>1100</house4Rent>
             <hotelRent>1275</hotelRent>
-            <color>Color.GREEN</color>
+            <color>GREEN</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -364,7 +364,7 @@
             <house3Rent>900</house3Rent>
             <house4Rent>1100</house4Rent>
             <hotelRent>1275</hotelRent>
-            <color>Color.GREEN</color>
+            <color>GREEN</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -385,7 +385,7 @@
             <house3Rent>1000</house3Rent>
             <house4Rent>1200</house4Rent>
             <hotelRent>1400</hotelRent>
-            <color>Color.GREEN</color>
+            <color>GREEN</color>
             <numOfColors>3</numOfColors>
         </Property>
     </Location>
@@ -412,7 +412,7 @@
             <house3Rent>1100</house3Rent>
             <house4Rent>1300</house4Rent>
             <hotelRent>1500</hotelRent>
-            <color>Color.DARKBLUE</color>
+            <color>DARKBLUE</color>
             <numOfColors>2</numOfColors>
         </Property>
     </Location>
@@ -433,7 +433,7 @@
             <house3Rent>1400</house3Rent>
             <house4Rent>1700</house4Rent>
             <hotelRent>200</hotelRent>
-            <color>Color.DARKBLUE</color>
+            <color>DARKBLUE</color>
             <numOfColors>2</numOfColors>
         </Property>
     </Location>

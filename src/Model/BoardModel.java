@@ -4,6 +4,7 @@ import Listener.BoardView;
 import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import Model.GamePlayer.User;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,7 +18,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -31,6 +31,7 @@ public class BoardModel {
     public static final int JAIL_POSITION = 10; // 11 - 1
     public static final int TOTAL_UTILITIES = 2;
     private static final int ROLLING_DICE_DELAY = 10;
+    public static final String STARTING_POSITION = "Go";
     public static int centerMoney = 0;
 
     private final List<Location> board;
@@ -42,6 +43,9 @@ public class BoardModel {
     private int roll2;
     private final ArrayList<Player> gamePlayers;
     private boolean payed;
+    private String version;
+
+
 
 
     /**
@@ -78,75 +82,11 @@ public class BoardModel {
         }
     }
 
-
-    /**
-     * Constants for each board element in board
-     */
-    public enum BoardElements{
-        GO(new FreePass("Go", 0)),
-        MEDITERRANEAN(new Property("Mediterranean Avenue", 60, 50,2,10,30,90,160,250,Color.BROWN, 2)),
-        FREE_PASS( new FreePass("Free Pass",0)),
-        BALTIC(new Property("Baltic Avenue", 60,50,4,20,60,180,320,450, Color.BROWN, 2)),
-        INCOME(new Tax("Income Tax", 200)),
-        READING_R(new RailRoad("Reading Railroad", 200)),
-        ORIENTAL(new Property("Oriental Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
-        FREE_PASS2( new FreePass("Free Pass",0)),
-        VERMONT(new Property("Vermont Avenue", 100, 50,6,30,90,270,400,550, Color.LIGHTBLUE, 3)),
-        CONNECTICUT(new Property("Connecticut Avenue", 120, 50,8,40,100,300,450,600, Color.LIGHTBLUE, 3)),
-        LAND_ON_JAIL(new LandOnJail("In Jail - Just Visiting", 0)),
-        CHARLES(new Property("ST.Charles Place", 140,100,10,50,150,450,625,750, Color.PURPLE, 3)),
-        ELECTRIC(new Utility("Electric Company", 150)),
-        STATES(new Property("States Avenue",140,100,10,50,150,450,625,750,Color.PURPLE, 3)),
-        VIRGINIA(new Property("Virginia Avenue", 160,100,12,60,180,500,700,900, Color.PURPLE, 3)),
-        PENNSYLVANIA_R(new RailRoad("Pennsylvania Railroad", 200)),
-        JAMES(new Property("ST. James Place", 180, 100,14,70,200,550,750,950, Color.ORANGE, 3)),
-        FREE_PASS3( new FreePass("Free Pass",0)),
-        TENNESSEE(new Property("Tennessee Avenue", 180,100,14,70,200,550,750,950, Color.ORANGE, 3)),
-        NEW_YORK(new Property("New York Avenue", 200,100,16,80,220,600,800,1000, Color.ORANGE, 3)),
-        FREE_PARKING(new FreeParking(0, "Free Parking")),
-        KENTUCKY(new Property("Kentucky Avenue",220,150,18,90,250,700,875,1050, Color.RED,3)),
-        FREE_PASS4( new FreePass("Free Pass",0)),
-        INDIANA(new Property("Indiana Avenue", 220,150,18,90,250,700,875,1050, Color.RED, 3)),
-        ILLINOIS(new Property("Illinois Avenue", 240,150,20,100,300,750,925,1110, Color.RED, 3)),
-        BO_R(new RailRoad("B&O Railroad", 200)),
-        ATLANTIC(new Property("Atlantic Avenue", 260,150,22,110,330,800,975,1150,Color.YELLOW, 3)),
-        VENTNOR(new Property("Ventnor Avenue", 260,150,22,110,330,800,975,1150, Color.YELLOW, 3)),
-        WATER(new Utility("Water Works", 150)),
-        MARVIN(new Property("Marvin Gardens", 280,150,24,120,360,850,1025,1200, Color.YELLOW, 3)),
-        GO_TO_JAIL(new GoToJail("In Jail", 0)),
-        PACIFIC(new Property("Pacific Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
-        CAROLINA(new Property("North Carolina Avenue", 300,200,26,130,390,900,1100,1275, Color.GREEN, 3)),
-        FREE_PASS5( new FreePass("Free Pass",0)),
-        PENNSYLVANIA(new Property("Pennsylvania Avenue", 320,200,28,150,450,1000,1200,1400, Color.GREEN, 3)),
-        SHORT_R(new RailRoad("ShortLine Railroad", 200)),
-        FREE_PASS6( new FreePass("Free Pass",0)),
-        PARK(new Property("Park Place", 350,200,35,175,500,1100,1300,1500,Color.DARKBLUE, 2)),
-        LUXURY(new Tax("Luxury Tax", 100)),
-        BOARDWALK(new Property("Boardwalk", 400,200,50,200,600,1400,1700,2000, Color.DARKBLUE, 2));
-
-        private final Location piece;
-        /**
-         * Constructor for Each boardElements
-         * @param piece Location, the location of the board element
-         */
-        BoardElements(Location piece){
-            this.piece = piece;
-        }
-
-        /**
-         * Getter method to get the location piece
-         * @return Location, the location piece
-         */
-        public Location getPiece() {
-            return this.piece;
-        }
-    }
-
     /**
      * Constants for handling player choice throughout the game
      */
     public enum PlayerChoice{
-        ROLL(1), QUIT(2), PASS(3), PAY_OUT(4), ROLL_OUT(5), BUY_HOUSE(6), SELL_HOUSE(7);
+        ROLL(1), QUIT(2), PASS(3), PAY_OUT(4), ROLL_OUT(5), BUY_HOUSE(6), SELL_HOUSE(7), SAVE(8), SAVE_QUIT(9);
 
         private final int choice;
 
@@ -190,6 +130,19 @@ public class BoardModel {
         this.roll2 = roll2;
         this.status = Status.UNFINISHED;
         this.payed = false;
+        this.version = "";
+    }
+
+    /**
+     * set the version of the game
+     * @param version String, the version
+     */
+    public void setGameVersion(String version){
+        this.version = version;
+    }
+
+    public String getGameVersion(){
+        return this.version;
     }
 
     /**
@@ -223,6 +176,22 @@ public class BoardModel {
      */
     public void addGamePlayers(Player player) {
         this.gamePlayers.add(player);
+    }
+
+    public int getNumberOfPlayers() {
+        return this.gamePlayers.size();
+    }
+
+    public int getRoll1() {
+        return this.roll1;
+    }
+
+    public int getRoll2() {
+        return this.roll2;
+    }
+
+    public int getNumOfPlayers() {
+        return this.numberOfPlayers;
     }
 
     /**
@@ -280,64 +249,51 @@ public class BoardModel {
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("Location");
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
-            Node node = nodeList.item(itr).getFirstChild();
+            Node node = nodeList.item(itr).getFirstChild().getNextSibling();
             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                if (node.getNodeName().equals("FreePass")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    this.board.add(new FreePass(name, 0));//add to board accordingly
-                }
-                else if (node.getNodeName().equals("Property")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
-                    int costPerHouse = Integer.parseInt(e.getElementsByTagName("costPerHouse").item(0).getTextContent());//Parse accordingly
-                    int initialRent = Integer.parseInt(e.getElementsByTagName("initialRent").item(0).getTextContent());//Parse accordingly
-                    int house1Rent = Integer.parseInt(e.getElementsByTagName("house1Rent").item(0).getTextContent());//Parse accordingly
-                    int house2Rent = Integer.parseInt(e.getElementsByTagName("house2Rent").item(0).getTextContent());//Parse accordingly
-                    int house3Rent = Integer.parseInt(e.getElementsByTagName("house3Rent").item(0).getTextContent());//Parse accordingly
-                    int house4Rent = Integer.parseInt(e.getElementsByTagName("house4Rent").item(0).getTextContent());//Parse accordingly
-                    int hotelRent = Integer.parseInt(e.getElementsByTagName("hotelRent").item(0).getTextContent());//Parse accordingly
-                    BoardModel.Color color = Color.valueOf(e.getElementsByTagName("color").item(0).getTextContent());//Parse accordingly
-                    int numOfColors = Integer.parseInt(e.getElementsByTagName("numOfColors").item(0).getTextContent());//Parse accordingly
-                    this.board.add(new Property(name, cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, color, numOfColors));
-                }
-                else if (node.getNodeName().equals("Tax")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
-                    this.board.add(new Tax(name, cost));
-                }
-                else if (node.getNodeName().equals("RailRoad")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
-                    this.board.add(new RailRoad(name, cost));
-                }
-                else if (node.getNodeName().equals("LandOnJail")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    this.board.add(new LandOnJail(name, 0));//add to board accordingly
-                }
-                else if (node.getNodeName().equals("Utility")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());//Parse accordingly
-                    this.board.add(new Utility(name, cost));
-                }
-                else if (node.getNodeName().equals("FreeParking")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    this.board.add(new FreeParking(0, name));//add to board accordingly
-                }
-                else if (node.getNodeName().equals("GoToJail")) {
-                    Element e = (Element) node;
-                    String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly
-                    this.board.add(new GoToJail(name, 0));//add to board accordingly
-                }
+                this.parseAndAddDataLocationToBoard(node);
             }
         }
     }
+
+    private void parseAndAddDataLocationToBoard(Node node){
+        switch (node.getNodeName()) {
+            case "FreePass": {
+                this.board.add(FreePass.createNewFreePass(node));
+                break;
+            }
+            case "Property": {
+                this.board.add(Property.createNewProperty(node));
+                break;
+            }
+            case "Tax": {
+                this.board.add(Tax.createNewTax(node));
+                break;
+            }
+            case "RailRoad": {
+                this.board.add(RailRoad.createNewRailRoad(node));
+                break;
+            }
+            case "LandOnJail": {
+                this.board.add(LandOnJail.createNewLandOnJail(node));
+                break;
+            }
+            case "Utility": {
+                this.board.add(Utility.createNewUtility(node));
+                break;
+            }
+            case "FreeParking": {
+                this.board.add(FreeParking.createNewFreeParking(node));
+                break;
+            }
+            case "GoToJail": {
+                this.board.add(GoToJail.createNewGoToJail(node));
+                break;
+            }
+        }
+        System.out.println(this.board.size());
+    }
+
 
     /**
      * Method that loops through the board list and adds all the listeners to each.
@@ -698,7 +654,7 @@ public class BoardModel {
      */
     private void handleSaveToXML(String filename){
         try{
-            BufferedWriter out = new BufferedWriter(new FileWriter(filename+".xml"));
+            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
             out.write(this.toXML());
             out.close();
         }catch(IOException ex){
@@ -712,25 +668,69 @@ public class BoardModel {
      */
     private String toXML(){
         String str = "<boardModel>\n";
-
-        //str += "\t<version>" + this.getVersion + "</version>\n";
-        str += "\t<centerMoney>" + this.centerMoney + "</centerMoney>\n";
+        str += "\t<version>" + this.version + "</version>\n";
+        str += "\t<centerMoney>" + BoardModel.centerMoney + "</centerMoney>\n";
+        str += "\t<numberOfPlayers>" + this.numberOfPlayers + "</numberOfPlayers>\n";
         str += "\t<currentTurn>" + this.currentTurn + "</currentTurn>\n";
         str += "\t<roll1>" + this.roll1 + "</roll1>\n";
         str += "\t<roll2>" + this.roll2 + "</roll2>\n";
 
         for(Player p : this.gamePlayers){
-            str += "\t<player>\n";
-
-            str += p.toXML();
-
-            str += "\t</player>\n";
+            if (p instanceof User){
+                str += p.toXML("User");
+                continue;
+            }
+            str += p.toXML("AI");
         }
-
         str += "</boardModel>\n";
-
         return str;
     }
+
+    public void createBoard() throws ParserConfigurationException, SAXException, IOException {
+        if (this.version.equals(TypeOfBoards.US.getVersion())){
+            initializeBoard("src/LoadXML/NewBoardModel.xml");
+        }else{
+            //initializeBoard();
+        }
+    }
+
+    private void initializeLoadedBoardModel(Document doc) throws IOException, SAXException, ParserConfigurationException {
+        String version = doc.getElementsByTagName("version").item(0).getTextContent();
+        int diceRoll1 = Integer.parseInt(doc.getElementsByTagName("roll1").item(0).getTextContent());
+        int diceRoll2 = Integer.parseInt(doc.getElementsByTagName("roll2").item(0).getTextContent());
+        int currentTurn = Integer.parseInt(doc.getElementsByTagName("currentTurn").item(0).getTextContent());
+        int centerMoney = Integer.parseInt(doc.getElementsByTagName("centerMoney").item(0).getTextContent());
+        int numOfPlayers = Integer.parseInt(doc.getElementsByTagName("numberOfPlayers").item(0).getTextContent());
+        this.roll1 = diceRoll1;
+        this.roll2 = diceRoll2;
+        this.currentTurn = currentTurn;
+        this.numberOfPlayers = numOfPlayers;
+        BoardModel.centerMoney = centerMoney;
+        this.version = version;
+        createBoard();
+    }
+
+    public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
+        Player p;
+        File file = new File(path);
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(file);
+        doc.getDocumentElement().normalize();
+        NodeList nodePlayerList = doc.getElementsByTagName("player");
+        initializeLoadedBoardModel(doc);
+        for (int i = 0; i < nodePlayerList.getLength(); i++){
+            Node player = nodePlayerList.item(i);
+            if (player.getNodeType() == Node.ELEMENT_NODE){
+                Element playerElement = (Element) player;
+                p = Player.createPlayer(playerElement);
+                this.addGamePlayers(p);
+                p.parseAddPlayerProperties(playerElement, this.board);
+                p.parseAddPlayerOwnedColors(playerElement);
+            }
+        }
+    }
+
 
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.
@@ -759,6 +759,11 @@ public class BoardModel {
         }
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             handleSellingOfHouses(e);
+        }else if (choice == PlayerChoice.SAVE.getChoice()){
+            handleSaveToXML("src/SaveXML/savedFile.xml");
+        }else if (choice == PlayerChoice.SAVE_QUIT.getChoice()){
+            handleSaveToXML("src/SaveXML/savedFile.xml");
+            System.exit(0);
         }
     }
 }

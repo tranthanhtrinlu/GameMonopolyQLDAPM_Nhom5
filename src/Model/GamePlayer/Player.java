@@ -1,7 +1,13 @@
 package Model.GamePlayer;
+import Model.BoardElements.RailRoad;
+import Model.BoardElements.Utility;
 import Model.BoardModel;
 import Model.BoardElements.Location;
 import Model.BoardElements.Property;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +17,6 @@ import java.util.List;
  * Class MVC.Player that defines the attributes of a player in the Monopoly game.
  */
 public abstract class Player{
-
     private final String playerName;
     private int moneyAmount;
     private boolean inJail;
@@ -29,7 +34,7 @@ public abstract class Player{
      * @param name String player name
      */
     public Player(String name, int moneyAmount){
-        this(name, moneyAmount, false, 0, false, 0, BoardModel.BoardElements.GO.getPiece().getName(), 0,0);
+        this(name, moneyAmount, false, 0, false, 0, BoardModel.STARTING_POSITION, 0,0);
     }
 
     public Player(String playerName, int moneyAmount, boolean out,  int position, boolean inJail, int turnsInJail, String currLocation, int numOfRailroads, int numOfUtilities){
@@ -397,6 +402,8 @@ public abstract class Player{
         for (Location location : this.ownedProperties){
             location.resetOwner();
         }
+        this.ownedProperties.clear();
+        this.ownedPropertiesBasedOnColors.clear();
     }
 
     public List<Location> getOwnedProperties() {
@@ -407,8 +414,10 @@ public abstract class Player{
      * returns a xml represntation of player as a single string
      * @return
      */
-    public String toXML(){
+    public String toXML(String kindOfPlayer){
         String str = "";
+        str += "\t<player>\n";
+        str += "\t\t<typeOfPlayer>" + kindOfPlayer + "</typeOfPlayer>\n";
         str += "\t\t<moneyAmount>" + this.getMoneyAmount() + "</moneyAmount>\n";
         str += "\t\t<playerName>" + this.getPlayerName() + "</playerName>\n";
         str += "\t\t<inJail>" + this.getInJail() + "</inJail>\n";
@@ -418,35 +427,112 @@ public abstract class Player{
         str += "\t\t<numOfRailroads>" + this.getNumOfRailroads() + "</numOfRailroads>\n";
         str += "\t\t<numOfUtilities>" + this.getNumOfUtilities() + "</numOfUtilities>\n";
         str += "\t\t<out>" + this.getOut() + "</out>\n";
-
         // Properties
         str += "\t\t<ownedProperties>\n";
-
         for(Location l : this.getOwnedProperties()){
             str += "\t\t\t<Location>\n";
-
-            str += "\t\t\t\t<name>" + l.getName() + "</name>\n";
-            str += "\t\t\t\t<cost>" + l.getCost() + "</cost>\n";
-
+            if (l instanceof Property){
+                str += ((Property) l).toXML();
+            }else if (l instanceof Utility){
+                str += ((Utility) l).toXML();
+            }else if (l instanceof RailRoad){
+                str += ((RailRoad) l).toXML();
+            }
             str += "\t\t\t</Location>\n";
         }
-
         str += "\t\t</ownedProperties>\n";
-
         // Colored Owned Properties
         str += "\t\t<coloredOwnedProperties>\n";
-
         for(BoardModel.Color color : this.getOwnedPropertiesBasedOnColors().keySet()){
             str += "\t\t\t<index>\n";
-
             str += "\t\t\t\t<color>" + color + "</color>\n";
             str += "\t\t\t\t<number>" + this.getOwnedPropertiesBasedOnColors().get(color) + "</number>\n";
-
             str += "\t\t\t</index>\n";
         }
-
         str += "\t\t</coloredOwnedProperties>\n";
-
+        str += "\t</player>\n";
         return str;
+    }
+
+    public static Player createPlayer(Element playerElement){
+        String kindOfPlayer = playerElement.getElementsByTagName("typeOfPlayer").item(0).getTextContent();
+        int moneyAmount = Integer.parseInt(playerElement.getElementsByTagName("moneyAmount").item(0).getTextContent());
+        String name = playerElement.getElementsByTagName("playerName").item(0).getTextContent();
+        boolean inJail = Boolean.parseBoolean(playerElement.getElementsByTagName("inJail").item(0).getTextContent());
+        int turnsInJail = Integer.parseInt(playerElement.getElementsByTagName("turnsInJail").item(0).getTextContent());
+        int position = Integer.parseInt(playerElement.getElementsByTagName("position").item(0).getTextContent());
+        String currLocation = playerElement.getElementsByTagName("currLocation").item(0).getTextContent();
+        int numOfRailroads = Integer.parseInt(playerElement.getElementsByTagName("numOfRailroads").item(0).getTextContent());
+        int numOfUtilities = Integer.parseInt(playerElement.getElementsByTagName("numOfUtilities").item(0).getTextContent());
+        boolean out = Boolean.parseBoolean(playerElement.getElementsByTagName("out").item(0).getTextContent());
+        if (kindOfPlayer.equals("User"))
+            return new User(name, moneyAmount, out, position, inJail, turnsInJail, currLocation, numOfRailroads, numOfUtilities);
+        return new AI(name, moneyAmount, out, position, inJail, turnsInJail, currLocation, numOfRailroads, numOfUtilities);
+    }
+
+    private void loadPropertyToPlayer(Node nodeProperty, List<Location> board){
+        Element property = (Element) nodeProperty;
+        String propertyName = property.getElementsByTagName("name").item(0).getTextContent();
+        int numberOfHouses = Integer.parseInt(property.getElementsByTagName("numberOfHouses").item(0).getTextContent());
+        int oldNumOfHouses = Integer.parseInt(property.getElementsByTagName("oldNumOfHouses").item(0).getTextContent());
+        for (Location l : board){
+            if (l instanceof Property){
+                if (l.getName().equals(propertyName)){
+                    ((Property) l).setNumOfHouses(numberOfHouses);
+                    ((Property) l).setOldNumOfHouses(oldNumOfHouses);
+                    ((Property) l).setOwner(this);
+                    this.addProperty(l);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void loadNonPropertyOwnerShipToPlayer(Node location, List<Location> board){
+        String locationName = ((Element) location).getElementsByTagName("name").item(0).getTextContent();
+        for (Location l : board) {
+            if (l instanceof RailRoad) {
+                if (l.getName().equals(locationName)) {
+                    ((RailRoad) l).setOwner(this);
+                    this.addProperty(l);
+                    break;
+                }
+            }else if (l instanceof Utility) {
+                if (l.getName().equals(locationName)) {
+                    ((Utility) l).setOwner(this);
+                    this.addProperty(l);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void parseAddPlayerProperties(Element playerElement, List<Location> board) {
+        Element ownedLocations = (Element) playerElement.getElementsByTagName("ownedProperties").item(0);
+        NodeList locations = ownedLocations.getElementsByTagName("Location");
+        for (int itr = 0; itr < locations.getLength(); itr++) {
+            Node node = locations.item(itr).getFirstChild().getNextSibling();
+            if (node.getNodeType() == Node.ELEMENT_NODE){
+                if (node.getNodeName().equals("Property")){
+                    this.loadPropertyToPlayer(node, board);
+                }else{
+                    loadNonPropertyOwnerShipToPlayer(node, board);
+                }
+            }
+        }
+    }
+
+    public void parseAddPlayerOwnedColors(Element playerElement) {
+        Element ownedColors = (Element) playerElement.getElementsByTagName("coloredOwnedProperties").item(0);
+        NodeList colorsOwned = ownedColors.getElementsByTagName("index");
+        for (int itr = 0; itr<colorsOwned.getLength(); itr++) {
+            Node colorIndex = colorsOwned.item(itr);
+            if (colorIndex.getNodeType() == Node.ELEMENT_NODE){
+                Element value = (Element) colorIndex;
+                BoardModel.Color color = BoardModel.Color.valueOf(value.getElementsByTagName("color").item(0).getTextContent());
+                int num = Integer.parseInt(value.getElementsByTagName("number").item(0).getTextContent());
+                this.addColorToProperty(color, num);
+            }
+        }
     }
 }

@@ -42,7 +42,6 @@ public class PlayerDisplayPanel extends JPanel {
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING + " " + CURRENT_TURN);
         else
             playerButton = new JButton(p.getPlayerName() + " " + DROP_DOWN_STRING);
-
         playerButton.addActionListener(e -> {
             String[] text = playerButton.getText().split(" ");
             int length = text.length;
@@ -140,18 +139,25 @@ public class PlayerDisplayPanel extends JPanel {
      * @param p Player, the player
      */
     private void addToPanel(JPanel panel, Player p){
-        JLabel label = new JLabel("Money: $" + p.getMoneyAmount());
-        panel.add(new JLabel("Current Location: " + p.getCurrLocation()));
-        panel.add(label);
-        panel.add(new JLabel("Properties:"));
+        JLabel moneyLabel = new JLabel("Money: $" + p.getMoneyAmount());
+        JLabel locationLabel = new JLabel("Current Location: " + p.getCurrLocation());
+        JLabel propertyLabel = new JLabel("Properties:");
+        moneyLabel.setFont(new Font("Arial", Font.BOLD, 11));
+        locationLabel.setFont(new Font("Arial", Font.BOLD, 11));
+        propertyLabel.setFont(new Font("Arial", Font.BOLD, 11));
+        panel.add(locationLabel);
+        panel.add(moneyLabel);
+        panel.add(propertyLabel);
         for (int i = 0; i < p.getNumOfProperties(); i++) {
+            JLabel location;
             Location place = p.getPropertyByIndex(i);
             if (p.getPropertyByIndex(i) instanceof Property) {
-                panel.add(new JLabel(place.getName() + " [" + ((Property) place).getNumOfHouses() + " houses, rent: $" + ((Property) place).getRent() + "]"));
+                location = new JLabel(place.getName() + " [" + ((Property) place).getNumOfHouses() + " houses, rent: $" + ((Property) place).getRent() + "]");
             } else {
-                panel.add(new JLabel(place.getName()));
+                location = new JLabel(place.getName());
             }
+            location.setFont(new Font("Arial", Font.BOLD, 11));
+            panel.add(location);
         }
     }
-
 }
