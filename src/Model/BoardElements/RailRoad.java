@@ -6,6 +6,8 @@ import Listener.RailRoadListener;
 import Listener.BoardView;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 
 import java.util.ArrayList;
@@ -203,6 +205,10 @@ public class RailRoad extends Location implements BuyableLocation {
         return this.owner;
     }
 
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
+
     /**
      * prints info to a string
      * @param p MVC.Player
@@ -219,5 +225,19 @@ public class RailRoad extends Location implements BuyableLocation {
                 + this.payments.get(this.owner.getNumOfRailroads()) + "} \n" + p.getPlayerName() + " will lose money now";
     }
 
+    @Override
+    public String toXML(){
+        String str = "\t\t\t\t<RailRoad>\n";
+        str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
+        str += "\t\t\t\t</RailRoad>\n";
+        return str;
+    }
+
+    public static Location createNewRailRoad(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());
+        return new RailRoad(name, cost);
+    }
 
 }

@@ -5,7 +5,6 @@ import Model.GamePlayer.User;
 import View.Components.GamePhotosComponents.BoardGetterFunctionality;
 import View.Components.GamePhotosComponents.UKBoard;
 import View.Components.GamePhotosComponents.USBoard;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

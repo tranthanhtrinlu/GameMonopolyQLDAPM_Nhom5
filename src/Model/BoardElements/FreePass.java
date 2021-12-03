@@ -3,6 +3,9 @@ import Events.FreePassEvent;
 import Listener.BoardView;
 import Listener.FreePassListener;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class FreePass extends Location {
         super(cost, name);
         this.listeners = new ArrayList<>();
     }
+
+
 
     /**
      * Boolean method for listening to the Free Pass element.
@@ -76,6 +81,18 @@ public class FreePass extends Location {
         this.listeners.add(view);
     }
 
+
+    /**
+     * creates a new free pass given the node data
+     * @param node Node, the data
+     * @return FreePass, new FreePass
+     */
+    public static Location createNewFreePass(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());
+        return new FreePass(name, cost);
+    }
 
 
 }

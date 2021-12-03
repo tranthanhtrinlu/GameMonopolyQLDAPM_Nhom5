@@ -6,6 +6,9 @@ import Listener.PropertyListener;
 import Model.BoardModel;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -360,5 +363,35 @@ public class Property extends Location implements BuyableLocation {
             }
         }
         return total;
+    }
+
+    public void setOldNumOfHouses(int oldNumOfHouses) {
+        this.oldNumOfHouses = oldNumOfHouses;
+    }
+
+    @Override
+    public String toXML(){
+        String str = "\t\t\t\t<Property>\n";
+        str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
+        str += "\t\t\t\t\t<numberOfHouses>" + this.numOfHouses + "</numberOfHouses>\n";
+        str += "\t\t\t\t\t<oldNumOfHouses>" + this.oldNumOfHouses + "</oldNumOfHouses>\n";
+        str += "\t\t\t\t</Property>\n";
+        return str;
+    }
+
+    public static Location createNewProperty(Node node) {
+        Element e = (Element) node;
+        String name = e.getElementsByTagName("name").item(0).getTextContent();
+        int cost = Integer.parseInt(e.getElementsByTagName("cost").item(0).getTextContent());
+        int costPerHouse = Integer.parseInt(e.getElementsByTagName("costPerHouse").item(0).getTextContent());
+        int initialRent = Integer.parseInt(e.getElementsByTagName("initialRent").item(0).getTextContent());
+        int house1Rent = Integer.parseInt(e.getElementsByTagName("house1Rent").item(0).getTextContent());
+        int house2Rent = Integer.parseInt(e.getElementsByTagName("house2Rent").item(0).getTextContent());
+        int house3Rent = Integer.parseInt(e.getElementsByTagName("house3Rent").item(0).getTextContent());
+        int house4Rent = Integer.parseInt(e.getElementsByTagName("house4Rent").item(0).getTextContent());
+        int hotelRent = Integer.parseInt(e.getElementsByTagName("hotelRent").item(0).getTextContent());
+        BoardModel.Color color = BoardModel.Color.valueOf(e.getElementsByTagName("color").item(0).getTextContent());
+        int numOfColors = Integer.parseInt(e.getElementsByTagName("numOfColors").item(0).getTextContent());
+        return new Property(name, cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, color, numOfColors);
     }
 }
