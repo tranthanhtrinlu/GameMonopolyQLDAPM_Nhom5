@@ -220,6 +220,9 @@ public class Utility extends Location implements BuyableLocation {
     }
 
     @Override
+    /**
+     * returns an XML representation of Utility as a String
+     */
     public String toXML(){
         String str = "\t\t\t\t<Utility>\n";
         str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
@@ -227,10 +230,19 @@ public class Utility extends Location implements BuyableLocation {
         return str;
     }
 
+    /**
+     * Set the owner of this utility
+     * @param owner Player, the player to be set as the new owner
+     */
     public void setOwner(Player owner) {
         this.owner = owner;
     }
 
+    /**
+     * create new utility from node data
+     * @param node, the node containing the data
+     * @return the newly created location
+     */
     public static Location createNewUtility(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

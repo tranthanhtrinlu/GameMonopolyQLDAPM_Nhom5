@@ -88,6 +88,11 @@ public class Tax extends Location{
         this.listeners.add(view);
     }
 
+    /**
+     * creates a new Tax from node data
+     * @param node the node containing the data
+     * @return Location, the newly created location
+     */
     public static Location createNewTax(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();//Parse accordingly

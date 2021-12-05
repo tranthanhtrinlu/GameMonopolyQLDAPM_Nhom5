@@ -78,7 +78,11 @@ public class LandOnJail extends Location {
         this.landOnJailListenerList.add(view);
     }
 
-
+    /**
+     * create new land on jail form load
+     * @param node node containing land on jail info
+     * @return Location, the new location created
+     */
     public static Location createNewLandOnJail(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

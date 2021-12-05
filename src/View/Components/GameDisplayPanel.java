@@ -37,6 +37,10 @@ public class GameDisplayPanel extends JPanel {
     private final ArrayList<Image> leftPhotos;
     private final ArrayList<Image> rightPhotos;
 
+    /**
+     * Constructor
+     * @param version String, the game version
+     */
     public GameDisplayPanel(String version){
         BoardGetterFunctionality board;
         if (version.equals(BoardModel.TypeOfBoards.US.getVersion()))

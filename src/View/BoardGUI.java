@@ -141,8 +141,12 @@ public class BoardGUI extends JFrame implements BoardView{
         back.addActionListener(e -> {mainMenu(model);});
     }
 
-
-
+    /**
+     * adds panels to the menu
+     * @param topButton top button
+     * @param middleButton middle button
+     * @param bottomButton bottom button
+     */
     private void addToMenuPanels(JButton topButton, JButton middleButton, JButton bottomButton) {
         JPanel buttonPanel = new JPanel(new BorderLayout());
         JPanel blank = new JPanel();
@@ -201,6 +205,13 @@ public class BoardGUI extends JFrame implements BoardView{
         model.addViewToListener(this);
     }
 
+    /**
+     * Load a game from a save file
+     * @param model the board model
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
     private void loadSavedGame(BoardModel model) throws IOException, SAXException, ParserConfigurationException {
         model.loadSavedXML("src/SaveXML/savedFile.xml");
         resetFrame();
@@ -222,6 +233,12 @@ public class BoardGUI extends JFrame implements BoardView{
         model.addViewToListener(this);
     }
 
+    /**
+     * add version and rolls to game
+     * @param version String, the version of the game
+     * @param dice1 int, dice 1
+     * @param dice2 int, dice 2
+     */
     private void addToGame(String version, int dice1, int dice2){
         this.gamePanel = new GameDisplayPanel(version);
         this.sidePanel = new PlayerDisplayPanel();
@@ -344,14 +361,20 @@ public class BoardGUI extends JFrame implements BoardView{
                 + " and rent is $" + e.getRentCost() + "\nThey pay now");
     }
 
-
+    /**
+     * Overridden method to announce that the player cannot afford a railroad
+     * @param e RailRoadEvent, the event occurring in the RailRoad
+     */
     @Override
     public void announceCannotBuyRailRoad(RailRoadEvent e){
         ConfirmMessageController messageController = new ConfirmMessageController();
         messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " tried to buy " + e.getRailRoad().getName() + " but does not have enough Money, moving to the next player");
     }
 
-
+    /**
+     * Overridden method to announce that the player purchased a railroad
+     * @param e RailRoadEvent, the event occurring in the RailRoad
+     */
     @Override
     public void announcePurchaseRailRoad(RailRoadEvent e){
         ConfirmMessageController messageController = new ConfirmMessageController();
@@ -395,12 +418,20 @@ public class BoardGUI extends JFrame implements BoardView{
                 "Number of utilities owned by owner is " + e.getUtility().getOwner().getNumOfUtilities() + ". so payment (dice roll * (10 if 2 utilities else 4)) is $" + e.getPayment());
     }
 
+    /**
+     * Overridden method to announce that a player cannot afford a utility
+     * @param e A Events.UtilityEvent e.
+     */
     @Override
     public void announceCannotBuyUtility(UtilityEvent e){
         ConfirmMessageController messageController = new ConfirmMessageController();
         messageController.sendMessage(this, "Player: " + e.getPlayer().getPlayerName() + " tried to buy " + e.getUtility().getName() + " but does not have enough Money, moving to the next player");
     }
 
+    /**
+     * Overridden method to announce that a player has purchased a utility
+     * @param e A Events.UtilityEvent e.
+     */
     @Override
     public void announcePurchaseOfUtility(UtilityEvent e) {
         ConfirmMessageController messageController = new ConfirmMessageController();
@@ -468,7 +499,10 @@ public class BoardGUI extends JFrame implements BoardView{
 
     /* HANDLES */
 
-
+    /**
+     * Announces a players bankruptcy and removal form the game
+     * @param p Player, the player who is bankrupt
+     */
     @Override
     public void handleAnnounceBankruptedPlayer(Player p){
         ConfirmMessageController messageController = new ConfirmMessageController();
@@ -647,12 +681,19 @@ public class BoardGUI extends JFrame implements BoardView{
         dice2.setIcon(new ImageIcon(diceImages.get(roll2-1)));
     }
 
+    /**
+     * Handles the removal of a player piece from the board
+     * @param e BoardEvent, the event occurring in the board
+     */
     @Override
     public void handleRemoveOfPlayerPiece(BoardEvent e){
         this.gamePanel.removePieceFromBoard(e.getTurn(),e.getPlayer().getPosition());
     }
 
-
+    /**
+     * Handles the removal of a player view from the board
+     * @param e BoardEvent, the event occurring in the BoardModel
+     */
     @Override
     public void handleRemoveOfPlayerView(BoardEvent e){
         this.sidePanel.removePlayerView(e.getTurn(), e.getPlayer());
@@ -707,6 +748,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     }
 
+    //main
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         new BoardGUI();
     }

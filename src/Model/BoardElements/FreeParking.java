@@ -81,6 +81,11 @@ public class FreeParking extends Location{
         this.listeners.add(view);
     }
 
+    /**
+     * create new free parking from node data
+     * @param node node containing the data
+     * @return Location, the new location created
+     */
     public static Location createNewFreeParking(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

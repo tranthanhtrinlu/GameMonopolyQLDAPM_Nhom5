@@ -365,11 +365,18 @@ public class Property extends Location implements BuyableLocation {
         return total;
     }
 
+    /**
+     * setter for oldNumofHouses
+     * @param oldNumOfHouses, the old num of houses
+     */
     public void setOldNumOfHouses(int oldNumOfHouses) {
         this.oldNumOfHouses = oldNumOfHouses;
     }
 
     @Override
+    /**
+     * returns a xml representation of property as a string
+     */
     public String toXML(){
         String str = "\t\t\t\t<Property>\n";
         str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
@@ -379,6 +386,11 @@ public class Property extends Location implements BuyableLocation {
         return str;
     }
 
+    /**
+     * Create new property from node data
+     * @param node, node containing the data
+     * @return the newly created location
+     */
     public static Location createNewProperty(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

@@ -226,6 +226,9 @@ public class RailRoad extends Location implements BuyableLocation {
     }
 
     @Override
+    /**
+     * Returns an XML representation of RailRoad as a string
+     */
     public String toXML(){
         String str = "\t\t\t\t<RailRoad>\n";
         str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
@@ -233,6 +236,11 @@ public class RailRoad extends Location implements BuyableLocation {
         return str;
     }
 
+    /**
+     * Create new railroad form node data
+     * @param node, the node containing the data
+     * @return the newly created Location
+     */
     public static Location createNewRailRoad(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

@@ -81,6 +81,11 @@ public class GoToJail extends Location{
         this.goToJailListener.add(view);
     }
 
+    /**
+     * create new go to jail form load
+     * @param node node containing go to jail info
+     * @return Location, the new location created
+     */
     public static Location createNewGoToJail(Node node) {
         Element e = (Element) node;
         String name = e.getElementsByTagName("name").item(0).getTextContent();

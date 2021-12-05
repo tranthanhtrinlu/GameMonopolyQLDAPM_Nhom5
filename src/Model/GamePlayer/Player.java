@@ -297,6 +297,11 @@ public abstract class Player{
         return null;
     }
 
+    /**
+     * checks if the player owns a property with a given color
+     * @param color BoardModel.Color the color to check for
+     * @return boolean indicating whether the player has the color or not
+     */
     public boolean hasColor(BoardModel.Color color){
         return this.ownedPropertiesBasedOnColors.containsKey(color);
     }
@@ -454,6 +459,11 @@ public abstract class Player{
         return str;
     }
 
+    /**
+     * Create a player from load
+     * @param playerElement Element, the element contain ing the player information
+     * @return Player, the loaded player
+     */
     public static Player createPlayer(Element playerElement){
         String kindOfPlayer = playerElement.getElementsByTagName("typeOfPlayer").item(0).getTextContent();
         int moneyAmount = Integer.parseInt(playerElement.getElementsByTagName("moneyAmount").item(0).getTextContent());
@@ -470,6 +480,11 @@ public abstract class Player{
         return new AI(name, moneyAmount, out, position, inJail, turnsInJail, currLocation, numOfRailroads, numOfUtilities);
     }
 
+    /**
+     * Load properties to player
+     * @param nodeProperty, the node containing the properties
+     * @param board the list of locations on the board
+     */
     private void loadPropertyToPlayer(Node nodeProperty, List<Location> board){
         Element property = (Element) nodeProperty;
         String propertyName = property.getElementsByTagName("name").item(0).getTextContent();
@@ -488,6 +503,11 @@ public abstract class Player{
         }
     }
 
+    /**
+     * Load non properties to player
+     * @param location The node containing the locations
+     * @param board the list of locations on the board
+     */
     private void loadNonPropertyOwnerShipToPlayer(Node location, List<Location> board){
         String locationName = ((Element) location).getElementsByTagName("name").item(0).getTextContent();
         for (Location l : board) {
@@ -507,6 +527,11 @@ public abstract class Player{
         }
     }
 
+    /**
+     * Parses the player properties
+     * @param playerElement the element containing the players information
+     * @param board the list of locations on the board
+     */
     public void parseAddPlayerProperties(Element playerElement, List<Location> board) {
         Element ownedLocations = (Element) playerElement.getElementsByTagName("ownedProperties").item(0);
         NodeList locations = ownedLocations.getElementsByTagName("Location");
@@ -522,6 +547,10 @@ public abstract class Player{
         }
     }
 
+    /**
+     * parses and adds the property colors owned
+     * @param playerElement the element containing the players information
+     */
     public void parseAddPlayerOwnedColors(Element playerElement) {
         Element ownedColors = (Element) playerElement.getElementsByTagName("coloredOwnedProperties").item(0);
         NodeList colorsOwned = ownedColors.getElementsByTagName("index");
