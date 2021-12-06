@@ -9,6 +9,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -263,10 +264,11 @@ public class BoardModel {
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      */
     public void initializeBoard(String path) throws IOException, SAXException, ParserConfigurationException {
-        File file = new File(path);
+        //File file = new File(path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
+        //System.out.println(file.getAbsolutePath() + " <- absolute path");
+        Document doc = db.parse(new InputSource(path));
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("Location");
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
@@ -724,6 +726,7 @@ public class BoardModel {
         }else{
             resource = classLoader.getResource("LoadXML/UKBoardModel.xml");
         }
+        System.out.println(resource.getPath());
         initializeBoard(resource.getPath());
     }
 
@@ -759,10 +762,10 @@ public class BoardModel {
      */
     public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
         Player p;
-        File file = new File(path);
+        //File file = new File(path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
+        Document doc = db.parse(new InputSource(path));
         doc.getDocumentElement().normalize();
         NodeList nodePlayerList = doc.getElementsByTagName("player");
         initializeLoadedBoardModel(doc);
