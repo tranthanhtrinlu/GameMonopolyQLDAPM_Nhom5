@@ -13,8 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Class HouseController for controlling the purchase and selling of houses.
  */
 public class HouseController {
-
-
     private final static boolean SELL_HOUSE = false;
     private final static boolean BUY_HOUSE = true;
 
@@ -65,7 +63,7 @@ public class HouseController {
         JComboBox houses = new JComboBox(options.toArray());
         AtomicReference<JComboBox> num = new AtomicReference<>(new JComboBox(getBuyOrSellChoices(choice, place)));
         houses.addActionListener(e->{
-            updatePanel(panel, (String) houses.getSelectedItem(), place, num, choice, options,listProperties, houses);
+            updatePanel(panel, (String) houses.getSelectedItem(), place, num, choice, p, houses);
         });
         addToPanel(panel, place, num, houses, choice);
         int result = JOptionPane.showConfirmDialog(frame, panel,
@@ -112,16 +110,10 @@ public class HouseController {
      * @param place An Atomic reference to a Property place.
      * @param num An Atomic reference to a JComboBox num.
      * @param choice A Boolean choice.
-     * @param options A List of String choices.
-     * @param listProperties A List of property properties.
      * @param houses A JComboBox houses.
      */
-    private void updatePanel (JPanel panel, String selectedItem, AtomicReference<Property> place, AtomicReference<JComboBox> num, boolean choice, List<String> options, List<Property> listProperties, JComboBox houses){
-        for (int i = 0; i<options.size(); i++){
-            if (options.get(i).equals(selectedItem)){
-                place.set(listProperties.get(i));
-            }
-        }
+    private void updatePanel (JPanel panel, String selectedItem, AtomicReference<Property> place, AtomicReference<JComboBox> num, boolean choice, Player p, JComboBox houses){
+        place.set(p.getPropertyByName(selectedItem));
         num.set(new JComboBox(getBuyOrSellChoices(choice, place)));
         panel.removeAll();
         panel.add(new JLabel("Property: "));
@@ -156,7 +148,6 @@ public class HouseController {
             return "<html>Number houses added to current (" + place.get().getNumOfHouses() +" of " + place.get().getMaxNumberOfHouses() + "): <br>(Cost per house is $" + place.get().getCostPerHouse() + ")</html>";
         }
         return "<html>Number of houses " + place.get().getNumOfHouses() + ": <br>(profit per house is $" + place.get().getCostPerHouse() + ")</html>";
-
     }
 
     /**
@@ -173,7 +164,6 @@ public class HouseController {
         panel.add(new JLabel(getText(choice, place)));
         panel.add(num.get());
     }
-
 }
 
 

@@ -45,9 +45,6 @@ public class BoardModel {
     private boolean payed;
     private String version;
 
-
-
-
     /**
      * Color constants for the Board
      */
@@ -178,18 +175,34 @@ public class BoardModel {
         this.gamePlayers.add(player);
     }
 
+    /**
+     * get the number of players in the game
+     * @return Integer, the number of players
+     */
     public int getNumberOfPlayers() {
         return this.gamePlayers.size();
     }
 
+    /**
+     * get the integer value of the first dice roll
+     * @return Integer, the first dice roll
+     */
     public int getRoll1() {
         return this.roll1;
     }
 
+    /**
+     * get the integer value of the second dice roll
+     * @return Integer, the second dice roll
+     */
     public int getRoll2() {
         return this.roll2;
     }
 
+    /**
+     * get the true number of players in the game (player's who out attribute it false)
+     * @return Integer, the true number of players
+     */
     public int getNumOfPlayers() {
         return this.numberOfPlayers;
     }
@@ -256,6 +269,10 @@ public class BoardModel {
         }
     }
 
+    /**
+     * given the node element, add Location to the board according to the node
+     * @param node Node, the node element of Location
+     */
     private void parseAndAddDataLocationToBoard(Node node){
         switch (node.getNodeName()) {
             case "FreePass": {
@@ -291,7 +308,6 @@ public class BoardModel {
                 break;
             }
         }
-        System.out.println(this.board.size());
     }
 
 
@@ -686,6 +702,12 @@ public class BoardModel {
         return str;
     }
 
+    /**
+     * create the board according to the version of the board model specified
+     * @throws ParserConfigurationException Throw parser exception if parsing causes error
+     * @throws SAXException Throw sax exception if saxing causes error
+     * @throws IOException Throw IO exception if IO causes error
+     */
     public void createBoard() throws ParserConfigurationException, SAXException, IOException {
         if (this.version.equals(TypeOfBoards.US.getVersion())){
             initializeBoard("src/LoadXML/NewBoardModel.xml");
@@ -694,6 +716,13 @@ public class BoardModel {
         }
     }
 
+    /**
+     * Initialize the board model given the document parsed
+     * @param doc Document, the xml document parsed
+     * @throws ParserConfigurationException Throw parser exception if parsing causes error
+     * @throws SAXException Throw sax exception if saxing causes error
+     * @throws IOException Throw IO exception if IO causes error
+     */
     private void initializeLoadedBoardModel(Document doc) throws IOException, SAXException, ParserConfigurationException {
         String version = doc.getElementsByTagName("version").item(0).getTextContent();
         int diceRoll1 = Integer.parseInt(doc.getElementsByTagName("roll1").item(0).getTextContent());
@@ -710,6 +739,13 @@ public class BoardModel {
         createBoard();
     }
 
+    /**
+     * Load a saved path XML specified by the player in the Game menu
+     * @param path String, the file path
+     * @throws ParserConfigurationException Throw parser exception if parsing causes error
+     * @throws SAXException Throw sax exception if saxing causes error
+     * @throws IOException Throw IO exception if IO causes error
+     */
     public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
         Player p;
         File file = new File(path);
@@ -730,7 +766,6 @@ public class BoardModel {
             }
         }
     }
-
 
     /**
      * Method for simulating the player's turn depending on numerous scenarios. Rolls the dice and determines whether the player is in jail. Gives choices on whether to move, pass, or quit the game.

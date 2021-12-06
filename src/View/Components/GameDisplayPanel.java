@@ -42,12 +42,7 @@ public class GameDisplayPanel extends JPanel {
      * @param version String, the game version
      */
     public GameDisplayPanel(String version){
-        BoardGetterFunctionality board;
-        if (version.equals(BoardModel.TypeOfBoards.US.getVersion()))
-            board = new USBoard();
-        else
-            board = new UKBoard();
-
+        BoardGetterFunctionality board = getBoard(version);
         this.playerPieces = new ArrayList<>();
         this.playerPiecesDisplay = new ArrayList<>();
 
@@ -69,6 +64,17 @@ public class GameDisplayPanel extends JPanel {
         this.setMiddleRightImages();
         this.setLayout(null);
         this.setBackground(new Color(205, 230, 208));
+    }
+
+    /**
+     * get the board images according to the version of the game
+     * @param version String, the board version
+     * @return BoardGetterFunctionality, the board
+     */
+    private BoardGetterFunctionality getBoard(String version){
+        if (version.equals(BoardModel.TypeOfBoards.US.getVersion()))
+            return new USBoard();
+        return new UKBoard();
     }
 
     /**

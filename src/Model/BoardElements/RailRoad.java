@@ -19,6 +19,8 @@ import java.util.Random;
  * Class Railroad that defines a railroad element. Extends MVC.Location
  */
 public class RailRoad extends Location implements BuyableLocation {
+    public final static String INVALID_PARSE = "B&O RailRoad";
+    public final static String VALID_PARSE = "B&amp;O RailRoad";
     private final static int AI_RANDOM_CHOICE_BUY = 0;
     private List<Integer> payments;
     private Player owner;
@@ -230,8 +232,11 @@ public class RailRoad extends Location implements BuyableLocation {
      * Returns an XML representation of RailRoad as a string
      */
     public String toXML(){
+        String name = this.getName();
+        if (name.equals(INVALID_PARSE))
+            name =  VALID_PARSE;
         String str = "\t\t\t\t<RailRoad>\n";
-        str += "\t\t\t\t\t<name>" + this.getName() + "</name>\n";
+        str += "\t\t\t\t\t<name>" + name + "</name>\n";
         str += "\t\t\t\t</RailRoad>\n";
         return str;
     }

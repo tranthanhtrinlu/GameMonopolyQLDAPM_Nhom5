@@ -6,6 +6,7 @@ import Listener.PropertyListener;
 import Model.BoardModel;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
+import Model.GamePlayer.User;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -405,5 +406,42 @@ public class Property extends Location implements BuyableLocation {
         BoardModel.Color color = BoardModel.Color.valueOf(e.getElementsByTagName("color").item(0).getTextContent());
         int numOfColors = Integer.parseInt(e.getElementsByTagName("numOfColors").item(0).getTextContent());
         return new Property(name, cost, costPerHouse, initialRent, house1Rent, house2Rent, house3Rent, house4Rent, hotelRent, color, numOfColors);
+    }
+
+    /**
+     * get the List of rent cost
+     * @return List<Integer>
+     */
+    public List<Integer> getRentCosts() {
+        return this.rentCosts;
+    }
+
+    /**
+     * getter for property listeners
+     * @return List<PropertyListener>
+     */
+    public List<PropertyListener> getPropertyListeners() {
+        return this.propertyListeners;
+    }
+
+    /**
+     * Overrides java object equals() method
+     * @param obj Object, the object to check
+     * @return boolean, true iff the comparison and the object is identical, otherwise false
+     */
+    @Override
+    public boolean equals(Object obj){
+        if (this == obj){
+            return true;
+        }
+        if(obj == null || obj.getClass()!= this.getClass()){
+            return false;
+        }
+        Property place = (Property) obj;
+        return this.getName().equals(place.getName()) && this.rentCosts == place.getRentCosts()
+                && this.numOfHouses == place.getNumOfHouses()
+                && this.maxNumberOfHouses == place.getMaxNumberOfHouses() && this.color == place.getColor()
+                && this.owner == place.getOwner() && this.numberOfColor == place.getNumberOfColor() && this.costPerHouse == place.getCostPerHouse()
+                && this.oldNumOfHouses == place.getOldNumOfHouses() && this.propertyListeners == place.getPropertyListeners();
     }
 }

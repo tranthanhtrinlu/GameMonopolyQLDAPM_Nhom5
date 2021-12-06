@@ -420,21 +420,24 @@ public abstract class Player{
      * @return
      */
     public String toXML(String kindOfPlayer){
+        String currLocation = this.currLocation;
+        if (currLocation.equals(RailRoad.INVALID_PARSE))
+            currLocation = RailRoad.VALID_PARSE;
         String str = "";
         str += "\t<player>\n";
         str += "\t\t<typeOfPlayer>" + kindOfPlayer + "</typeOfPlayer>\n";
-        str += "\t\t<moneyAmount>" + this.getMoneyAmount() + "</moneyAmount>\n";
-        str += "\t\t<playerName>" + this.getPlayerName() + "</playerName>\n";
-        str += "\t\t<inJail>" + this.getInJail() + "</inJail>\n";
-        str += "\t\t<turnsInJail>" + this.getTurnsInJail() + "</turnsInJail>\n";
-        str += "\t\t<position>" + this.getPosition() + "</position>\n";
-        str += "\t\t<currLocation>" + this.getCurrLocation() + "</currLocation>\n";
-        str += "\t\t<numOfRailroads>" + this.getNumOfRailroads() + "</numOfRailroads>\n";
-        str += "\t\t<numOfUtilities>" + this.getNumOfUtilities() + "</numOfUtilities>\n";
-        str += "\t\t<out>" + this.getOut() + "</out>\n";
+        str += "\t\t<moneyAmount>" + this.moneyAmount + "</moneyAmount>\n";
+        str += "\t\t<playerName>" + this.playerName + "</playerName>\n";
+        str += "\t\t<inJail>" + this.inJail + "</inJail>\n";
+        str += "\t\t<turnsInJail>" + this.turnsInJail + "</turnsInJail>\n";
+        str += "\t\t<position>" + this.position + "</position>\n";
+        str += "\t\t<currLocation>" + currLocation + "</currLocation>\n";
+        str += "\t\t<numOfRailroads>" + this.numOfRailroads + "</numOfRailroads>\n";
+        str += "\t\t<numOfUtilities>" + this.numOfUtilities + "</numOfUtilities>\n";
+        str += "\t\t<out>" + this.out + "</out>\n";
         // Properties
         str += "\t\t<ownedProperties>\n";
-        for(Location l : this.getOwnedProperties()){
+        for(Location l : this.ownedProperties){
             str += "\t\t\t<Location>\n";
             if (l instanceof Property){
                 str += ((Property) l).toXML();
@@ -448,10 +451,10 @@ public abstract class Player{
         str += "\t\t</ownedProperties>\n";
         // Colored Owned Properties
         str += "\t\t<coloredOwnedProperties>\n";
-        for(BoardModel.Color color : this.getOwnedPropertiesBasedOnColors().keySet()){
+        for(BoardModel.Color color : this.ownedPropertiesBasedOnColors.keySet()){
             str += "\t\t\t<index>\n";
             str += "\t\t\t\t<color>" + color + "</color>\n";
-            str += "\t\t\t\t<number>" + this.getOwnedPropertiesBasedOnColors().get(color) + "</number>\n";
+            str += "\t\t\t\t<number>" + this.ownedPropertiesBasedOnColors.get(color) + "</number>\n";
             str += "\t\t\t</index>\n";
         }
         str += "\t\t</coloredOwnedProperties>\n";
@@ -541,7 +544,7 @@ public abstract class Player{
                 if (node.getNodeName().equals("Property")){
                     this.loadPropertyToPlayer(node, board);
                 }else{
-                    loadNonPropertyOwnerShipToPlayer(node, board);
+                    this.loadNonPropertyOwnerShipToPlayer(node, board);
                 }
             }
         }

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 /**
  * BoardGUI Class, also known as the boardView class
- * @author Tony Massaad
+ * @author Tony Massaad, Max Curkovic, Kareem, Cory Helm
  */
 public class BoardGUI extends JFrame implements BoardView{
     public final static int GAME_WIDTH = 985;
@@ -35,7 +35,10 @@ public class BoardGUI extends JFrame implements BoardView{
     private final ArrayList<Image> diceImages;
     private JLabel dice1, dice2;
 
-    public BoardGUI() throws IOException, ParserConfigurationException, SAXException {
+    /**
+     * default constructor for BoardGUI
+     */
+    public BoardGUI(){
         super("Monopoly");
         BoardModel model = new BoardModel();
         mainMenu(model);
@@ -86,6 +89,9 @@ public class BoardGUI extends JFrame implements BoardView{
     }
 
 
+    /**
+     * reset the frame
+     */
     private void resetFrame(){
         this.getContentPane().removeAll();
         this.revalidate();
