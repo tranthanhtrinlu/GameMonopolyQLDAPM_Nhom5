@@ -5,6 +5,7 @@ import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
 import Model.GamePlayer.User;
+import com.sun.tools.javac.Main;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -15,10 +16,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -262,13 +260,15 @@ public class BoardModel {
 
     /**
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
+     * @param path String, the file path
      */
     public void initializeBoard(String path) throws IOException, SAXException, ParserConfigurationException {
-        //File file = new File(path);
+        //System.out.println(new File(".").getAbsolutePath());
+        //System.out.println("The path is '" + path + "'");
+        InputStream input = getFileFromPath(path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        //System.out.println(file.getAbsolutePath() + " <- absolute path");
-        Document doc = db.parse(new InputSource(path));
+        Document doc = db.parse(input);
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("Location");
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
@@ -719,15 +719,13 @@ public class BoardModel {
      * @throws IOException Throw IO exception if IO causes error
      */
     public void createBoard() throws ParserConfigurationException, SAXException, IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        URL resource;
+        String resource;
         if (this.version.equals(TypeOfBoards.US.getVersion())){
-            resource = classLoader.getResource("LoadXML/NewBoardModel.xml");
+            resource = "LoadXML/NewBoardModel.xml";
         }else{
-            resource = classLoader.getResource("LoadXML/UKBoardModel.xml");
+            resource = "LoadXML/UKBoardModel.xml";
         }
-        System.out.println(resource.getPath());
-        initializeBoard(resource.getPath());
+        initializeBoard(resource);
     }
 
     /**
@@ -763,9 +761,10 @@ public class BoardModel {
     public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
         Player p;
         //File file = new File(path);
+        InputStream input = getFileFromPath(path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new InputSource(path));
+        Document doc = db.parse(input);
         doc.getDocumentElement().normalize();
         NodeList nodePlayerList = doc.getElementsByTagName("player");
         initializeLoadedBoardModel(doc);
@@ -779,6 +778,13 @@ public class BoardModel {
                 p.parseAddPlayerOwnedColors(playerElement);
             }
         }
+    }
+
+    private InputStream getFileFromPath(String path){
+        InputStream input = BoardModel.class.getResourceAsStream("/"+path);
+        if (input == null)
+            input = BoardModel.class.getResourceAsStream("src/"+path);
+        return input;
     }
 
     /**
