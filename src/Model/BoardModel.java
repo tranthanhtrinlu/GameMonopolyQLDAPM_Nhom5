@@ -130,6 +130,7 @@ public class BoardModel {
         this.version = "";
     }
 
+
     /**
      * set the version of the game
      * @param version String, the version
@@ -182,6 +183,12 @@ public class BoardModel {
     public int getNumberOfPlayers() {
         return this.gamePlayers.size();
     }
+
+    /**
+     * gets the size of the board
+     * @return Integer, size
+     */
+    public int getSizeOfBoard(){return this.board.size();}
 
     /**
      * get the integer value of the first dice roll
