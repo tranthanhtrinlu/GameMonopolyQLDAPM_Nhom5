@@ -3,7 +3,7 @@
 	<centerMoney>0</centerMoney>
 	<numberOfPlayers>5</numberOfPlayers>
 	<currentTurn>3</currentTurn>
-	<roll1>2</roll1>
+	<roll1>1</roll1>
 	<roll2>5</roll2>
 	<player>
 		<typeOfPlayer>User</typeOfPlayer>

@@ -263,12 +263,10 @@ public class BoardModel {
      * @param path String, the file path
      */
     public void initializeBoard(String path) throws IOException, SAXException, ParserConfigurationException {
-        //System.out.println(new File(".").getAbsolutePath());
-        //System.out.println("The path is '" + path + "'");
-        InputStream input = getFileFromPath(path);
+        File load = new File("./"+path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(input);
+        Document doc = db.parse(load);
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getElementsByTagName("Location");
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
@@ -680,7 +678,8 @@ public class BoardModel {
      */
     private void handleSaveToXML(String filename){
         try{
-            BufferedWriter out = new BufferedWriter(new FileWriter(filename));
+            File save = new File(filename);
+            BufferedWriter out = new BufferedWriter(new FileWriter(save));
             out.write(this.toXML());
             out.close();
         }catch(IOException ex){
@@ -721,9 +720,9 @@ public class BoardModel {
     public void createBoard() throws ParserConfigurationException, SAXException, IOException {
         String resource;
         if (this.version.equals(TypeOfBoards.US.getVersion())){
-            resource = "LoadXML/NewBoardModel.xml";
+            resource = "NewBoardModel.xml";
         }else{
-            resource = "LoadXML/UKBoardModel.xml";
+            resource = "UKBoardModel.xml";
         }
         initializeBoard(resource);
     }
@@ -760,11 +759,10 @@ public class BoardModel {
      */
     public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
         Player p;
-        //File file = new File(path);
-        InputStream input = getFileFromPath(path);
+        File file = new File("./"+path);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(input);
+        Document doc = db.parse(file);
         doc.getDocumentElement().normalize();
         NodeList nodePlayerList = doc.getElementsByTagName("player");
         initializeLoadedBoardModel(doc);
@@ -778,13 +776,6 @@ public class BoardModel {
                 p.parseAddPlayerOwnedColors(playerElement);
             }
         }
-    }
-
-    private InputStream getFileFromPath(String path){
-        InputStream input = BoardModel.class.getResourceAsStream("/"+path);
-        if (input == null)
-            input = BoardModel.class.getResourceAsStream("src/"+path);
-        return input;
     }
 
     /**
@@ -815,9 +806,9 @@ public class BoardModel {
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             handleSellingOfHouses(e);
         }else if (choice == PlayerChoice.SAVE.getChoice()){
-            handleSaveToXML("src/SaveXML/savedFile.xml");
+            handleSaveToXML("./savedFile.xml");
         }else if (choice == PlayerChoice.SAVE_QUIT.getChoice()){
-            handleSaveToXML("src/SaveXML/savedFile.xml");
+            handleSaveToXML("./savedFile.xml");
             System.exit(0);
         }
     }
