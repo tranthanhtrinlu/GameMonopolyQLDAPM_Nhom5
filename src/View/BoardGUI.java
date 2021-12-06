@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -219,7 +220,9 @@ public class BoardGUI extends JFrame implements BoardView{
      * @throws ParserConfigurationException
      */
     private void loadSavedGame(BoardModel model) throws IOException, SAXException, ParserConfigurationException {
-        model.loadSavedXML("src/SaveXML/savedFile.xml");
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource = classLoader.getResource("SaveXML/savedFile.xml");
+        model.loadSavedXML(resource.getPath());
         resetFrame();
         addToGame(model.getGameVersion(), model.getRoll1()-1, model.getRoll2()-1);
         for (int i = 0; i<model.getNumberOfPlayers(); i++){

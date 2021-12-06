@@ -18,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -716,11 +717,14 @@ public class BoardModel {
      * @throws IOException Throw IO exception if IO causes error
      */
     public void createBoard() throws ParserConfigurationException, SAXException, IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        URL resource;
         if (this.version.equals(TypeOfBoards.US.getVersion())){
-            initializeBoard("src/LoadXML/NewBoardModel.xml");
+            resource = classLoader.getResource("LoadXML/NewBoardModel.xml");
         }else{
-            initializeBoard("src/LoadXML/UKBoardModel.xml");
+            resource = classLoader.getResource("LoadXML/UKBoardModel.xml");
         }
+        initializeBoard(resource.getPath());
     }
 
     /**
