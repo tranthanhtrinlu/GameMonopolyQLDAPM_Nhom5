@@ -220,7 +220,8 @@ public class BoardGUI extends JFrame implements BoardView{
      * @throws ParserConfigurationException
      */
     private void loadSavedGame(BoardModel model) throws IOException, SAXException, ParserConfigurationException {
-        model.loadSavedXML("savedFile.xml");
+        if (!model.loadSavedXML(BoardModel.StringRepresentationOfXML.JAR_SAVED.getPath()))
+            model.loadSavedXML(BoardModel.StringRepresentationOfXML.SAVED.getPath());
         resetFrame();
         addToGame(model.getGameVersion(), model.getRoll1()-1, model.getRoll2()-1);
         for (int i = 0; i<model.getNumberOfPlayers(); i++){

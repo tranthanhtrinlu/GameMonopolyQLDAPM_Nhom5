@@ -3,8 +3,8 @@
 	<centerMoney>0</centerMoney>
 	<numberOfPlayers>5</numberOfPlayers>
 	<currentTurn>3</currentTurn>
-	<roll1>1</roll1>
-	<roll2>5</roll2>
+	<roll1>6</roll1>
+	<roll2>3</roll2>
 	<player>
 		<typeOfPlayer>User</typeOfPlayer>
 		<moneyAmount>242</moneyAmount>
@@ -41,15 +41,15 @@
 		</ownedProperties>
 		<coloredOwnedProperties>
 			<index>
+				<color>YELLOW</color>
+				<number>1</number>
+			</index>
+			<index>
 				<color>ORANGE</color>
 				<number>1</number>
 			</index>
 			<index>
 				<color>GREEN</color>
-				<number>1</number>
-			</index>
-			<index>
-				<color>YELLOW</color>
 				<number>1</number>
 			</index>
 		</coloredOwnedProperties>
@@ -163,11 +163,11 @@
 				<number>1</number>
 			</index>
 			<index>
-				<color>GREEN</color>
+				<color>BROWN</color>
 				<number>1</number>
 			</index>
 			<index>
-				<color>BROWN</color>
+				<color>GREEN</color>
 				<number>1</number>
 			</index>
 		</coloredOwnedProperties>

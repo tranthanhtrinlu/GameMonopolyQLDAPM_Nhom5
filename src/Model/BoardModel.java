@@ -5,24 +5,21 @@ import Model.BoardElements.*;
 import Model.GamePlayer.AI;
 import Model.GamePlayer.Player;
 import Model.GamePlayer.User;
-import com.sun.tools.javac.Main;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 
 /**
  * @author Tony Massaad
- * Class MVC.BoardModel that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
+ * Class  that acts as the model for the Monopoly game. Essentially sets up the game and board as a whole.
  */
 public class BoardModel {
     public static final int MAX_PLAYERS = 5;
@@ -50,6 +47,32 @@ public class BoardModel {
      */
     public enum Color{
         BROWN, LIGHTBLUE, PURPLE, ORANGE, RED, YELLOW, GREEN, DARKBLUE, NONE
+    }
+
+    /**
+     * Enum for constant strings on loading and saving xml
+     */
+    public enum StringRepresentationOfXML{
+        JAR_SAVED("./savedFile.xml"), JAR_LOAD_UK("./UKBoardModel.xml"), JAR_LOAD_US("./NewBoardModel.xml"),
+        LOAD_US("src/LoadXML/NewBoardModel.xml"), LOAD_UK("src/LoadXML/UKBoardModel.xml"), SAVED("src/SaveXML/savedFile.xml");
+
+        private final String path;
+
+        /**
+         * Constructor for String Representation
+         * @param path String, the path
+         */
+        StringRepresentationOfXML(String path){
+            this.path = path;
+        }
+
+        /**
+         * Get the path of the Given XML file
+         * @return String, the path
+         */
+        public String getPath(){
+            return this.path;
+        }
     }
 
     /**
@@ -118,6 +141,12 @@ public class BoardModel {
          this(0,0,0);
     }
 
+    /**
+     * Constructor for BoardModel
+     * @param currentTurn Integer, the current turn
+     * @param roll1 Integer, the first roll the game is on
+     * @param roll2 Integer, the second roll the game is on
+     */
     public BoardModel(int currentTurn, int roll1, int roll2) {
         this.gamePlayers = new ArrayList<>();
         this.board = new ArrayList<>();
@@ -139,6 +168,10 @@ public class BoardModel {
         this.version = version;
     }
 
+    /**
+     * Getter for getting the game version
+     * @return String, the game version
+     */
     public String getGameVersion(){
         return this.version;
     }
@@ -262,18 +295,24 @@ public class BoardModel {
      * Method for initializing the board. Adds all necessary elements, including properties, railroads and utilities.
      * @param path String, the file path
      */
-    public void initializeBoard(String path) throws IOException, SAXException, ParserConfigurationException {
-        File load = new File("./"+path);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(load);
-        doc.getDocumentElement().normalize();
-        NodeList nodeList = doc.getElementsByTagName("Location");
-        for (int itr = 0; itr < nodeList.getLength(); itr++) {
-            Node node = nodeList.item(itr).getFirstChild().getNextSibling();
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                this.parseAndAddDataLocationToBoard(node);
+    public boolean initializeBoard(String path){
+        try{
+            File load = new File(path);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(load);
+            doc.getDocumentElement().normalize();
+            NodeList nodeList = doc.getElementsByTagName("Location");
+            for (int itr = 0; itr < nodeList.getLength(); itr++) {
+                Node node = nodeList.item(itr).getFirstChild().getNextSibling();
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    this.parseAndAddDataLocationToBoard(node);
+                }
             }
+            return true;
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            System.out.println("Didn't load path " + path);
+            return false;
         }
     }
 
@@ -676,14 +715,16 @@ public class BoardModel {
      * handler for when the player decides to save the game.
      * @param filename String, the name of the file to save the information in
      */
-    private void handleSaveToXML(String filename){
+    private boolean handleSaveToXML(String filename){
         try{
             File save = new File(filename);
             BufferedWriter out = new BufferedWriter(new FileWriter(save));
             out.write(this.toXML());
             out.close();
+            return true;
         }catch(IOException ex){
             ex.printStackTrace();
+            return false;
         }
     }
 
@@ -713,18 +754,32 @@ public class BoardModel {
 
     /**
      * create the board according to the version of the board model specified
-     * @throws ParserConfigurationException Throw parser exception if parsing causes error
-     * @throws SAXException Throw sax exception if saxing causes error
-     * @throws IOException Throw IO exception if IO causes error
      */
-    public void createBoard() throws ParserConfigurationException, SAXException, IOException {
-        String resource;
+    public void createBoard() {
+        if (!initializeBoard(getVersionTypeJar()))
+            initializeBoard(getVersionType());
+    }
+
+    /**
+     * Get the version path in JAR file
+     * @return String, the path
+     */
+    private String getVersionTypeJar(){
         if (this.version.equals(TypeOfBoards.US.getVersion())){
-            resource = "NewBoardModel.xml";
-        }else{
-            resource = "UKBoardModel.xml";
+            return StringRepresentationOfXML.JAR_LOAD_US.getPath();
         }
-        initializeBoard(resource);
+        return StringRepresentationOfXML.JAR_LOAD_UK.getPath();
+    }
+
+    /**
+     * get the version path in IDE
+     * @return String, the path
+     */
+    private String getVersionType(){
+        if (this.version.equals(TypeOfBoards.US.getVersion())){
+            return StringRepresentationOfXML.LOAD_US.getPath();
+        }
+        return StringRepresentationOfXML.LOAD_UK.getPath();
     }
 
     /**
@@ -753,29 +808,37 @@ public class BoardModel {
     /**
      * Load a saved path XML specified by the player in the Game menu
      * @param path String, the file path
-     * @throws ParserConfigurationException Throw parser exception if parsing causes error
-     * @throws SAXException Throw sax exception if saxing causes error
-     * @throws IOException Throw IO exception if IO causes error
      */
-    public void loadSavedXML(String path) throws ParserConfigurationException, IOException, SAXException {
-        Player p;
-        File file = new File("./"+path);
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
-        doc.getDocumentElement().normalize();
-        NodeList nodePlayerList = doc.getElementsByTagName("player");
-        initializeLoadedBoardModel(doc);
-        for (int i = 0; i < nodePlayerList.getLength(); i++){
-            Node player = nodePlayerList.item(i);
-            if (player.getNodeType() == Node.ELEMENT_NODE){
-                Element playerElement = (Element) player;
-                p = Player.createPlayer(playerElement);
-                this.addGamePlayers(p);
-                p.parseAddPlayerProperties(playerElement, this.board);
-                p.parseAddPlayerOwnedColors(playerElement);
+    public boolean loadSavedXML(String path) {
+        try{
+            Player p;
+            File file = new File(path);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(file);
+            doc.getDocumentElement().normalize();
+            NodeList nodePlayerList = doc.getElementsByTagName("player");
+            initializeLoadedBoardModel(doc);
+            for (int i = 0; i < nodePlayerList.getLength(); i++){
+                Node player = nodePlayerList.item(i);
+                if (player.getNodeType() == Node.ELEMENT_NODE){
+                    Element playerElement = (Element) player;
+                    p = Player.createPlayer(playerElement);
+                    this.addGamePlayers(p);
+                    p.parseAddPlayerProperties(playerElement, this.board);
+                    p.parseAddPlayerOwnedColors(playerElement);
+                }
             }
+            return true;
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            System.out.println("Failed to Load " + path);
+            return false;
         }
+    }
+
+    private void handleSavedFunctionality(){
+        if (!handleSaveToXML(StringRepresentationOfXML.SAVED.getPath()))
+            handleSaveToXML(StringRepresentationOfXML.JAR_SAVED.getPath());
     }
 
     /**
@@ -806,9 +869,9 @@ public class BoardModel {
         else if (choice == PlayerChoice.SELL_HOUSE.getChoice()){ // sell house
             handleSellingOfHouses(e);
         }else if (choice == PlayerChoice.SAVE.getChoice()){
-            handleSaveToXML("./savedFile.xml");
+            handleSavedFunctionality();
         }else if (choice == PlayerChoice.SAVE_QUIT.getChoice()){
-            handleSaveToXML("./savedFile.xml");
+            handleSavedFunctionality();
             System.exit(0);
         }
     }
