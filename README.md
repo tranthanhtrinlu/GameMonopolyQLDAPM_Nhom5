@@ -40,7 +40,7 @@ In IDE
 
 For explanation on the rules of the program, please refer to the [user manual](https://github.com/tony1bally/3110MonopolyProject/blob/master/Documentations/User%20Manual%20.pdf).
  
-## Monopoly Design Process
+## Monopoly Design Decision
 This project is developed through the implementation of Model-View-Controller (MVC)
 
 - Here is the UML diagram of the project:
