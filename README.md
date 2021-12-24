@@ -1,15 +1,63 @@
-# 3110MonopolyProject
+# Monopoly Simulator
 
-Authors: Tony Massaad (101150282), Max Curkovic (101139937), Cory Helm (101171699), Kareem El-Hajjar (101109259)
+<p align="center">
+<img src="READMEImages/Monopoly heading.jfif" />
+</p>
 
-Milestone 4 Deliverable (of 4 total)
+## Description
+This repository shows the implementation of the popular board game monopoly. The objective is so bankrupt your opposition through interactive gameplay by purchasing as many properties and houses as possible. Each player starts with $1500 US version or $15 million in UK Version. Spend wisely and aim for the top! 
 
-Since the last deliverable, we have implemented a custom UK version of the Monopoly game, where players can choose to play either the normal version or the UK version. We have also implemented a save/load feature, where players can save their current game and load it through reading an XML file. More smelly code was also addressed.
+<p align="center">
+<h3>US Board<h3>
+<img src="READMEImages/USBoard.jpg" />
+</p>
+  
+<p align="center">
+<h3>UK Board<h3>
+<img src="READMEImages/UKBoard.jfif" />
+</p>
 
-The current implementation focuses on a GUI with a jail system, ability to buy properties, railroads and utilities. Players can go around the board and each move/roll of the die has an animation that really makes the Monopoly game feel life-like. On the side bar, the list of players and their owned properties/money balance is listed. Each option the player is given, whether it would be to pass/roll or buy a new property, is given as a pop up. A player can purchase and sell houses for any given property that they own. A player can also choose to save the current game to play later and load it back up when they launch the game again. 
+## Authors
+[@Anthony Massaad](https://github.com/tony1bally) \
+[@Max Curkovic](https://github.com/maxcurkovic) \
+[@Kareem El-Hajjar](https://github.com/KareemEH) \
+[@Cory Helm](https://github.com/CoryH99)
 
-The players can also choose to play with AIs. The AIs may not be the smartest, but they can stir up the game and make choices that can affect a human player's thinking!
+## Running the program
+When using the Jar File, ensure that the savedXML.xml, NewBoardModel.xml, and UKBoardModel.xml files are within the same folder as the jar file.
+Otherwise, within IDE, everything can stay as is. 
 
-As of now, there are no known issues with the full version of the game. Milestone 4 has been tested and fully implemented with no known bugs.
+In Jar File
+- Simply double click the jar or alternatively, inside command line, ```java -jar 3110Project.jar```
 
-This has been a fun project to work on, and we were excited to tackle it and learn a lot from doing so. ~ MC
+In IDE
+- Simply click the run button. 
+
+## Steps to running a game
+- Once the program is running, you can choose to either load an existing saved file, or load whichever version you wish to play
+- To launch a new game select: ```New Game -> "version type"```
+- To launch a saved game select: ```Load Recent Game```
+
+For explanation on the rules of the program, please refer to the [user manual](https://github.com/tony1bally/3110MonopolyProject/blob/master/Documentations/User%20Manual%20.pdf).
+ 
+## Monopoly Design Process
+This project is developed through the implementation of Model-View-Controller (MVC)
+
+- Here is the UML diagram of the project:
+<p align="center">
+    <img src="READMEImages/UMLDiagram.PNG" />
+</p>
+
+- For the logic of the game, please refer to the Sequence diagram [here](https://github.com/tony1bally/3110MonopolyProject/tree/master/UML%20Diagrams).
+- For the overall design descisions for the project, please refer to the Design Descriptions [here](https://github.com/tony1bally/3110MonopolyProject/blob/master/Documentations/DesignDescriptions_M4.pdf).
+  
+## Workplan ahead/To be implemented
+- Implementation of Chance and Chest
+- Making game more appealing (i.e., Player side panel, game board, player pieces)
+- Adding housing and hotel images on properties when purchased
+- Adding more customizatin to the board setup for the player icons and background colours.
+
+## CREDITS
+Authors: Anthony Massaad, Max Curkovic, Kareem El-Hajjar, and Cory Helm
+
+Copyright © 2021. All rights reserved
