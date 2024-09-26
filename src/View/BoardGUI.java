@@ -30,6 +30,7 @@ public class BoardGUI extends JFrame implements BoardView{
 
     private GameDisplayPanel gamePanel;
     private PlayerDisplayPanel sidePanel;
+//    private PlayerDisplayPanel sidePanel;
     private JPanel gameControlPanel;
 
     private final JButton turnPass, quit, roll, payOutOfJail, rollDouble, purchaseEstateHouses, sellHouses, save, save_quit;
